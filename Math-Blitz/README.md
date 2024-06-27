@@ -2,7 +2,7 @@
 
 Math Flash is a fast-paced, engaging, and challenging math game where players can test and improve their arithmetic skills. The game presents players with a series of math questions involving addition, subtraction, multiplication, and division. Players must solve these problems as quickly and accurately as possible to earn points until the game timer runs out.
 
-Math Flash incorporates the theme "It's About Time" by making time a central element of the gameplay and strategy. In this game, players are racing against the clock to answer as many math questions as possible before the timer runs out. The timer adds an element of urgency and pressure, encouraging players to think and act quickly.
+In this game, players are racing against the clock to answer as many math questions as possible before the timer runs out. The timer adds an element of urgency and pressure, encouraging players to think and act quickly.
 
 How to Play Math Flash:
 
