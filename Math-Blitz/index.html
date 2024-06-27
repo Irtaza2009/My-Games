@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+<audio id="backgroundMusic" loop>
+    <source src="background-music.mp3" type="audio/mpeg">
+</audio>
+<audio id="scoreSound">
+    <source src="score-sound.mp3" type="audio/mpeg">
+</audio>
+<audio id="loseSound">
+    <source src="lose-sound.wav" type="audio/wav">
+</audio>
+  <title>Math Flash</title>
+</head>
+<canvas id="canvas"></canvas>
+<canvas id="canvas2"></canvas>
+<button id="volume-button">Mute</button>
+
+<body>
+    <div id="difficulty-container" style="display: none;">
+        <button id="easy-button">Easy</button>
+        <button id="hard-button">Hard</button>
+      </div>
+      
+      
+    <div id="highscore-container" style="display: none;">
+        <span id="highscore"></span>
+      </div>      
+    
+    <div id="menu-container">
+        <div id="game-name">Math Flash</div>
+        <button id="startButton">Start Game</button>
+      </div>
+      
+  <div id="game-container">
+    <div id="score-container">
+      <p id="timer">30</p>
+      <p id="score">Score: 0</p>
+    </div>
+    <p id="question"></p>
+    <div id="options"></div>
+    <div id="restart-container" style="display: none;">
+      <button id="restart-button">Restart</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

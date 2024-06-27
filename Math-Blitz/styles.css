@@ -1,0 +1,170 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #ffddba;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: #232220;
+  }
+
+  #easy-button {
+    padding: 10px 20px;
+    font-size: 30px;
+    cursor: pointer;
+    background-color: #d9ae8e;
+    color:#4e4c4f;
+    border-radius: 100px;
+    border-style: solid;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  #hard-button {
+    padding: 10px 20px;
+    font-size: 30px;
+    cursor: pointer;
+    background-color: #d9ae8e;
+    color:#4e4c4f;
+    border-radius: 100px;
+    border-style: solid;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  #volume-button {
+    display:none;
+    position: absolute;
+    top: 3%;
+    right: 1%;
+    padding: 10px 20px;
+    font-size: 30px;
+    cursor: pointer;
+    background-color: #d9ae8e;
+    color:#4e4c4f;
+    border-radius: 100px;
+    border-style: solid;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  #highscore-container {
+    padding: 10px 20px;
+    position: absolute;
+    top: 13%;
+    left: width/2;
+    font-size: 50px;
+    color:#4e4c4f;
+    background-color: #d9ae8e;
+    border-radius: 100px;
+    border-style: solid;
+  }
+  
+
+  #game-name {
+    align-self: center;
+    padding: 10px 10px;
+    font-size: 50px;
+    margin-bottom: 30px;
+    color:#ffddba;
+    background-color: #4e4c4f;
+    border-radius: 100px;
+    outline-style: solid;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  
+  
+  #game-container {
+    display: none;
+  }
+  
+  #menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  #startButton {
+    padding: 10px 20px;
+    font-size: 30px;
+    cursor: pointer;
+    background-color: #d9ae8e;
+    color:#4e4c4f;
+    border-radius: 100px;
+    outline-style: solid;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  
+  #game-container {
+    text-align: center;
+  }
+  
+  #score-container {
+    margin-bottom: 20px;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  #timer {
+    font-size: 48px;
+    margin: 0;
+    color: #4e4c4f;
+    background-color: #d9ae8e;
+    border-radius: 100px;
+    border-style: solid;
+  }
+  
+  #score {
+    font-size: 30px;
+    margin: 10px 0;
+    color: #d9ae8e;
+    background-color: #4e4c4f;
+    border-radius: 100px;
+    border: 10px #4e4c4f solid;
+    outline-style: solid;
+
+  }
+  
+  #question {
+    font-size: 36px;
+    outline-style: solid;
+    background-color: #4e4c4f;
+    border-radius: 100px;
+    color:#d9ae8e;
+  }
+  
+  #options {
+    margin-bottom: 20px;
+  }
+  
+  #options button {
+    padding: 10px 20px;
+    font-size: 20px;
+    margin: 15px;
+    cursor: pointer;
+    background-color: #d9ae8e;
+    color: #4e4c4f;
+    border-radius: 100px;
+  }
+  
+  #restart-container {
+    margin-top: 20px;
+  }
+  
+  #restart-button {
+    padding: 10px 30px;
+    font-size: 30px;
+    cursor: pointer;
+    margin-top: 40px;
+    color:#d9ae8e;
+    background-color: #4e4c4f;
+    border-radius: 100px;
+    border-style: solid;
+  }
+  canvas {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 1;
+    z-index: -1;
+  }
