@@ -286,6 +286,44 @@ window.addEventListener("load", function () {
       this.fontFamily = "Helvetica";
       this.color = "#f6f930ff";
     }
+    draw(context) {
+      context.save();
+      context.fillStyle = this.color;
+      context.shadowOffsetX = 2;
+      context.shadowOffsetY = 2;
+      context.shadowColor = "black";
+      context.font = this.fontSize + "px " + this.fontFamily;
+
+      // game over message
+      if (this.game.gameOver) {
+        context.textAlign = "center";
+        let message1;
+        let message2;
+        if (this.game.score >= this.game.winningScore) {
+          message1 = "You Win!";
+          message2 =
+            "Well done! Your High Score is: " +
+            (this.game.gameTime / 1000).toFixed(1) +
+            "s";
+        } else {
+          message1 = "You lose!";
+          message2 = "Try again next time!";
+        }
+        context.font = "50px" + this.fontFamily;
+        context.fillText(
+          message1,
+          this.game.width * 0.5,
+          this.game.height * 0.5 - 40
+        );
+        context.font = "25px" + this.fontFamily;
+        context.fillText(
+          message2,
+          this.game.width * 0.5,
+          this.game.height * 0.5 + 40
+        );
+      }
+      context.restore();
+    }
   }
   class Game {
     constructor(width, height) {
