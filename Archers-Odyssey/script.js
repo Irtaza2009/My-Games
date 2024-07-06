@@ -196,7 +196,40 @@ window.addEventListener("load", function () {
       this.type = "arrowB";
     }
   }
-
+  class Swords extends Enemy {
+    constructor(game) {
+      super(game);
+      this.width = 70;
+      this.height = 70;
+      this.lives = 2;
+      this.hitPoints = 1;
+      this.score = this.lives;
+      this.frameX = 0;
+      this.frameY = 0;
+      this.animate = true;
+      this.y =
+        this.game.height * 0.38 +
+        Math.random() * (this.game.height * 0.5 - this.height);
+      this.image = document.getElementById("swords");
+    }
+  }
+  class Peasants extends Enemy {
+    constructor(game) {
+      super(game);
+      this.width = 62;
+      this.height = 70;
+      this.lives = 1;
+      this.hitPoints = 1;
+      this.score = this.lives;
+      this.frameX = 0;
+      this.frameY = 0;
+      this.animate = false;
+      this.y =
+        this.game.height * 0.38 +
+        Math.random() * (this.game.height * 0.5 - this.height);
+      this.image = document.getElementById("peasant");
+    }
+  }
   class Layer {
     constructor(game, image, speedModifier) {
       this.game = game;
