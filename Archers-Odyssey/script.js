@@ -1,3 +1,17 @@
+/* A simple game using HTML5 Canvas
+and JavaScript.
+The game is a simple shooter
+game where the player has to shoot
+enemies to gain points.
+The player can move up
+and down and shoot projectiles.
+The game has a simple scoring
+system and a game over screen.
+The game also has a simple
+background and a parallax effect.
+The game also has a debug
+mode to show collision boxes.*/
+
 window.addEventListener("load", function () {
   const canvas = document.getElementById("canvas1");
   const ctx = canvas.getContext("2d");
@@ -178,6 +192,42 @@ window.addEventListener("load", function () {
     }
   }
 
+  class Mage extends Enemy {
+    constructor(game) {
+      super(game);
+      this.width = 65;
+      this.height = 70;
+      this.lives = 5;
+      this.hitPoints = 2;
+      this.score = this.lives;
+      this.y =
+        this.game.height * 0.38 +
+        Math.random() * (this.game.height * 0.5 - this.height);
+      this.frameX = 0;
+      this.frameY = 0;
+      this.animate = false;
+      this.image = document.getElementById("mage");
+    }
+  }
+  class Lucky extends Enemy {
+    constructor(game) {
+      super(game);
+      this.width = 40;
+      this.height = 40;
+      this.lives = 15;
+      this.hitPoints = -1;
+      this.score = 15;
+      this.y =
+        this.game.height * 0.38 +
+        Math.random() * (this.game.height * 0.5 - this.height);
+      this.frameX = 4;
+      this.frameY = 1;
+      this.animate = false;
+      this.image = document.getElementById("heart");
+      this.type = "lucky";
+    }
+  }
+
   class ArrowB extends Enemy {
     constructor(game) {
       super(game);
@@ -196,40 +246,7 @@ window.addEventListener("load", function () {
       this.type = "arrowB";
     }
   }
-  class Swords extends Enemy {
-    constructor(game) {
-      super(game);
-      this.width = 70;
-      this.height = 70;
-      this.lives = 2;
-      this.hitPoints = 1;
-      this.score = this.lives;
-      this.frameX = 0;
-      this.frameY = 0;
-      this.animate = true;
-      this.y =
-        this.game.height * 0.38 +
-        Math.random() * (this.game.height * 0.5 - this.height);
-      this.image = document.getElementById("swords");
-    }
-  }
-  class Peasants extends Enemy {
-    constructor(game) {
-      super(game);
-      this.width = 62;
-      this.height = 70;
-      this.lives = 1;
-      this.hitPoints = 1;
-      this.score = this.lives;
-      this.frameX = 0;
-      this.frameY = 0;
-      this.animate = false;
-      this.y =
-        this.game.height * 0.38 +
-        Math.random() * (this.game.height * 0.5 - this.height);
-      this.image = document.getElementById("peasant");
-    }
-  }
+
   class Layer {
     constructor(game, image, speedModifier) {
       this.game = game;
