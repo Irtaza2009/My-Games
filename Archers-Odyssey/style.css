@@ -1,0 +1,29 @@
+element{
+    --tiffany-blue: #97ead2ff;
+    --desert-sand: #d7b29dff;
+    --slate-gray: #6d8a96ff;
+    --yellow: #f6f930ff;
+    --royal-blue-traditional: #03256cff;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#canvas1 {
+    border: 5px solid black;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #97ead2ff;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#layer1, #layer2, #layer3, #player, #peasant, #mage, #swords, #heart, #arrow, #arrowB {
+    display: none;
+}
