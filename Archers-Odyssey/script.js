@@ -139,6 +139,63 @@ window.addEventListener("load", function () {
       }
     }
   }
+  class Enemy {
+    constructor(game) {
+      this.game = game;
+      this.x = this.game.width;
+      this.speedX = Math.random() * -1.5 - 0.5;
+      this.markedForDeletion = false;
+    }
+    update() {
+      this.x += this.speedX - this.game.speed;
+      if (this.x + this.width < 0) this.markedForDeletion = true;
+    }
+    draw(context) {
+      if (this.game.debug)
+        context.strokeRect(this.x, this.y, this.width, this.height);
+      if (this.type == "lucky" || this.type == "arrowB")
+        context.drawImage(this.image, this.x, this.y, this.width, this.height);
+      else
+        context.drawImage(
+          this.image,
+          this.frameX * this.width,
+          this.frameY * this.height,
+          this.width,
+          this.height,
+          this.x,
+          this.y,
+          this.width,
+          this.height
+        );
+      context.fillStyle = "black";
+      context.font = "20px Helvetica";
+      if (this.game.debug)
+        context.fillText(
+          this.lives,
+          this.x + this.width / 2,
+          this.y + this.height / 2
+        );
+    }
+  }
+
+  class ArrowB extends Enemy {
+    constructor(game) {
+      super(game);
+      this.width = 40;
+      this.height = 40;
+      this.lives = 15;
+      this.hitPoints = 0;
+      this.score = 15;
+      this.y =
+        this.game.height * 0.38 +
+        Math.random() * (this.game.height * 0.5 - this.height);
+      this.frameX = 4;
+      this.frameY = 1;
+      this.animate = false;
+      this.image = document.getElementById("arrowB");
+      this.type = "arrowB";
+    }
+  }
 
   class Layer {
     constructor(game, image, speedModifier) {
@@ -189,7 +246,14 @@ window.addEventListener("load", function () {
       this.layers.forEach((layer) => layer.draw(context));
     }
   }
-
+  class UI {
+    constructor(game) {
+      this.game = game;
+      this.fontSize = 25;
+      this.fontFamily = "Helvetica";
+      this.color = "#f6f930ff";
+    }
+  }
   class Game {
     constructor(width, height) {
       this.width = width;
@@ -258,8 +322,27 @@ window.addEventListener("load", function () {
       this.background.draw(context);
       this.player.draw(context);
       this.ui.draw(context);
-
+      this.enemies.forEach((enemy) => {
+        enemy.draw(context);
+      });
       this.ui.draw(context);
+    }
+    addEnemy() {
+      const randomise = Math.random();
+      if (this.score >= 50 && randomise > 0.6)
+        this.enemies.push(new Mage(this));
+      if (randomise > 0.95) this.enemies.push(new ArrowB(this));
+      else if (randomise > 0.9) this.enemies.push(new Lucky(this));
+      else if (randomise > 0.6) this.enemies.push(new Swords(this));
+      else if (randomise > 0) this.enemies.push(new Peasants(this));
+    }
+    checkCollision(rect1, rect2) {
+      return (
+        rect1.x < rect2.x + rect2.width &&
+        rect1.x + rect1.width > rect2.x &&
+        rect1.y < rect2.y + rect2.height &&
+        rect1.height + rect1.y > rect2.y
+      );
     }
   }
 
