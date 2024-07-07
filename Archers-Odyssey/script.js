@@ -47,6 +47,7 @@ window.addEventListener("load", function () {
   }
 
   // Projectile class represents the projectiles shot by the player
+
   class Projectile {
     constructor(game, x, y) {
       this.game = game;
@@ -281,6 +282,23 @@ window.addEventListener("load", function () {
       this.image = document.getElementById("swords");
     }
   }
+  class Peasants extends Enemy {
+    constructor(game) {
+      super(game);
+      this.width = 62;
+      this.height = 70;
+      this.lives = 1;
+      this.hitPoints = 1;
+      this.score = this.lives;
+      this.frameX = 0;
+      this.frameY = 0;
+      this.animate = false;
+      this.y =
+        this.game.height * 0.38 +
+        Math.random() * (this.game.height * 0.5 - this.height);
+      this.image = document.getElementById("peasant");
+    }
+  }
 
   // Peasants class represents a specific type of enemy
   class Peasants extends Enemy {
@@ -355,6 +373,82 @@ window.addEventListener("load", function () {
   }
 
   // UI class represents the user interface elements in the game
+
+  class UI {
+    constructor(game) {
+      this.game = game;
+      this.fontSize = 25;
+      this.fontFamily = "Helvetica";
+      this.color = "#f6f930ff";
+    }
+    draw(context) {
+      context.save();
+      context.fillStyle = this.color;
+      context.shadowOffsetX = 2;
+      context.shadowOffsetY = 2;
+      context.shadowColor = "black";
+      context.font = this.fontSize + "px " + this.fontFamily;
+      // time
+      context.fillText(
+        "Time: " + (this.game.gameTime / 1000).toFixed(1) + "s",
+        this.game.width - 150,
+        30
+      );
+      // score
+      context.fillText("Score: " + this.game.score, 20, 30);
+      // ammo
+      context.fillStyle = this.color;
+      for (let i = 0; i < this.game.ammo; i++) {
+        context.drawImage(
+          document.getElementById("arrow"),
+          20 + 12 * i,
+          50,
+          10,
+          20
+        );
+      }
+      // hp
+      context.fillStyle = "red";
+      for (let i = 0; i < this.game.hp; i++) {
+        context.drawImage(
+          document.getElementById("heart"),
+          this.game.width - 25 - 21 * i,
+          60,
+          20,
+          20
+        );
+      }
+      // game over message
+      if (this.game.gameOver) {
+        context.textAlign = "center";
+        let message1;
+        let message2;
+        if (this.game.score >= this.game.winningScore) {
+          message1 = "You Win!";
+          message2 =
+            "Well done! Your High Score is: " +
+            (this.game.gameTime / 1000).toFixed(1) +
+            "s";
+        } else {
+          message1 = "You lose!";
+          message2 = "Try again next time!";
+        }
+        context.font = "50px" + this.fontFamily;
+        context.fillText(
+          message1,
+          this.game.width * 0.5,
+          this.game.height * 0.5 - 40
+        );
+        context.font = "25px" + this.fontFamily;
+        context.fillText(
+          message2,
+          this.game.width * 0.5,
+          this.game.height * 0.5 + 40
+        );
+      }
+      context.restore();
+    }
+  }
 
   // Game class represents the game itself
   class Game {
