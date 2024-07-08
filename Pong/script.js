@@ -83,3 +83,68 @@ const draw = () => {
   ctx.fillText(leftScore, canvas.width / 4, 50);
   ctx.fillText(rightScore, (canvas.width / 4) * 3, 50);
 };
+
+const update = () => {
+  ballX += ballXSpeed;
+  ballY += ballYSpeed;
+
+  // Ball bouncing logic
+  if (ballY + ballSize > canvas.height || ballY < 0) {
+    ballYSpeed = -ballYSpeed;
+  }
+
+  if (ballX + ballSize > canvas.width) {
+    if (ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight / 2) {
+      ballXSpeed = -ballXSpeed;
+
+      // Add a random angle to the ball's trajectory
+      ballYSpeed += Math.random() * 2 - 1;
+    } else {
+      // Left player scores
+      leftScore++;
+      ballX = canvas.width / 2;
+      ballY = canvas.height / 2;
+      ballXSpeed = 3;
+      ballYSpeed = 3;
+    }
+  }
+
+  if (ballX < 0) {
+    if (ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight / 2) {
+      ballXSpeed = -ballXSpeed;
+
+      // Add a random angle to the ball's trajectory
+      ballYSpeed += Math.random() * 2 - 1;
+    } else {
+      // Right player scores
+      rightScore++;
+      ballX = canvas.width / 2;
+      ballY = canvas.height / 2;
+      ballXSpeed = -3;
+      ballYSpeed = 3;
+    }
+  }
+
+  // Move left paddle
+  if (leftPaddleY > ballY - paddleHeight / 2) {
+    leftPaddleY -= 2;
+  }
+  if (leftPaddleY + paddleHeight / 2 < ballY) {
+    leftPaddleY += 2;
+  }
+
+  // Move right paddle
+  if (rightPaddleUp) {
+    rightPaddleY -= 5;
+  }
+  if (rightPaddleDown) {
+    rightPaddleY += 5;
+  }
+
+  // Check if right paddle is within canvas boundaries
+  if (rightPaddleY < 0) {
+    rightPaddleY = 0;
+  } else if (rightPaddleY + paddleHeight / 2 > canvas.height) {
+    rightPaddleY = canvas.height - paddleHeight / 2;
+  }
+};
