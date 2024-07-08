@@ -1,17 +1,17 @@
 /* A simple game using HTML5 Canvas
-and JavaScript.
-The game is a simple shooter
-game where the player has to shoot
-enemies to gain points.
-The player can move up
-and down and shoot projectiles.
-The game has a simple scoring
-system and a game over screen.
-The game also has a simple
-background and a parallax effect.
-The game also has a debug
-mode to show collision boxes.
-The enemies are all made by extending the enemy class.*/
+-and JavaScript.
+-The game is a simple shooter
+-game where the player has to shoot
+-enemies to gain points.
+-The player can move up
+-and down and shoot projectiles.
+-The game has a simple scoring
+-system and a game over screen.
+-The game also has a simple
+-background and a parallax effect.
+-The game also has a debug
+-mode to show collision boxes.
+-The enemies are all made by extending the enemy class.*/
 
 window.addEventListener("load", function () {
   const canvas = document.getElementById("canvas1");
@@ -19,11 +19,9 @@ window.addEventListener("load", function () {
   canvas.width = 700;
   canvas.height = 500;
 
-  // InputHandler class handles user input
   class InputHandler {
     constructor(game) {
       this.game = game;
-      // Listen for keydown event
       window.addEventListener("keydown", (e) => {
         if (
           (e.key === "ArrowUp" || e.key === "ArrowDown") &&
@@ -37,7 +35,6 @@ window.addEventListener("load", function () {
           this.game.debug = !this.game.debug;
         }
       });
-      // Listen for keyup event
       window.addEventListener("keyup", (e) => {
         if (this.game.keys.indexOf(e.key) > -1) {
           this.game.keys.splice(this.game.keys.indexOf(e.key), 1);
@@ -45,9 +42,6 @@ window.addEventListener("load", function () {
       });
     }
   }
-
-  // Projectile class represents the projectiles shot by the player
-
   class Projectile {
     constructor(game, x, y) {
       this.game = game;
@@ -77,11 +71,7 @@ window.addEventListener("load", function () {
       );
     }
   }
-
-  // Particle class represents particles in the game
   class Particle {}
-
-  // Player class represents the player character
   class Player {
     constructor(game) {
       this.game = game;
@@ -164,8 +154,6 @@ window.addEventListener("load", function () {
       }
     }
   }
-
-  // Enemy class represents the enemies in the game
   class Enemy {
     constructor(game) {
       this.game = game;
@@ -204,8 +192,6 @@ window.addEventListener("load", function () {
         );
     }
   }
-
-  // Mage class represents a specific type of enemy
   class Mage extends Enemy {
     constructor(game) {
       super(game);
@@ -223,8 +209,6 @@ window.addEventListener("load", function () {
       this.image = document.getElementById("mage");
     }
   }
-
-  // Lucky class represents a specific type of enemy
   class Lucky extends Enemy {
     constructor(game) {
       super(game);
@@ -243,8 +227,6 @@ window.addEventListener("load", function () {
       this.type = "lucky";
     }
   }
-
-  // ArrowB class represents a specific type of enemy
   class ArrowB extends Enemy {
     constructor(game) {
       super(game);
@@ -263,8 +245,6 @@ window.addEventListener("load", function () {
       this.type = "arrowB";
     }
   }
-
-  // Swords class represents a specific type of enemy
   class Swords extends Enemy {
     constructor(game) {
       super(game);
@@ -299,27 +279,6 @@ window.addEventListener("load", function () {
       this.image = document.getElementById("peasant");
     }
   }
-
-  // Peasants class represents a specific type of enemy
-  class Peasants extends Enemy {
-    constructor(game) {
-      super(game);
-      this.width = 62;
-      this.height = 70;
-      this.lives = 1;
-      this.hitPoints = 1;
-      this.score = this.lives;
-      this.frameX = 0;
-      this.frameY = 0;
-      this.animate = false;
-      this.y =
-        this.game.height * 0.38 +
-        Math.random() * (this.game.height * 0.5 - this.height);
-      this.image = document.getElementById("peasant");
-    }
-  }
-
-  // Layer class represents a layer in the game background
   class Layer {
     constructor(game, image, speedModifier) {
       this.game = game;
@@ -351,8 +310,6 @@ window.addEventListener("load", function () {
       );
     }
   }
-
-  // Background class represents the game background
   class Background {
     constructor(game) {
       this.game = game;
@@ -371,9 +328,6 @@ window.addEventListener("load", function () {
       this.layers.forEach((layer) => layer.draw(context));
     }
   }
-
-  // UI class represents the user interface elements in the game
-
   class UI {
     constructor(game) {
       this.game = game;
@@ -449,8 +403,6 @@ window.addEventListener("load", function () {
       context.restore();
     }
   }
-
-  // Game class represents the game itself
   class Game {
     constructor(width, height) {
       this.width = width;
