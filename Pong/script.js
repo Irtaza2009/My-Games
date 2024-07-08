@@ -148,3 +148,42 @@ const update = () => {
     rightPaddleY = canvas.height - paddleHeight / 2;
   }
 };
+
+const handleKeyDown = (e) => {
+  switch (e.key) {
+    case "ArrowUp":
+      rightPaddleUp = true;
+      break;
+    case "ArrowDown":
+      rightPaddleDown = true;
+      break;
+    default:
+      break;
+  }
+};
+
+const handleKeyUp = (e) => {
+  switch (e.key) {
+    case "ArrowUp":
+      rightPaddleUp = false;
+      break;
+    case "ArrowDown":
+      rightPaddleDown = false;
+      break;
+    default:
+      break;
+  }
+};
+
+const gameLoop = () => {
+  update();
+  draw();
+  requestAnimationFrame(gameLoop);
+};
+
+window.addEventListener("resize", resizeCanvas);
+window.addEventListener("keydown", handleKeyDown);
+window.addEventListener("keyup", handleKeyUp);
+
+resizeCanvas();
+gameLoop();
