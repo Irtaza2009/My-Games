@@ -11,21 +11,24 @@ const basket = {
 };
 
 const balls = [];
-const ballRadius = 10;
 let score = 0;
+let lives = 3;
 let gameInterval;
 let ballInterval;
 
+const scoreElement = document.getElementById("score");
+const livesElement = document.getElementById("lives");
+
 function drawBasket() {
-  ctx.fillStyle = "#0095DD";
+  ctx.fillStyle = "#FFB6C1";
   ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
 }
 
 function drawBalls() {
   balls.forEach((ball) => {
     ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ballRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "red";
+    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+    ctx.fillStyle = ball.color;
     ctx.fill();
     ctx.closePath();
   });
@@ -48,28 +51,37 @@ function moveBalls() {
     ball.y += ball.dy;
 
     if (
-      ball.y + ballRadius > basket.y &&
-      ball.y + ballRadius < basket.y + basket.height &&
+      ball.y + ball.radius > basket.y &&
+      ball.y + ball.radius < basket.y + basket.height &&
       ball.x > basket.x &&
       ball.x < basket.x + basket.width
     ) {
       balls.splice(index, 1);
       score++;
-    } else if (ball.y + ballRadius > canvas.height) {
+      scoreElement.textContent = score;
+    } else if (ball.y + ball.radius > canvas.height) {
       balls.splice(index, 1);
+      lives--;
+      livesElement.textContent = lives;
+
+      if (lives <= 0) {
+        endGame();
+      }
     }
   });
 }
 
 function addBall() {
-  const x = Math.random() * (canvas.width - ballRadius * 2) + ballRadius;
-  const y = ballRadius;
+  const x = Math.random() * (canvas.width - 20) + 10;
+  const y = 10;
   const dy = Math.random() * 2 + 1;
-  balls.push({ x, y, dy });
+  const radius = Math.random() * 15 + 5;
+  const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+  balls.push({ x, y, dy, radius, color });
 }
 
 function drawScore() {
-  ctx.font = "16px Arial";
+  ctx.font = "20px CozyFont";
   ctx.fillStyle = "#0095DD";
   ctx.fillText(`Score: ${score}`, 8, 20);
 }
@@ -78,7 +90,6 @@ function update() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBasket();
   drawBalls();
-  drawScore();
   moveBasket();
   moveBalls();
 }
@@ -111,7 +122,7 @@ function endGame() {
   clearInterval(gameInterval);
   clearInterval(ballInterval);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.font = "30px Arial";
+  ctx.font = "30px CozyFont";
   ctx.fillStyle = "red";
   ctx.fillText("Game Over", canvas.width / 2 - 75, canvas.height / 2);
   ctx.fillText(
@@ -125,5 +136,3 @@ document.addEventListener("keydown", keyDown);
 document.addEventListener("keyup", keyUp);
 
 startGame();
-
-setTimeout(endGame, 30000); // End the game after 30 seconds
