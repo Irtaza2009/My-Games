@@ -31,7 +31,7 @@ const basket = {
   x: canvas.width / 2 - 100,
   y: canvas.height - 105,
   width: 150,
-  height: 100, // Adjust to match your image size
+  height: 100,
   dx: 0,
   speed: 7,
   caughtBalls: [], // Add container for caught balls
@@ -181,6 +181,28 @@ function moveCaughtBalls() {
           ball.dy = otherBall.dy;
           otherBall.dx = tempDx;
           otherBall.dy = tempDy;
+
+          // Combine balls if they are primary colors
+          const newColor = mixColors(ball.color, otherBall.color);
+          if (newColor) {
+            // Remove the two balls
+            basket.caughtBalls.splice(i, 1);
+            basket.caughtBalls.splice(index, 1);
+
+            // Add new combined ball
+            const newRadius = Math.max(ball.radius, otherBall.radius) + 5;
+            const newBall = {
+              x: (ball.x + otherBall.x) / 2,
+              y: (ball.y + otherBall.y) / 2,
+              dx: (ball.dx + otherBall.dx) / 2,
+              dy: (ball.dy + otherBall.dy) / 2,
+              radius: newRadius,
+              color: newColor,
+            };
+            basket.caughtBalls.push(newBall);
+            score += 10; // Additional score for combining balls
+            scoreElement.textContent = `Score: ${score}`;
+          }
         }
       }
     }
@@ -205,27 +227,49 @@ function moveBombs() {
   });
 }
 
-// Predefined cozy and aesthetic colors
-const cozyColors = [
-  "#FFDAB9", // Peach Puff
-  "#FFE4B5", // Moccasin
-  "#FFDEAD", // Navajo White
-  "#FFFACD", // Lemon Chiffon
-  "#E6E6FA", // Lavender
-  "#D8BFD8", // Thistle
-  "#DDA0DD", // Plum
-  "#FFC0CB", // Pink
-  "#FFB6C1", // Light Pink
-  "#F5DEB3", // Wheat
-];
+// Predefined primary and secondary cozy colors
+const primaryColors = {
+  red: "#FFC0CB", // Cozy Pinkish Red
+  yellow: "#FFDEAD", // Cozy Yellowish
+  blue: "#ADD8E6", // Cozy Light Blue
+};
+
+const secondaryColors = {
+  orange: "#FFDAB9", // Cozy Peach
+  green: "#98FB98", // Cozy Pale Green
+  purple: "#DDA0DD", // Cozy Plum
+};
+
+function mixColors(color1, color2) {
+  if (
+    (color1 === primaryColors.red && color2 === primaryColors.yellow) ||
+    (color1 === primaryColors.yellow && color2 === primaryColors.red)
+  ) {
+    return secondaryColors.orange;
+  } else if (
+    (color1 === primaryColors.yellow && color2 === primaryColors.blue) ||
+    (color1 === primaryColors.blue && color2 === primaryColors.yellow)
+  ) {
+    return secondaryColors.green;
+  } else if (
+    (color1 === primaryColors.red && color2 === primaryColors.blue) ||
+    (color1 === primaryColors.blue && color2 === primaryColors.red)
+  ) {
+    return secondaryColors.purple;
+  } else {
+    return null;
+  }
+}
 
 function addBall() {
   const x = Math.random() * (canvas.width - 20) + 10;
   const y = 10;
-  const dy = Math.random() * 2 + 1;
-  const radius = Math.random() * 15 + 5;
-  const color = cozyColors[Math.floor(Math.random() * cozyColors.length)];
-  balls.push({ x, y, dy, radius, color });
+  const dx = (Math.random() - 0.5) * 2; // Random horizontal movement
+  const dy = Math.random() * 2 + 1; // Random vertical speed
+  const radius = Math.random() * 15 + 5; // Random radius
+  const colors = Object.values(primaryColors);
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  balls.push({ x, y, dx, dy, radius, color });
 }
 
 function addBomb() {
@@ -234,7 +278,7 @@ function addBomb() {
   const dy = Math.random() * 2 + 1;
   const radius = 15; // Bomb size
   const color = "black";
-  bombs.push({ x, y, dy, radius });
+  bombs.push({ x, y, dy, radius, color });
 }
 
 function drawScore() {
@@ -298,7 +342,5 @@ document.addEventListener("keydown", keyDown);
 document.addEventListener("keyup", keyUp);
 window.addEventListener("resize", resizeCanvas);
 
-// Commenting out the basket image loading
-// basketImg.onload = startGame;
 startGame();
 resizeCanvas();
