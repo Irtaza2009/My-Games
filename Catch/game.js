@@ -1,16 +1,31 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-let canvasWidth = window.innerWidth;
-let canvasHeight =
-  window.innerHeight - document.querySelector(".ui-container").offsetHeight;
+const MAX_CANVAS_WIDTH = 800; // Maximum width for larger screens
+const MAX_CANVAS_HEIGHT = 600; // Maximum height for larger screens
 
-canvas.width = canvasWidth;
-canvas.height = canvasHeight;
+function resizeCanvas() {
+  const viewportWidth = window.innerWidth;
+  const viewportHeight =
+    window.innerHeight - document.querySelector(".ui-container").offsetHeight;
 
-// Commenting out the basket image
-// const basketImg = new Image();
-// basketImg.src = "basket.png"; // Replace with the correct path to your basket image
+  canvasWidth = Math.min(viewportWidth, MAX_CANVAS_WIDTH);
+  canvasHeight = Math.min(viewportHeight, MAX_CANVAS_HEIGHT);
+
+  canvas.width = canvasWidth;
+  canvas.height = canvasHeight;
+
+  basket.y = canvas.height - basket.height - 10;
+
+  // Adjust the position of caught balls to fit new dimensions
+  basket.caughtBalls.forEach((ball) => {
+    ball.x = Math.min(ball.x, canvas.width - ball.radius);
+    ball.y = Math.min(ball.y, canvas.height - ball.radius);
+  });
+}
+
+canvas.width = MAX_CANVAS_WIDTH;
+canvas.height = MAX_CANVAS_HEIGHT;
 
 const basket = {
   x: canvas.width / 2 - 100,
@@ -120,7 +135,7 @@ function moveBalls() {
 }
 
 function moveCaughtBalls() {
-  basket.caughtBalls.forEach((ball) => {
+  basket.caughtBalls.forEach((ball, index) => {
     ball.dy += 0.1; // Gravity
     ball.x += ball.dx;
     ball.y += ball.dy;
@@ -139,6 +154,35 @@ function moveCaughtBalls() {
     } else if (ball.x + ball.radius > basket.x + basket.width - 10) {
       ball.x = basket.x + basket.width - 10 - ball.radius;
       ball.dx *= -0.3;
+    }
+
+    // Check for collisions with other balls
+    for (let i = 0; i < basket.caughtBalls.length; i++) {
+      if (i !== index) {
+        const otherBall = basket.caughtBalls[i];
+        const dx = ball.x - otherBall.x;
+        const dy = ball.y - otherBall.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const minDist = ball.radius + otherBall.radius;
+
+        if (distance < minDist) {
+          // Adjust positions to prevent overlap
+          const angle = Math.atan2(dy, dx);
+          const overlap = (minDist - distance) / 2;
+          ball.x += Math.cos(angle) * overlap;
+          ball.y += Math.sin(angle) * overlap;
+          otherBall.x -= Math.cos(angle) * overlap;
+          otherBall.y -= Math.sin(angle) * overlap;
+
+          // Adjust velocities to simulate bounce
+          const tempDx = ball.dx;
+          const tempDy = ball.dy;
+          ball.dx = otherBall.dx;
+          ball.dy = otherBall.dy;
+          otherBall.dx = tempDx;
+          otherBall.dy = tempDy;
+        }
+      }
     }
   });
 }
@@ -161,12 +205,26 @@ function moveBombs() {
   });
 }
 
+// Predefined cozy and aesthetic colors
+const cozyColors = [
+  "#FFDAB9", // Peach Puff
+  "#FFE4B5", // Moccasin
+  "#FFDEAD", // Navajo White
+  "#FFFACD", // Lemon Chiffon
+  "#E6E6FA", // Lavender
+  "#D8BFD8", // Thistle
+  "#DDA0DD", // Plum
+  "#FFC0CB", // Pink
+  "#FFB6C1", // Light Pink
+  "#F5DEB3", // Wheat
+];
+
 function addBall() {
   const x = Math.random() * (canvas.width - 20) + 10;
   const y = 10;
   const dy = Math.random() * 2 + 1;
   const radius = Math.random() * 15 + 5;
-  const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+  const color = cozyColors[Math.floor(Math.random() * cozyColors.length)];
   balls.push({ x, y, dy, radius, color });
 }
 
@@ -176,7 +234,7 @@ function addBomb() {
   const dy = Math.random() * 2 + 1;
   const radius = 15; // Bomb size
   const color = "black";
-  bombs.push({ x, y, dy, radius, color });
+  bombs.push({ x, y, dy, radius });
 }
 
 function drawScore() {
@@ -236,15 +294,6 @@ function endGame() {
   );
 }
 
-function resizeCanvas() {
-  canvasWidth = window.innerWidth;
-  canvasHeight =
-    window.innerHeight - document.querySelector(".ui-container").offsetHeight;
-  canvas.width = canvasWidth;
-  canvas.height = canvasHeight;
-  basket.y = canvas.height - 30;
-}
-
 document.addEventListener("keydown", keyDown);
 document.addEventListener("keyup", keyUp);
 window.addEventListener("resize", resizeCanvas);
@@ -252,3 +301,4 @@ window.addEventListener("resize", resizeCanvas);
 // Commenting out the basket image loading
 // basketImg.onload = startGame;
 startGame();
+resizeCanvas();
