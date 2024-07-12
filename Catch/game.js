@@ -330,6 +330,13 @@ function keyUp(e) {
 }
 
 function startGame() {
+  score = 0;
+  lives = 3;
+  balls.length = 0;
+  bombs.length = 0;
+  basket.caughtBalls.length = 0;
+  scoreElement.textContent = `Score: ${score}`;
+  livesElement.textContent = `Lives: ${lives}`;
   gameInterval = setInterval(update, 20);
   ballInterval = setInterval(addBall, 2000); // Slower ball spawn rate
   bombInterval = setInterval(addBomb, 5000); // Bombs spawn every 5 seconds
@@ -348,6 +355,22 @@ function endGame() {
     canvas.width / 2 - 100,
     canvas.height / 2 + 40
   );
+
+  // Create and show the restart button
+  const restartButton = document.createElement("button");
+  restartButton.innerHTML = '<i class="fas fa-redo"></i> Restart';
+  restartButton.className = "restart-button"; // Add class for styling
+  restartButton.onclick = () => {
+    restartButton.remove(); // Remove button after clicking
+    startGame();
+  };
+  document.body.appendChild(restartButton);
+
+  // Position the restart button below the game over text
+  restartButton.style.top = `${canvas.offsetTop + canvas.height / 2 + 70}px`;
+  restartButton.style.left = `${
+    canvas.offsetLeft + canvas.width / 2 - restartButton.offsetWidth / 2
+  }px`;
 }
 
 document.addEventListener("keydown", keyDown);

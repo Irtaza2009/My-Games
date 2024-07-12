@@ -38,3 +38,23 @@ canvas {
   margin-right: 40px;
   color: #8b4513;
 }
+
+.restart-button {
+  position: absolute;
+  padding: 10px 20px;
+  font-size: 20px;
+  background-color: #8b4513;
+  color: #fff;
+  border: none;
+  border-radius: 10px; /* Rounded borders */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Space between icon and text */
+  font-family: "Agbalumo", sans-serif; /* Cozy font */
+}
+
+.restart-button i {
+  font-size: 24px; /* FontAwesome icon size */
+}
