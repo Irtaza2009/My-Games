@@ -5,12 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cozy Catch Game</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="game.js" defer></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
   </head>
   <body>
+    <div id="titleScreen" class="title-screen">
+      <h1>Cozy Catch Game</h1>
+      <button id="playButton" class="play-button">
+        <i class="fas fa-play"></i> Play
+      </button>
+    </div>
     <div class="ui-container">
       <div id="score" class="score">Score: 0</div>
       <div id="lives" class="lives">Lives: 3</div>
@@ -18,6 +25,5 @@
     <div class="game-container">
       <canvas id="gameCanvas"></canvas>
     </div>
-    <script src="game.js"></script>
   </body>
 </html>

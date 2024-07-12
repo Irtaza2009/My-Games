@@ -188,25 +188,52 @@ function moveCaughtBalls() {
             // Remove the two balls
             basket.caughtBalls.splice(i, 1);
             basket.caughtBalls.splice(index, 1);
-
-            // Add new combined ball
-            const newRadius = Math.max(ball.radius, otherBall.radius) + 5;
-            const newBall = {
+            // Add a new combined ball
+            basket.caughtBalls.push({
               x: (ball.x + otherBall.x) / 2,
               y: (ball.y + otherBall.y) / 2,
+              radius: ball.radius,
+              color: newColor,
               dx: (ball.dx + otherBall.dx) / 2,
               dy: (ball.dy + otherBall.dy) / 2,
-              radius: newRadius,
-              color: newColor,
-            };
-            basket.caughtBalls.push(newBall);
-            score += 10; // Additional score for combining balls
-            scoreElement.textContent = `Score: ${score}`;
+            });
           }
         }
       }
     }
   });
+}
+
+function mixColors(color1, color2) {
+  const primaryColors = {
+    red: [255, 0, 0],
+    yellow: [255, 255, 0],
+    blue: [0, 0, 255],
+  };
+
+  const getRGB = (color) => primaryColors[color];
+
+  const rgb1 = getRGB(color1);
+  const rgb2 = getRGB(color2);
+
+  if (!rgb1 || !rgb2) return null;
+
+  const mixedRGB = [
+    Math.min((rgb1[0] + rgb2[0]) / 2, 255),
+    Math.min((rgb1[1] + rgb2[1]) / 2, 255),
+    Math.min((rgb1[2] + rgb2[2]) / 2, 255),
+  ];
+
+  const colorMap = {
+    "255,0,0": "red",
+    "255,255,0": "yellow",
+    "0,0,255": "blue",
+    "128,128,0": "olive", // Yellow + Blue
+    "128,0,128": "purple", // Red + Blue
+    "255,128,0": "orange", // Red + Yellow
+  };
+
+  return colorMap[mixedRGB.join(",")] || null;
 }
 
 function moveBombs() {
@@ -220,126 +247,65 @@ function moveBombs() {
       bomb.x < basket.x + basket.width
     ) {
       bombs.splice(index, 1);
-      endGame();
+      lives--;
+      livesElement.textContent = `Lives: ${lives}`;
+
+      if (lives <= 0) {
+        endGame();
+      }
     } else if (bomb.y + bomb.radius > canvas.height) {
       bombs.splice(index, 1);
     }
   });
 }
 
-// Predefined primary and secondary cozy colors
-const primaryColors = {
-  red: "#FFC0CB", // Cozy Pinkish Red
-  yellow: "#FFDEAD", // Cozy Yellowish
-  blue: "#ADD8E6", // Cozy Light Blue
-  green: "#98FB98", // Cozy Pale Green
-};
-
-const secondaryColors = {
-  orange: "#FFDAB9", // Cozy Peach
-  purple: "#DDA0DD", // Cozy Plum
-  teal: "#AFEEEE", // Cozy Pale Blue
-  pink: "#FFB6C1", // Cozy Light Pink
-};
-
-function mixColors(color1, color2) {
-  if (
-    (color1 === primaryColors.red && color2 === primaryColors.yellow) ||
-    (color1 === primaryColors.yellow && color2 === primaryColors.red)
-  ) {
-    return secondaryColors.orange;
-  } else if (
-    (color1 === primaryColors.yellow && color2 === primaryColors.blue) ||
-    (color1 === primaryColors.blue && color2 === primaryColors.yellow)
-  ) {
-    return secondaryColors.green;
-  } else if (
-    (color1 === primaryColors.red && color2 === primaryColors.blue) ||
-    (color1 === primaryColors.blue && color2 === primaryColors.red)
-  ) {
-    return secondaryColors.purple;
-  } else if (
-    (color1 === primaryColors.red && color2 === primaryColors.green) ||
-    (color1 === primaryColors.green && color2 === primaryColors.red)
-  ) {
-    return secondaryColors.pink;
-  } else if (
-    (color1 === primaryColors.yellow && color2 === primaryColors.green) ||
-    (color1 === primaryColors.green && color2 === primaryColors.yellow)
-  ) {
-    return secondaryColors.teal;
-  } else {
-    return null; // No valid combination
-  }
-}
-
-function addBall() {
-  const x = Math.random() * (canvas.width - 20) + 10;
-  const y = 10;
-  const dx = (Math.random() - 0.5) * 2; // Random horizontal movement
-  const dy = Math.random() * 2 + 1; // Random vertical speed
-  const radius = Math.random() * 10 + 5; // Random radius for primary colors
-  const colors = Object.values(primaryColors);
-  const color = colors[Math.floor(Math.random() * colors.length)];
-  balls.push({ x, y, dx, dy, radius, color });
-}
-
-function addBomb() {
-  const x = Math.random() * (canvas.width - 20) + 10;
-  const y = 10;
-  const dy = Math.random() * 2 + 1;
-  const radius = 15; // Bomb size
-  const color = "black";
-  bombs.push({ x, y, dy, radius, color });
-}
-
-function drawScore() {
-  ctx.font = "20px Agbalumo";
-  ctx.fillStyle = "#0095DD";
-  ctx.fillText(`Score: ${score}`, 8, 20);
-}
-
-function update() {
+function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBasket();
   drawBalls();
   drawBombs();
+}
+
+function update() {
   moveBasket();
   moveBalls();
-  moveCaughtBalls();
   moveBombs();
-}
-
-function keyDown(e) {
-  if (e.key === "ArrowRight" || e.key === "Right") {
-    basket.dx = basket.speed;
-  } else if (e.key === "ArrowLeft" || e.key === "Left") {
-    basket.dx = -basket.speed;
-  }
-}
-
-function keyUp(e) {
-  if (
-    e.key === "ArrowRight" ||
-    e.key === "Right" ||
-    e.key === "ArrowLeft" ||
-    e.key === "Left"
-  ) {
-    basket.dx = 0;
-  }
+  moveCaughtBalls();
+  draw();
 }
 
 function startGame() {
+  balls.length = 0; // Clear balls array
+  bombs.length = 0; // Clear bombs array
+  basket.caughtBalls.length = 0; // Clear caught balls array
   score = 0;
   lives = 3;
-  balls.length = 0;
-  bombs.length = 0;
-  basket.caughtBalls.length = 0;
   scoreElement.textContent = `Score: ${score}`;
   livesElement.textContent = `Lives: ${lives}`;
-  gameInterval = setInterval(update, 20);
-  ballInterval = setInterval(addBall, 2000); // Slower ball spawn rate
-  bombInterval = setInterval(addBomb, 5000); // Bombs spawn every 5 seconds
+
+  gameInterval = setInterval(update, 1000 / 60);
+  ballInterval = setInterval(() => {
+    const radius = Math.random() * 20 + 10;
+    const x = Math.random() * (canvas.width - radius * 2) + radius;
+    const dy = Math.random() * 2 + 1;
+    const colors = ["red", "yellow", "blue"];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+
+    balls.push({ x, y: -radius, radius, color, dy, dx: 0 });
+  }, 1000);
+
+  bombInterval = setInterval(() => {
+    const radius = Math.random() * 15 + 10;
+    const x = Math.random() * (canvas.width - radius * 2) + radius;
+    const dy = Math.random() * 2 + 2;
+
+    bombs.push({ x, y: -radius, radius, color: "black", dy });
+  }, 3000);
+
+  // Hide the title screen and show the game elements
+  document.getElementById("titleScreen").style.display = "none";
+  document.querySelector(".ui-container").style.display = "block";
+  document.querySelector(".game-container").style.display = "block";
 }
 
 function endGame() {
@@ -373,9 +339,25 @@ function endGame() {
   }px`;
 }
 
-document.addEventListener("keydown", keyDown);
-document.addEventListener("keyup", keyUp);
-window.addEventListener("resize", resizeCanvas);
+document.getElementById("playButton").onclick = startGame;
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowLeft" || e.key === "a") {
+    basket.dx = -basket.speed;
+  } else if (e.key === "ArrowRight" || e.key === "d") {
+    basket.dx = basket.speed;
+  }
+});
 
-startGame();
+document.addEventListener("keyup", (e) => {
+  if (
+    e.key === "ArrowLeft" ||
+    e.key === "a" ||
+    e.key === "ArrowRight" ||
+    e.key === "d"
+  ) {
+    basket.dx = 0;
+  }
+});
+
+window.addEventListener("resize", resizeCanvas);
 resizeCanvas();

@@ -58,3 +58,46 @@ canvas {
 .restart-button i {
   font-size: 24px; /* FontAwesome icon size */
 }
+
+.title-screen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #ffe4e1; /* Cozy background color */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10; /* Ensure it is above other elements */
+}
+
+.title-screen h1 {
+  font-size: 48px;
+  color: #8b4513;
+  font-family: "Agbalumo", system-ui;
+  margin-bottom: 20px;
+}
+
+.play-button {
+  padding: 10px 20px;
+  font-size: 20px;
+  background-color: #8b4513;
+  color: #fff;
+  border: none;
+  border-radius: 10px; /* Rounded borders */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Space between icon and text */
+  font-family: "Agbalumo", sans-serif; /* Cozy font */
+}
+
+.play-button i {
+  font-size: 24px; /* FontAwesome icon size */
+}
+
+.ui-container,
+.game-container {
+  display: none; /* Hide game elements initially */
+}
