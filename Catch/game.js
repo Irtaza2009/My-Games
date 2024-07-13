@@ -86,11 +86,31 @@ function drawCaughtBalls() {
 
 function drawBombs() {
   bombs.forEach((bomb) => {
+    // Draw the black circle for the bomb
     ctx.beginPath();
     ctx.arc(bomb.x, bomb.y, bomb.radius, 0, Math.PI * 2);
     ctx.fillStyle = bomb.color;
     ctx.fill();
     ctx.closePath();
+
+    // Draw red spikes around the bomb
+    const spikeCount = 8;
+    const spikeLength = bomb.radius * 1.5;
+    for (let i = 0; i < spikeCount; i++) {
+      const angle = (i * Math.PI * 2) / spikeCount;
+      const startX = bomb.x + bomb.radius * Math.cos(angle);
+      const startY = bomb.y + bomb.radius * Math.sin(angle);
+      const endX = bomb.x + (bomb.radius + spikeLength) * Math.cos(angle);
+      const endY = bomb.y + (bomb.radius + spikeLength) * Math.sin(angle);
+
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(endX, endY);
+      ctx.strokeStyle = "red";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      ctx.closePath();
+    }
   });
 }
 
@@ -122,6 +142,9 @@ function moveBalls() {
       ball.dx = (Math.random() - 0.5) * 2; // Add horizontal movement
       ball.dy = -Math.abs(ball.dy) * 0.5; // Bounce up with half speed
       basket.caughtBalls.push(ball);
+
+      // Check for basket size upgrade
+      checkForBasketUpgrade();
     } else if (ball.y + ball.radius > canvas.height) {
       balls.splice(index, 1);
       lives--;
@@ -139,57 +162,6 @@ function moveCaughtBalls() {
     ball.dy += 0.1; // Gravity
     ball.x += ball.dx;
     ball.y += ball.dy;
-
-    // Collision with basket bottom
-    if (ball.y + ball.radius > basket.y + basket.height - 10) {
-      ball.y = basket.y + basket.height - 10 - ball.radius;
-      ball.dy *= -0.3; // Bounce with dampening
-      if (Math.abs(ball.dy) < 0.5) ball.dy = 0; // Stop bouncing if very slow
-    }
-
-    // Collision with basket sides
-    if (ball.x - ball.radius < basket.x + 10) {
-      ball.x = basket.x + 10 + ball.radius;
-      ball.dx *= -0.3;
-    } else if (ball.x + ball.radius > basket.x + basket.width - 10) {
-      ball.x = basket.x + basket.width - 10 - ball.radius;
-      ball.dx *= -0.3;
-    }
-
-    // Check for collisions with other balls
-    for (let i = 0; i < basket.caughtBalls.length; i++) {
-      if (i !== index) {
-        const otherBall = basket.caughtBalls[i];
-        const dx = ball.x - otherBall.x;
-        const dy = ball.y - otherBall.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const minDist = ball.radius + otherBall.radius;
-
-
-    // Collision with basket bottom
-    if (ball.y + ball.radius > basket.y + basket.height - 10) {
-      ball.y = basket.y + basket.height - 10 - ball.radius;
-      ball.dy *= -0.3; // Bounce with dampening
-      if (Math.abs(ball.dy) < 0.5) ball.dy = 0; // Stop bouncing if very slow
-    }
-
-    // Collision with basket sides
-    if (ball.x - ball.radius < basket.x + 10) {
-      ball.x = basket.x + 10 + ball.radius;
-      ball.dx *= -0.3;
-    } else if (ball.x + ball.radius > basket.x + basket.width - 10) {
-      ball.x = basket.x + basket.width - 10 - ball.radius;
-      ball.dx *= -0.3;
-    }
-
-    // Check for collisions with other balls
-    for (let i = 0; i < basket.caughtBalls.length; i++) {
-      if (i !== index) {
-        const otherBall = basket.caughtBalls[i];
-        const dx = ball.x - otherBall.x;
-        const dy = ball.y - otherBall.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const minDist = ball.radius + otherBall.radius;
 
     // Collision with basket bottom
     if (ball.y + ball.radius > basket.y + basket.height - 10) {
@@ -394,6 +366,22 @@ function endGame() {
   restartButton.style.left = `${
     canvas.offsetLeft + canvas.width / 2 - restartButton.offsetWidth / 2
   }px`;
+}
+
+// Function to check for basket size upgrade
+function checkForBasketUpgrade() {
+  const upgradeThresholds = [10, 20, 30]; // Define score thresholds
+  const upgradeAmount = 20; // Amount to increase basket width
+
+  upgradeThresholds.forEach((threshold) => {
+    if (score === threshold) {
+      basket.width += upgradeAmount;
+      // Ensure the basket doesn't exceed canvas width
+      if (basket.width > canvas.width) {
+        basket.width = canvas.width;
+      }
+    }
+  });
 }
 
 document.getElementById("playButton").onclick = startGame;
