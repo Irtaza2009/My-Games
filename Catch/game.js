@@ -40,14 +40,12 @@ const basket = {
 const balls = [];
 const bombs = [];
 const powerUps = []; // Array for power-ups
-const backgroundBalls = []; // Array for background falling balls
 let score = 0;
 let lives = 3;
 let gameInterval;
 let ballInterval;
 let bombInterval;
 let powerUpInterval;
-let backgroundInterval; // Interval for background balls
 let isSlowdownActive = false;
 let slowdownTimeout;
 
@@ -137,16 +135,6 @@ function drawPowerUps() {
   });
 }
 
-function drawBackgroundBalls() {
-  backgroundBalls.forEach((ball) => {
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-    ctx.fillStyle = ball.color;
-    ctx.fill();
-    ctx.closePath();
-  });
-}
-
 function generatePowerUp() {
   const x = Math.random() * (canvas.width - 30) + 15;
   const radius = 15;
@@ -155,34 +143,36 @@ function generatePowerUp() {
   powerUps.push({ x, y: -radius, radius, dy });
 }
 
-function generateBall() {
-  const x = Math.random() * (canvas.width - 30) + 15;
-  const radius = 15;
-  const dy = 2;
+function movePowerUps() {
+  powerUps.forEach((powerUp, index) => {
+    powerUp.y += powerUp.dy;
 
-  balls.push({ x, y: -radius, radius, dy, color: getRandomColor() });
+    if (
+      powerUp.y + powerUp.radius > basket.y &&
+      powerUp.y + powerUp.radius < basket.y + basket.height &&
+      powerUp.x > basket.x &&
+      powerUp.x < basket.x + basket.width
+    ) {
+      powerUps.splice(index, 1);
+      activateSlowdown();
+    } else if (powerUp.y - powerUp.radius > canvas.height) {
+      powerUps.splice(index, 1);
+    }
+  });
 }
 
-function generateBomb() {
-  const x = Math.random() * (canvas.width - 30) + 15;
-  const radius = 15;
-  const dy = 2;
+function activateSlowdown() {
+  if (isSlowdownActive) {
+    clearTimeout(slowdownTimeout);
+  } else {
+    isSlowdownActive = true;
+    basket.speed /= 2;
+  }
 
-  bombs.push({ x, y: -radius, radius, dy, color: "black" });
-}
-
-function generateBackgroundBall() {
-  const x = Math.random() * canvas.width;
-  const radius = Math.random() * 10 + 5;
-  const dy = Math.random() * 2 + 1;
-  const color = getRandomColor();
-
-  backgroundBalls.push({ x, y: -radius, radius, dy, color });
-}
-
-function getRandomColor() {
-  const colors = ["red", "blue", "yellow"];
-  return colors[Math.floor(Math.random() * colors.length)];
+  slowdownTimeout = setTimeout(() => {
+    isSlowdownActive = false;
+    basket.speed *= 2;
+  }, 5000); // Slow down for 5 seconds
 }
 
 function moveBasket() {
@@ -230,27 +220,130 @@ function moveBalls() {
   });
 }
 
-function moveBackgroundBalls() {
-  backgroundBalls.forEach((ball, index) => {
+function moveCaughtBalls() {
+  basket.caughtBalls.forEach((ball, index) => {
+    ball.dy += 0.1; // Gravity
+    ball.x += ball.dx;
     ball.y += ball.dy;
 
-    if (ball.y - ball.radius > canvas.height) {
-      backgroundBalls.splice(index, 1);
+    // Collision with basket bottom
+    if (ball.y + ball.radius > basket.y + basket.height - 10) {
+      ball.y = basket.y + basket.height - 10 - ball.radius;
+      ball.dy *= -0.3; // Bounce with dampening
+      if (Math.abs(ball.dy) < 0.5) ball.dy = 0; // Stop bouncing if very slow
+    }
+
+    // Collision with basket sides
+    if (ball.x - ball.radius < basket.x + 10) {
+      ball.x = basket.x + 10 + ball.radius;
+      ball.dx *= -0.3;
+    } else if (ball.x + ball.radius > basket.x + basket.width - 10) {
+      ball.x = basket.x + basket.width - 10 - ball.radius;
+      ball.dx *= -0.3;
+    }
+
+    // Check for collisions with other balls
+    for (let i = 0; i < basket.caughtBalls.length; i++) {
+      if (i !== index) {
+        const otherBall = basket.caughtBalls[i];
+        const dx = ball.x - otherBall.x;
+        const dy = ball.y - otherBall.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const minDist = ball.radius + otherBall.radius;
+
+        if (distance < minDist) {
+          // Adjust positions to prevent overlap
+          const angle = Math.atan2(dy, dx);
+          const overlap = (minDist - distance) / 2;
+          ball.x += Math.cos(angle) * overlap;
+          ball.y += Math.sin(angle) * overlap;
+          otherBall.x -= Math.cos(angle) * overlap;
+          otherBall.y -= Math.sin(angle) * overlap;
+
+          // Adjust velocities to simulate bounce
+          const tempDx = ball.dx;
+          const tempDy = ball.dy;
+          ball.dx = otherBall.dx;
+          ball.dy = otherBall.dy;
+          otherBall.dx = tempDx;
+          otherBall.dy = tempDy;
+
+          // Combine balls if they are primary colors
+          const newColor = mixColors(ball.color, otherBall.color);
+          if (newColor) {
+            // Remove the two balls
+            basket.caughtBalls.splice(i, 1);
+            basket.caughtBalls.splice(index, 1);
+            // Add a new combined ball
+            basket.caughtBalls.push({
+              x: (ball.x + otherBall.x) / 2,
+              y: (ball.y + otherBall.y) / 2,
+              radius: ball.radius,
+              dx: (ball.dx + otherBall.dx) / 2,
+              dy: (ball.dy + otherBall.dy) / 2,
+              color: newColor,
+            });
+          }
+        }
+      }
     }
   });
+}
 
-  // Generate new background balls randomly
-  if (Math.random() < 0.02) {
-    generateBackgroundBall();
+function generateBall() {
+  const x = Math.random() * (canvas.width - 30) + 15;
+  const radius = 15;
+  const dy = 2;
+
+  balls.push({ x, y: -radius, radius, dy, color: getRandomColor() });
+}
+
+function generateBomb() {
+  const x = Math.random() * (canvas.width - 30) + 15;
+  const radius = 15;
+  const dy = 2;
+
+  bombs.push({ x, y: -radius, radius, dy, color: "black" });
+}
+
+function getRandomColor() {
+  const colors = ["red", "blue", "yellow"];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function mixColors(color1, color2) {
+  const primaryColors = ["red", "blue", "yellow"];
+  const secondaryColors = {
+    "red,blue": "purple",
+    "blue,red": "purple",
+    "red,yellow": "orange",
+    "yellow,red": "orange",
+    "blue,yellow": "green",
+    "yellow,blue": "green",
+  };
+
+  if (primaryColors.includes(color1) && primaryColors.includes(color2)) {
+    return secondaryColors[`${color1},${color2}`] || null;
   }
+
+  return null;
 }
 
 function update() {
+  if (isSlowdownActive) {
+    basket.speed /= 2;
+    balls.forEach((ball) => (ball.dy /= 2));
+    bombs.forEach((bomb) => (bomb.dy /= 2));
+  } else {
+    basket.speed *= 2;
+    balls.forEach((ball) => (ball.dy *= 2));
+    bombs.forEach((bomb) => (bomb.dy *= 2));
+  }
+
   moveBasket();
   moveBalls();
   moveBombs();
   movePowerUps();
-  moveBackgroundBalls();
   moveCaughtBalls();
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -258,7 +351,6 @@ function update() {
   drawBalls();
   drawBombs();
   drawPowerUps();
-  drawBackgroundBalls();
 }
 
 function endGame() {
@@ -266,7 +358,6 @@ function endGame() {
   clearInterval(ballInterval);
   clearInterval(bombInterval);
   clearInterval(powerUpInterval);
-  clearInterval(backgroundInterval); // Clear background interval
   alert("Game Over!");
 }
 
@@ -296,4 +387,3 @@ gameInterval = setInterval(update, 1000 / 60);
 ballInterval = setInterval(generateBall, 2000);
 bombInterval = setInterval(generateBomb, 5000);
 powerUpInterval = setInterval(generatePowerUp, 10000);
-backgroundInterval = setInterval(generateBackgroundBall, 2000); // Interval for background balls
