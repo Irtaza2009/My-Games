@@ -39,11 +39,15 @@ const basket = {
 
 const balls = [];
 const bombs = [];
+const powerUps = []; // Array for power-ups
 let score = 0;
 let lives = 3;
 let gameInterval;
 let ballInterval;
 let bombInterval;
+let powerUpInterval;
+let isSlowdownActive = false;
+let slowdownTimeout;
 
 const scoreElement = document.getElementById("score");
 const livesElement = document.getElementById("lives");
@@ -114,6 +118,63 @@ function drawBombs() {
   });
 }
 
+function drawPowerUps() {
+  powerUps.forEach((powerUp) => {
+    // Draw the power-up as a blue star
+    ctx.beginPath();
+    ctx.moveTo(powerUp.x, powerUp.y - powerUp.radius);
+    for (let i = 1; i < 5; i++) {
+      ctx.lineTo(
+        powerUp.x + powerUp.radius * Math.cos((i * 4 * Math.PI) / 5),
+        powerUp.y - powerUp.radius * Math.sin((i * 4 * Math.PI) / 5)
+      );
+    }
+    ctx.fillStyle = "blue";
+    ctx.fill();
+    ctx.closePath();
+  });
+}
+
+function generatePowerUp() {
+  const x = Math.random() * (canvas.width - 30) + 15;
+  const radius = 15;
+  const dy = 2;
+
+  powerUps.push({ x, y: -radius, radius, dy });
+}
+
+function movePowerUps() {
+  powerUps.forEach((powerUp, index) => {
+    powerUp.y += powerUp.dy;
+
+    if (
+      powerUp.y + powerUp.radius > basket.y &&
+      powerUp.y + powerUp.radius < basket.y + basket.height &&
+      powerUp.x > basket.x &&
+      powerUp.x < basket.x + basket.width
+    ) {
+      powerUps.splice(index, 1);
+      activateSlowdown();
+    } else if (powerUp.y - powerUp.radius > canvas.height) {
+      powerUps.splice(index, 1);
+    }
+  });
+}
+
+function activateSlowdown() {
+  if (isSlowdownActive) {
+    clearTimeout(slowdownTimeout);
+  } else {
+    isSlowdownActive = true;
+    basket.speed /= 2;
+  }
+
+  slowdownTimeout = setTimeout(() => {
+    isSlowdownActive = false;
+    basket.speed *= 2;
+  }, 5000); // Slow down for 5 seconds
+}
+
 function moveBasket() {
   basket.x += basket.dx;
 
@@ -143,8 +204,10 @@ function moveBalls() {
       ball.dy = -Math.abs(ball.dy) * 0.5; // Bounce up with half speed
       basket.caughtBalls.push(ball);
 
-      // Check for basket size upgrade
-      checkForBasketUpgrade();
+      // Increase basket size every 5 points
+      if (score % 5 === 0) {
+        basket.width += 10;
+      }
     } else if (ball.y + ball.radius > canvas.height) {
       balls.splice(index, 1);
       lives--;
@@ -215,12 +278,11 @@ function moveCaughtBalls() {
             basket.caughtBalls.push({
               x: (ball.x + otherBall.x) / 2,
               y: (ball.y + otherBall.y) / 2,
-              radius: ball.radius * 1.5, // Larger radius for secondary colors
-              color: newColor,
+              radius: ball.radius,
               dx: (ball.dx + otherBall.dx) / 2,
               dy: (ball.dy + otherBall.dy) / 2,
+              color: newColor,
             });
-            break; // Exit the inner loop after merging
           }
         }
       }
@@ -228,163 +290,77 @@ function moveCaughtBalls() {
   });
 }
 
+function generateBall() {
+  const x = Math.random() * (canvas.width - 30) + 15;
+  const radius = 15;
+  const dy = 2;
+
+  balls.push({ x, y: -radius, radius, dy, color: getRandomColor() });
+}
+
+function generateBomb() {
+  const x = Math.random() * (canvas.width - 30) + 15;
+  const radius = 15;
+  const dy = 2;
+
+  bombs.push({ x, y: -radius, radius, dy, color: "black" });
+}
+
+function getRandomColor() {
+  const colors = ["red", "blue", "yellow"];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
 function mixColors(color1, color2) {
-  const primaryColors = {
-    red: [255, 0, 0],
-    yellow: [255, 255, 0],
-    blue: [0, 0, 255],
+  const primaryColors = ["red", "blue", "yellow"];
+  const secondaryColors = {
+    "red,blue": "purple",
+    "blue,red": "purple",
+    "red,yellow": "orange",
+    "yellow,red": "orange",
+    "blue,yellow": "green",
+    "yellow,blue": "green",
   };
 
-  const getRGB = (color) => primaryColors[color];
+  if (primaryColors.includes(color1) && primaryColors.includes(color2)) {
+    return secondaryColors[`${color1},${color2}`] || null;
+  }
 
-  const rgb1 = getRGB(color1);
-  const rgb2 = getRGB(color2);
-
-  if (!rgb1 || !rgb2 || color1 === color2) return null; // Only mix different primary colors
-
-  const mixedRGB = [
-    Math.min((rgb1[0] + rgb2[0]) / 2, 255),
-    Math.min((rgb1[1] + rgb2[1]) / 2, 255),
-    Math.min((rgb1[2] + rgb2[2]) / 2, 255),
-  ];
-
-  const colorMap = {
-    "255,128,0": "orange", // Red + Yellow
-    "128,128,0": "olive", // Yellow + Blue
-    "128,0,128": "purple", // Red + Blue
-  };
-
-  return colorMap[mixedRGB.join(",")] || null;
+  return null;
 }
 
-function moveBombs() {
-  bombs.forEach((bomb, index) => {
-    bomb.y += bomb.dy;
+function update() {
+  if (isSlowdownActive) {
+    basket.speed /= 2;
+    balls.forEach((ball) => (ball.dy /= 2));
+    bombs.forEach((bomb) => (bomb.dy /= 2));
+  } else {
+    basket.speed *= 2;
+    balls.forEach((ball) => (ball.dy *= 2));
+    bombs.forEach((bomb) => (bomb.dy *= 2));
+  }
 
-    if (
-      bomb.y + bomb.radius > basket.y &&
-      bomb.y + bomb.radius < basket.y + basket.height &&
-      bomb.x > basket.x &&
-      bomb.x < basket.x + basket.width
-    ) {
-      bombs.splice(index, 1);
-      lives--;
-      livesElement.textContent = `Lives: ${lives}`;
+  moveBasket();
+  moveBalls();
+  moveBombs();
+  movePowerUps();
+  moveCaughtBalls();
 
-      if (lives <= 0) {
-        endGame();
-      }
-    } else if (bomb.y + bomb.radius > canvas.height) {
-      bombs.splice(index, 1);
-    }
-  });
-}
-
-function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBasket();
   drawBalls();
   drawBombs();
-}
-
-function update() {
-  moveBasket();
-  moveBalls();
-  moveBombs();
-  moveCaughtBalls();
-  draw();
-}
-
-function startGame() {
-  balls.length = 0; // Clear balls array
-  bombs.length = 0; // Clear bombs array
-  basket.caughtBalls.length = 0; // Clear caught balls array
-  score = 0;
-  lives = 3;
-  scoreElement.textContent = `Score: ${score}`;
-  livesElement.textContent = `Lives: ${lives}`;
-
-  gameInterval = setInterval(update, 1000 / 60);
-  ballInterval = setInterval(() => {
-    const radius = Math.random() * 20 + 10;
-    const x = Math.random() * (canvas.width - radius * 2) + radius;
-    const dy = Math.random() * 2 + 1;
-    const colors = ["red", "yellow", "blue"];
-    const color = colors[Math.floor(Math.random() * colors.length)];
-
-    balls.push({ x, y: -radius, radius, color, dy, dx: 0 });
-  }, 1000);
-
-  bombInterval = setInterval(() => {
-    const radius = Math.random() * 15 + 10;
-    const x = Math.random() * (canvas.width - radius * 2) + radius;
-    const dy = Math.random() * 2 + 2;
-
-    bombs.push({ x, y: -radius, radius, color: "black", dy });
-  }, 3000);
-
-  // Hide the title screen and show the game elements
-  document.getElementById("titleScreen").style.display = "none";
-  document.querySelector(".ui-container").style.display = "flex";
-  document.querySelector(".game-container").style.display = "flex";
+  drawPowerUps();
 }
 
 function endGame() {
   clearInterval(gameInterval);
   clearInterval(ballInterval);
   clearInterval(bombInterval);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Create and show the game over text
-  const gameOverText = document.createElement("div");
-  gameOverText.className = "gameover-text"; // Add class for styling
-  gameOverText.innerHTML = `
-      <p>Game Over</p>
-      <p>Final Score: ${score}</p>
-  `;
-  document.body.appendChild(gameOverText);
-
-  // Position the game over text
-  gameOverText.style.top = `${canvas.offsetTop + canvas.height / 2 - 50}px`;
-  gameOverText.style.left = `${
-    canvas.offsetLeft + canvas.width / 2 - gameOverText.offsetWidth / 2
-  }px`;
-
-  // Create and show the restart button
-  const restartButton = document.createElement("button");
-  restartButton.innerHTML = '<i class="fas fa-redo"></i>Restart';
-  restartButton.className = "restart-button"; // Add class for styling
-  restartButton.onclick = () => {
-    gameOverText.remove(); // Remove game over text
-    restartButton.remove(); // Remove button after clicking
-    startGame();
-  };
-  document.body.appendChild(restartButton);
-
-  // Position the restart button below the game over text
-  restartButton.style.top = `${canvas.offsetTop + canvas.height / 2 + 40}px`;
-  restartButton.style.left = `${
-    canvas.offsetLeft + canvas.width / 2 - restartButton.offsetWidth / 2
-  }px`;
+  clearInterval(powerUpInterval);
+  alert("Game Over!");
 }
 
-// Function to check for basket size upgrade
-function checkForBasketUpgrade() {
-  const upgradeThresholds = [10, 20, 30]; // Define score thresholds
-  const upgradeAmount = 20; // Amount to increase basket width
-
-  upgradeThresholds.forEach((threshold) => {
-    if (score === threshold) {
-      basket.width += upgradeAmount;
-      // Ensure the basket doesn't exceed canvas width
-      if (basket.width > canvas.width) {
-        basket.width = canvas.width;
-      }
-    }
-  });
-}
-
-document.getElementById("playButton").onclick = startGame;
 document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft" || e.key === "a") {
     basket.dx = -basket.speed;
@@ -404,5 +380,10 @@ document.addEventListener("keyup", (e) => {
   }
 });
 
-window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+gameInterval = setInterval(update, 1000 / 60);
+ballInterval = setInterval(generateBall, 2000);
+bombInterval = setInterval(generateBomb, 5000);
+powerUpInterval = setInterval(generatePowerUp, 10000);
