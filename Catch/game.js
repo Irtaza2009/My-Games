@@ -15,7 +15,7 @@ function resizeCanvas() {
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
 
-  basket.y = canvas.height - basket.height - 10;
+  basket.y = canvas.height - basket.height - 70;
 
   // Adjust the position of caught balls to fit new dimensions
   basket.caughtBalls.forEach((ball) => {
@@ -165,6 +165,57 @@ function moveCaughtBalls() {
         const distance = Math.sqrt(dx * dx + dy * dy);
         const minDist = ball.radius + otherBall.radius;
 
+
+    // Collision with basket bottom
+    if (ball.y + ball.radius > basket.y + basket.height - 10) {
+      ball.y = basket.y + basket.height - 10 - ball.radius;
+      ball.dy *= -0.3; // Bounce with dampening
+      if (Math.abs(ball.dy) < 0.5) ball.dy = 0; // Stop bouncing if very slow
+    }
+
+    // Collision with basket sides
+    if (ball.x - ball.radius < basket.x + 10) {
+      ball.x = basket.x + 10 + ball.radius;
+      ball.dx *= -0.3;
+    } else if (ball.x + ball.radius > basket.x + basket.width - 10) {
+      ball.x = basket.x + basket.width - 10 - ball.radius;
+      ball.dx *= -0.3;
+    }
+
+    // Check for collisions with other balls
+    for (let i = 0; i < basket.caughtBalls.length; i++) {
+      if (i !== index) {
+        const otherBall = basket.caughtBalls[i];
+        const dx = ball.x - otherBall.x;
+        const dy = ball.y - otherBall.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const minDist = ball.radius + otherBall.radius;
+
+    // Collision with basket bottom
+    if (ball.y + ball.radius > basket.y + basket.height - 10) {
+      ball.y = basket.y + basket.height - 10 - ball.radius;
+      ball.dy *= -0.3; // Bounce with dampening
+      if (Math.abs(ball.dy) < 0.5) ball.dy = 0; // Stop bouncing if very slow
+    }
+
+    // Collision with basket sides
+    if (ball.x - ball.radius < basket.x + 10) {
+      ball.x = basket.x + 10 + ball.radius;
+      ball.dx *= -0.3;
+    } else if (ball.x + ball.radius > basket.x + basket.width - 10) {
+      ball.x = basket.x + basket.width - 10 - ball.radius;
+      ball.dx *= -0.3;
+    }
+
+    // Check for collisions with other balls
+    for (let i = 0; i < basket.caughtBalls.length; i++) {
+      if (i !== index) {
+        const otherBall = basket.caughtBalls[i];
+        const dx = ball.x - otherBall.x;
+        const dy = ball.y - otherBall.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const minDist = ball.radius + otherBall.radius;
+
         if (distance < minDist) {
           // Adjust positions to prevent overlap
           const angle = Math.atan2(dy, dx);
@@ -192,11 +243,12 @@ function moveCaughtBalls() {
             basket.caughtBalls.push({
               x: (ball.x + otherBall.x) / 2,
               y: (ball.y + otherBall.y) / 2,
-              radius: ball.radius,
+              radius: ball.radius * 1.5, // Larger radius for secondary colors
               color: newColor,
               dx: (ball.dx + otherBall.dx) / 2,
               dy: (ball.dy + otherBall.dy) / 2,
             });
+            break; // Exit the inner loop after merging
           }
         }
       }
@@ -216,7 +268,7 @@ function mixColors(color1, color2) {
   const rgb1 = getRGB(color1);
   const rgb2 = getRGB(color2);
 
-  if (!rgb1 || !rgb2) return null;
+  if (!rgb1 || !rgb2 || color1 === color2) return null; // Only mix different primary colors
 
   const mixedRGB = [
     Math.min((rgb1[0] + rgb2[0]) / 2, 255),
@@ -225,12 +277,9 @@ function mixColors(color1, color2) {
   ];
 
   const colorMap = {
-    "255,0,0": "red",
-    "255,255,0": "yellow",
-    "0,0,255": "blue",
+    "255,128,0": "orange", // Red + Yellow
     "128,128,0": "olive", // Yellow + Blue
     "128,0,128": "purple", // Red + Blue
-    "255,128,0": "orange", // Red + Yellow
   };
 
   return colorMap[mixedRGB.join(",")] || null;
@@ -304,8 +353,8 @@ function startGame() {
 
   // Hide the title screen and show the game elements
   document.getElementById("titleScreen").style.display = "none";
-  document.querySelector(".ui-container").style.display = "block";
-  document.querySelector(".game-container").style.display = "block";
+  document.querySelector(".ui-container").style.display = "flex";
+  document.querySelector(".game-container").style.display = "flex";
 }
 
 function endGame() {
@@ -313,27 +362,35 @@ function endGame() {
   clearInterval(ballInterval);
   clearInterval(bombInterval);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.font = "30px Agbalumo";
-  ctx.fillStyle = "red";
-  ctx.fillText("Game Over", canvas.width / 2 - 75, canvas.height / 2);
-  ctx.fillText(
-    `Final Score: ${score}`,
-    canvas.width / 2 - 100,
-    canvas.height / 2 + 40
-  );
+
+  // Create and show the game over text
+  const gameOverText = document.createElement("div");
+  gameOverText.className = "gameover-text"; // Add class for styling
+  gameOverText.innerHTML = `
+      <p>Game Over</p>
+      <p>Final Score: ${score}</p>
+  `;
+  document.body.appendChild(gameOverText);
+
+  // Position the game over text
+  gameOverText.style.top = `${canvas.offsetTop + canvas.height / 2 - 50}px`;
+  gameOverText.style.left = `${
+    canvas.offsetLeft + canvas.width / 2 - gameOverText.offsetWidth / 2
+  }px`;
 
   // Create and show the restart button
   const restartButton = document.createElement("button");
-  restartButton.innerHTML = '<i class="fas fa-redo"></i> Restart';
+  restartButton.innerHTML = '<i class="fas fa-redo"></i>Restart';
   restartButton.className = "restart-button"; // Add class for styling
   restartButton.onclick = () => {
+    gameOverText.remove(); // Remove game over text
     restartButton.remove(); // Remove button after clicking
     startGame();
   };
   document.body.appendChild(restartButton);
 
   // Position the restart button below the game over text
-  restartButton.style.top = `${canvas.offsetTop + canvas.height / 2 + 70}px`;
+  restartButton.style.top = `${canvas.offsetTop + canvas.height / 2 + 40}px`;
   restartButton.style.left = `${
     canvas.offsetLeft + canvas.width / 2 - restartButton.offsetWidth / 2
   }px`;

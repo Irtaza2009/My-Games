@@ -39,7 +39,8 @@ canvas {
   color: #8b4513;
 }
 
-.restart-button {
+.restart-button,
+.gameover-text {
   position: absolute;
   padding: 10px 20px;
   font-size: 20px;
