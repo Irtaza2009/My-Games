@@ -258,3 +258,92 @@ function splitBlockAndAddNextOneIfOverlaps() {
     missedTheSpot();
   }
 }
+
+function missedTheSpot() {
+  const topLayer = stack[stack.length - 1];
+
+  // Turn to top layer into an overhang and let it fall down
+  addOverhang(
+    topLayer.threejs.position.x,
+    topLayer.threejs.position.z,
+    topLayer.width,
+    topLayer.depth
+  );
+  world.remove(topLayer.cannonjs);
+  scene.remove(topLayer.threejs);
+
+  gameEnded = true;
+  if (resultsElement && !autopilot) resultsElement.style.display = "flex";
+}
+
+function animation(time) {
+  if (lastTime) {
+    const timePassed = time - lastTime;
+    const speed = 0.008;
+
+    const topLayer = stack[stack.length - 1];
+    const previousLayer = stack[stack.length - 2];
+
+    // The top level box should move if the game has not ended AND
+    // it's either NOT in autopilot or it is in autopilot and the box did not yet reach the robot position
+    const boxShouldMove =
+      !gameEnded &&
+      (!autopilot ||
+        (autopilot &&
+          topLayer.threejs.position[topLayer.direction] <
+            previousLayer.threejs.position[topLayer.direction] +
+              robotPrecision));
+
+    if (boxShouldMove) {
+      // Keep the position visible on UI and the position in the model in sync
+      topLayer.threejs.position[topLayer.direction] += speed * timePassed;
+      topLayer.cannonjs.position[topLayer.direction] += speed * timePassed;
+
+      // If the box went beyond the stack then show up the fail screen
+      if (topLayer.threejs.position[topLayer.direction] > 10) {
+        missedTheSpot();
+      }
+    } else {
+      // If it shouldn't move then is it because the autopilot reached the correct position?
+      // Because if so then next level is coming
+      if (autopilot) {
+        splitBlockAndAddNextOneIfOverlaps();
+        setRobotPrecision();
+      }
+    }
+
+    // 4 is the initial camera height
+    if (camera.position.y < boxHeight * (stack.length - 2) + 4) {
+      camera.position.y += speed * timePassed;
+    }
+
+    updatePhysics(timePassed);
+    renderer.render(scene, camera);
+  }
+  lastTime = time;
+}
+
+function updatePhysics(timePassed) {
+  world.step(timePassed / 1000); // Step the physics world
+
+  // Copy coordinates from Cannon.js to Three.js
+  overhangs.forEach((element) => {
+    element.threejs.position.copy(element.cannonjs.position);
+    element.threejs.quaternion.copy(element.cannonjs.quaternion);
+  });
+}
+
+window.addEventListener("resize", () => {
+  // Adjust camera
+  console.log("resize", window.innerWidth, window.innerHeight);
+  const aspect = window.innerWidth / window.innerHeight;
+  const width = 10;
+  const height = width / aspect;
+
+  camera.top = height / 2;
+  camera.bottom = height / -2;
+
+  // Reset renderer
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.render(scene, camera);
+});
