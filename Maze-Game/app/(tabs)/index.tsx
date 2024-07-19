@@ -2,82 +2,91 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
-const cellSize = 30;
-const cols = Math.floor(width / cellSize);
-const rows = Math.floor(height / cellSize);
+const cellSize = 30; // Size of each cell
+const cols = 7; // Number of columns
+const rows = 7; // Number of rows
 
 type Maze = number[][];
 type Position = { x: number; y: number };
 
-const shuffle = (array: any[]): any[] => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
+// Define multiple static maze layouts
+const mazes: Maze[] = [
+  [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 1, 0, 0, 1],
+    [1, 0, 1, 1, 0, 1, 1],
+    [1, 0, 1, 0, 0, 0, 1],
+    [1, 1, 1, 0, 1, 0, 1],
+    [1, 1, 1, 0, 1, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ],
+  [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 1, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 1, 0, 1],
+    [1, 1, 1, 0, 1, 0, 1],
+    [1, 1, 1, 0, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ],
+  [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ],
+  [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ],
+];
+
+// Function to select a random maze
+const getRandomMaze = (): Maze => {
+  const randomIndex = Math.floor(Math.random() * mazes.length);
+  return mazes[randomIndex];
 };
 
-const createMaze = (width: number, height: number): Maze => {
-  const maze: Maze = Array.from({ length: height }, () => Array(width).fill(1));
-
-  const carvePath = (x: number, y: number) => {
-    const directions = shuffle([
-      [0, 1], // Down
-      [1, 0], // Right
-      [0, -1], // Up
-      [-1, 0], // Left
-    ]);
-
-    directions.forEach(([dx, dy]) => {
-      const nx = x + dx * 2;
-      const ny = y + dy * 2;
-      if (
-        nx >= 0 &&
-        ny >= 0 &&
-        nx < width &&
-        ny < height &&
-        maze[ny][nx] === 1
-      ) {
-        maze[ny][nx] = 0;
-        maze[y + dy][x + dx] = 0;
-        carvePath(nx, ny);
-      }
-    });
-  };
-
-  maze[1][1] = 0; // Start position
-  carvePath(1, 1);
-  return maze;
-};
-
-const maze = createMaze(cols, rows);
-
-const Maze: React.FC = () => {
+const MazeComponent: React.FC = () => {
   const [position, setPosition] = useState<Position>({ x: 1, y: 1 });
+  const [maze, setMaze] = useState<Maze>(getRandomMaze());
 
   const handleKeyDown = (event: KeyboardEvent) => {
     const { key } = event;
     setPosition((prevPosition) => {
       let newX = prevPosition.x;
       let newY = prevPosition.y;
-      if (key === "ArrowUp" && maze[prevPosition.y - 1][prevPosition.x] === 0) {
+
+      if (
+        key === "ArrowUp" &&
+        maze[prevPosition.y - 1]?.[prevPosition.x] === 0
+      ) {
         newY = prevPosition.y - 1;
       } else if (
         key === "ArrowDown" &&
-        maze[prevPosition.y + 1][prevPosition.x] === 0
+        maze[prevPosition.y + 1]?.[prevPosition.x] === 0
       ) {
         newY = prevPosition.y + 1;
       } else if (
         key === "ArrowLeft" &&
-        maze[prevPosition.y][prevPosition.x - 1] === 0
+        maze[prevPosition.y]?.[prevPosition.x - 1] === 0
       ) {
         newX = prevPosition.x - 1;
       } else if (
         key === "ArrowRight" &&
-        maze[prevPosition.y][prevPosition.x + 1] === 0
+        maze[prevPosition.y]?.[prevPosition.x + 1] === 0
       ) {
         newX = prevPosition.x + 1;
       }
+
       return { x: newX, y: newY };
     });
   };
@@ -87,7 +96,7 @@ const Maze: React.FC = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [maze]);
 
   return (
     <View style={styles.mazeContainer}>
@@ -110,7 +119,7 @@ const Maze: React.FC = () => {
 const App: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Maze />
+      <MazeComponent />
     </View>
   );
 };
@@ -131,15 +140,17 @@ const styles = StyleSheet.create({
   cell: {
     width: cellSize,
     height: cellSize,
-    borderWidth: 1,
-    borderColor: "#000",
   },
   wall: {
     backgroundColor: "#000",
+    borderWidth: 1,
+    borderColor: "#fff", // Optional: add border for better visibility
   },
   ball: {
     backgroundColor: "red",
     borderRadius: cellSize / 2,
+    borderWidth: 1,
+    borderColor: "#fff", // Optional: add border for better visibility
   },
 });
 
