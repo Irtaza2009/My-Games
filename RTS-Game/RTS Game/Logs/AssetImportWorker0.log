@@ -1,0 +1,226 @@
+Unity Editor version:    2021.2.5f1 (4ec9a5e799f5)
+Branch:                  2021.2/staging
+Build type:              Release
+Batch mode:              YES
+macOS version:           Version 12.6.9 (Build 21G726)
+Darwin version:          21.6.0
+Architecture:            x86_64
+Running under Rosetta:   NO
+Available memory:        16384 MB
+Using pre-set license
+Pro License: NO
+
+COMMAND LINE ARGUMENTS:
+/Applications/2021.2.5f1/Unity.app/Contents/MacOS/Unity
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker0
+-projectPath
+/Users/admin/Desktop/MyGames/My-Games-Git/RTS-Game/RTS Game
+-logFile
+Logs/AssetImportWorker0.log
+-srvPort
+61715
+Successfully changed project path to: /Users/admin/Desktop/MyGames/My-Games-Git/RTS-Game/RTS Game
+/Users/admin/Desktop/MyGames/My-Games-Git/RTS-Game/RTS Game
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Refreshing native plugins compatible for Editor in 122.08 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2021.2.5f1 (4ec9a5e799f5)
+[Subsystems] Discovering subsystems at path /Applications/2021.2.5f1/Unity.app/Contents/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path /Users/admin/Desktop/MyGames/My-Games-Git/RTS-Game/RTS Game/Assets
+GfxDevice: creating device client; threaded=0; jobified=0
+Color LCD preferred device: Intel Iris Pro Graphics (low power)
+Metal devices available: 1
+0: Intel Iris Pro Graphics (low power)
+Using device Intel Iris Pro Graphics (low power)
+Initializing Metal device caps: Intel Iris Pro Graphics
+Initialize mono
+Mono path[0] = '/Applications/2021.2.5f1/Unity.app/Contents/Managed'
+Mono path[1] = '/Applications/2021.2.5f1/Unity.app/Contents/MonoBleedingEdge/lib/mono/unityjit-macos'
+Mono config path = '/Applications/2021.2.5f1/Unity.app/Contents/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56615
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: /Applications/2021.2.5f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: /Applications/2021.2.5f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll
+Register platform support module: /Applications/2021.2.5f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.004030 seconds.
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 116.43 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.088 seconds
+Domain Reload Profiling:
+	ReloadAssembly (1089ms)
+		BeginReloadAssembly (148ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (0ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (1ms)
+		EndReloadAssembly (815ms)
+			LoadAssemblies (150ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (190ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (52ms)
+			SetupLoadedEditorAssemblies (492ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (25ms)
+				SetLoadedEditorAssemblies (1ms)
+				RefreshPlugins (116ms)
+				BeforeProcessingInitializeOnLoad (2ms)
+				ProcessInitializeOnLoadAttributes (278ms)
+				ProcessInitializeOnLoadMethodAttributes (69ms)
+				AfterProcessingInitializeOnLoad (0ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (0ms)
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.009438 seconds.
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory doesn't match image /Users/admin/Desktop/MyGames/My-Games-Git/RTS-Game/RTS Game/Library/PackageCache/com.unity.visualscripting@1.7.5/Editor/VisualScripting.Core/Dependencies/YamlDotNet/Unity.VisualScripting.YamlDotNet.dll
+Symbol file LoadedFromMemory doesn't match image /Users/admin/Desktop/MyGames/My-Games-Git/RTS-Game/RTS Game/Library/PackageCache/com.unity.visualscripting@1.7.5/Editor/VisualScripting.Core/Dependencies/DotNetZip/Unity.VisualScripting.IonicZip.dll
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.76 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  2.697 seconds
+Domain Reload Profiling:
+	ReloadAssembly (2698ms)
+		BeginReloadAssembly (304ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (9ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (62ms)
+		EndReloadAssembly (2015ms)
+			LoadAssemblies (157ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (609ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (144ms)
+			SetupLoadedEditorAssemblies (783ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (19ms)
+				SetLoadedEditorAssemblies (1ms)
+				RefreshPlugins (1ms)
+				BeforeProcessingInitializeOnLoad (100ms)
+				ProcessInitializeOnLoadAttributes (598ms)
+				ProcessInitializeOnLoadMethodAttributes (62ms)
+				AfterProcessingInitializeOnLoad (2ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (9ms)
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Launching external process: /Applications/2021.2.5f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.09 seconds
+Refreshing native plugins compatible for Editor in 0.75 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3212 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 24 unused Assets / (97.6 KB). Loaded Objects now: 3670.
+Memory consumption went from 228.0 MB to 227.9 MB.
+Total: 4.206070 ms (FindLiveObjects: 0.435278 ms CreateObjectMapping: 0.153805 ms MarkObjects: 3.479736 ms  DeleteObjects: 0.135830 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:framework-osx-AVFoundation: e770b220cccbd017edd2c1fefb359320 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 405383.893851 seconds.
+  path: Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/contents_nature.jpg
+  artifactKey: Guid(19f644bcab1c54eb39fc1ffd5e103a36) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/contents_nature.jpg using Guid(19f644bcab1c54eb39fc1ffd5e103a36) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f6bf81f11f8e3ec0042c60f8c7fece79') in 0.256459 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 90.553245 seconds.
+  path: Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets
+  artifactKey: Guid(2d3e68a760a8c40179c10734c2519ed7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets using Guid(2d3e68a760a8c40179c10734c2519ed7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bb0d15fa37f87e6d55ce911b4669ea5b') in 0.001088 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 1.297000 seconds.
+  path: Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx(unity)
+  artifactKey: Guid(7ddd0e3a822a244188740b9066ec35fa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx(unity) using Guid(7ddd0e3a822a244188740b9066ec35fa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0c72385a6f813445a9bca78021e14462') in 0.001034 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 1.325606 seconds.
+  path: Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx(unity)/buildings
+  artifactKey: Guid(9c994ceb728d0428ba5263b06a25a127) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx(unity)/buildings using Guid(9c994ceb728d0428ba5263b06a25a127) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e6c788f22a5ecf6991ef7f9ca3de5c2d') in 0.002048 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 2.458060 seconds.
+  path: Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx(unity)/tiles
+  artifactKey: Guid(22f0d2ed2d93d468eaef949272d483d3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx(unity)/tiles using Guid(22f0d2ed2d93d468eaef949272d483d3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '560ecfddceafb6a9a3e37fd6c9b56528') in 0.001892 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.942400 seconds.
+  path: Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx(unity)/tiles/base
+  artifactKey: Guid(a78b064409d4a45688408cd09dd3c16b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx(unity)/tiles/base using Guid(a78b064409d4a45688408cd09dd3c16b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7162b2abc26a63ae3876ec1d94f52a7a') in 0.001674 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.187027 seconds.
+  path: Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx(unity)/tiles/base/hex_grass.fbx
+  artifactKey: Guid(7eddc3dd76b374b61b742c261b9269b8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx(unity)/tiles/base/hex_grass.fbx using Guid(7eddc3dd76b374b61b742c261b9269b8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6e545a3454fc620083c8a5edcc8f30a8') in 0.374487 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000088 seconds.
+  path: Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx(unity)/tiles/base/hex_grass_sloped_high.fbx
+  artifactKey: Guid(c521bf4695fd64c8eb07bd4816b25541) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx(unity)/tiles/base/hex_grass_sloped_high.fbx using Guid(c521bf4695fd64c8eb07bd4816b25541) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ea5a18cdc72dcd2f7681f7557f04650d') in 0.211383 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000064 seconds.
+  path: Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx(unity)/tiles/base/hexagons_medieval.png
+  artifactKey: Guid(1075b60a3fcc34b00a56f39b69c7bfe5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/fbx(unity)/tiles/base/hexagons_medieval.png using Guid(1075b60a3fcc34b00a56f39b69c7bfe5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2a74b200bddd755c21bca9ac26c96af9') in 0.182277 seconds 
