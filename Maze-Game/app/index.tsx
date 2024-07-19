@@ -59,11 +59,76 @@ const mazes: Maze[] = [
     [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1],
     [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   ],
 ];
+
+function isConnected(maze: number[][]): boolean {
+  const rows = maze.length;
+  const cols = maze[0].length;
+  const visited: boolean[][] = Array.from({ length: rows }, () =>
+    Array(cols).fill(false)
+  );
+
+  // Direction vectors for moving in the 4 cardinal directions (up, down, left, right)
+  const directions = [
+    [-1, 0], // up
+    [1, 0], // down
+    [0, -1], // left
+    [0, 1], // right
+  ];
+
+  function dfs(r: number, c: number) {
+    // If out of bounds or cell is not a zero or already visited, return
+    if (
+      r < 0 ||
+      r >= rows ||
+      c < 0 ||
+      c >= cols ||
+      maze[r][c] === 1 ||
+      visited[r][c]
+    )
+      return;
+
+    // Mark the cell as visited
+    visited[r][c] = true;
+
+    // Move in all 4 directions
+    for (const [dr, dc] of directions) {
+      dfs(r + dr, c + dc);
+    }
+  }
+
+  // Find the first zero cell and start the DFS from there
+  let foundZero = false;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (maze[r][c] === 0) {
+        dfs(r, c);
+        foundZero = true;
+        break;
+      }
+    }
+    if (foundZero) break;
+  }
+
+  // Check if all zeros are visited
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (maze[r][c] === 0 && !visited[r][c]) return false;
+    }
+  }
+
+  return true;
+}
+
+mazes.forEach((maze, index) => {
+  console.log(`Maze Level ${index + 1} connectivity: ${isConnected(maze)}`);
+});
 
 const initialGoal: Goal = { x: cols - 2, y: rows - 2 };
 
@@ -98,7 +163,7 @@ const MazeGame = () => {
 
   useEffect(() => {
     const handleOrientation = (event: DeviceOrientationEvent) => {
-      const { alpha, beta, gamma } = event;
+      const { beta, gamma } = event;
 
       if (beta > 15) movePlayer(0, 1);
       if (beta < -15) movePlayer(0, -1);
@@ -106,10 +171,29 @@ const MazeGame = () => {
       if (gamma < -15) movePlayer(-1, 0);
     };
 
+    const handleKeyDown = (event: KeyboardEvent) => {
+      switch (event.key) {
+        case "ArrowUp":
+          movePlayer(0, -1);
+          break;
+        case "ArrowDown":
+          movePlayer(0, 1);
+          break;
+        case "ArrowLeft":
+          movePlayer(-1, 0);
+          break;
+        case "ArrowRight":
+          movePlayer(1, 0);
+          break;
+      }
+    };
+
     window.addEventListener("deviceorientation", handleOrientation);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       window.removeEventListener("deviceorientation", handleOrientation);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [playerPosition]);
 
@@ -134,7 +218,7 @@ const MazeGame = () => {
       </View>
       <View style={styles.instructionsContainer}>
         <Text style={styles.instructionsText}>
-          Tilt your device to move the player to the goal!
+          Use arrow keys or tilt your device to move the player to the goal!
         </Text>
       </View>
     </View>
