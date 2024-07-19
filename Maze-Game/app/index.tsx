@@ -61,7 +61,7 @@ const mazes: Maze[] = [
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   ],
@@ -140,7 +140,24 @@ const MazeGame = () => {
   const [currentLevel, setCurrentLevel] = useState<number>(0);
   const [gameOver, setGameOver] = useState<boolean>(false);
 
+  const [moves, setMoves] = useState<number>(0);
+  const [timeElapsed, setTimeElapsed] = useState<number>(0);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+
   const maze = mazes[currentLevel];
+
+  useEffect(() => {
+    // Start timer
+    const id = setInterval(() => {
+      setTimeElapsed((prevTime) => prevTime + 1);
+    }, 1000);
+
+    setIntervalId(id);
+
+    return () => {
+      if (id) clearInterval(id);
+    };
+  }, []);
 
   const movePlayer = (direction: string) => {
     if (gameOver) return;
@@ -165,6 +182,7 @@ const MazeGame = () => {
 
     if (maze[newPos.y][newPos.x] === 0) {
       setPlayerPosition(newPos);
+      setMoves((prevMoves) => prevMoves + 1);
       if (newPos.x === goal.x && newPos.y === goal.y) {
         if (currentLevel < mazes.length - 1) {
           setCurrentLevel(currentLevel + 1);
@@ -233,9 +251,15 @@ const MazeGame = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.timerContainer}>
+        <Text>Time: {timeElapsed}s</Text>
+        <Text>Moves: {moves}</Text>
+      </View>
       {renderMaze()}
       <Text style={styles.level}>Level: {currentLevel + 1}</Text>
-      {gameOver && <Text style={styles.gameOver}>Game Over!</Text>}
+      {gameOver && (
+        <Text style={styles.gameOver}>You solved all the mazes!</Text>
+      )}
     </View>
   );
 };
@@ -283,9 +307,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   gameOver: {
-    marginTop: 20,
+    position: "absolute",
+    alignContent: "center",
     fontSize: 24,
-    color: "red",
+    color: "black",
+  },
+  timerContainer: {
+    marginBottom: 10,
   },
 });
 
