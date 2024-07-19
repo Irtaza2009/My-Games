@@ -67,6 +67,69 @@ const mazes: Maze[] = [
   ],
 ];
 
+function isConnected(maze: number[][]): boolean {
+  const rows = maze.length;
+  const cols = maze[0].length;
+  const visited: boolean[][] = Array.from({ length: rows }, () =>
+    Array(cols).fill(false)
+  );
+
+  // Direction vectors for moving in the 4 cardinal directions (up, down, left, right)
+  const directions = [
+    [-1, 0], // up
+    [1, 0], // down
+    [0, -1], // left
+    [0, 1], // right
+  ];
+
+  function dfs(r: number, c: number) {
+    // If out of bounds or cell is not a zero or already visited, return
+    if (
+      r < 0 ||
+      r >= rows ||
+      c < 0 ||
+      c >= cols ||
+      maze[r][c] === 1 ||
+      visited[r][c]
+    )
+      return;
+
+    // Mark the cell as visited
+    visited[r][c] = true;
+
+    // Move in all 4 directions
+    for (const [dr, dc] of directions) {
+      dfs(r + dr, c + dc);
+    }
+  }
+
+  // Find the first zero cell and start the DFS from there
+  let foundZero = false;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (maze[r][c] === 0) {
+        dfs(r, c);
+        foundZero = true;
+        break;
+      }
+    }
+    if (foundZero) break;
+  }
+
+  // Check if all zeros are visited
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (maze[r][c] === 0 && !visited[r][c]) return false;
+    }
+  }
+
+  return true;
+}
+
+mazes.forEach((maze, index) => {
+  console.log(`Maze Level ${index + 1} connectivity: ${isConnected(maze)}`);
+});
+
 const initialPlayerPosition: Position = { x: 1, y: 1 };
 const goal: Goal = { x: 13, y: 13 };
 
