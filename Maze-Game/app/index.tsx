@@ -8,6 +8,12 @@ import {
   TouchableHighlight,
 } from "react-native";
 
+import {
+  useFonts,
+  ComicNeue_400Regular,
+  ComicNeue_700Bold,
+} from "@expo-google-fonts/comic-neue";
+
 const { width, height } = Dimensions.get("window");
 const cellSize = 40; // Size of each cell
 const cols = 15; // Number of columns
@@ -141,6 +147,11 @@ const initialPlayerPosition: Position = { x: 1, y: 1 };
 const goal: Goal = { x: 13, y: 13 };
 
 const MazeGame = () => {
+  let [fontsLoaded] = useFonts({
+    ComicNeue_400Regular,
+    ComicNeue_700Bold,
+  });
+
   const [playerPosition, setPlayerPosition] = useState<Position>(
     initialPlayerPosition
   );
@@ -196,7 +207,7 @@ const MazeGame = () => {
         if (currentLevel < mazes.length - 1) {
           setCurrentLevel(currentLevel + 1);
           setPlayerPosition(initialPlayerPosition);
-          setTimeElapsed(0);
+          //setTimeElapsed(0);
         } else {
           setGameOver(true);
           Alert.alert(
@@ -286,13 +297,33 @@ const MazeGame = () => {
   return (
     <View style={styles.container}>
       <View style={styles.timerContainer}>
-        <Text>Time: {timeElapsed}s</Text>
-        <Text>Moves: {moves}</Text>
+        {!gameOver && (
+          <View>
+            <Text style={{ fontFamily: "ComicNeue_700Bold" }}>
+              Time: {timeElapsed}s
+            </Text>
+            <Text style={{ fontFamily: "ComicNeue_700Bold" }}>
+              Moves: {moves}
+            </Text>{" "}
+          </View>
+        )}
+        {gameOver && (
+          <Text style={styles.score}>Score: {moves / timeElapsed}</Text>
+        )}
       </View>
       {renderMaze()}
       <Text style={styles.level}>Level: {currentLevel + 1}</Text>
       {gameOver && (
-        <Text style={styles.gameOver}>You solved all the mazes!</Text>
+        <View>
+          <Text style={styles.gameOver}>You solved all the mazes!</Text>
+        </View>
+      )}
+      {!gameOver && (
+        <View style={styles.instructionsContainer}>
+          <Text style={styles.instructionsText}>
+            Use arrow keys or tilt your device to move the player to the goal!
+          </Text>
+        </View>
       )}
     </View>
   );
@@ -303,7 +334,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F8F8F8",
+    backgroundColor: "#FCC1AB",
   },
   maze: {
     width: cols * cellSize,
@@ -315,55 +346,68 @@ const styles = StyleSheet.create({
     width: cellSize,
     height: cellSize,
     borderWidth: 1,
-    borderColor: "#E0E0E0",
+    borderColor: "#C0A3E0",
   },
   wall: {
-    backgroundColor: "#D3D3D3",
+    backgroundColor: "#CB764C",
   },
   path: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#FBC2A3",
   },
   player: {
-    backgroundColor: "#FFB6C1",
+    backgroundColor: "#95D2E2",
   },
   goal: {
-    backgroundColor: "#B0E0E6",
+    backgroundColor: "#406789",
   },
   instructionsContainer: {
-    marginTop: 20,
+    marginTop: 1,
   },
   instructionsText: {
-    fontSize: 16,
+    fontSize: 20,
     color: "#808080",
+    fontFamily: "ComicNeue_700Bold",
   },
   level: {
     marginTop: 20,
     fontSize: 20,
+    fontFamily: "ComicNeue_700Bold",
   },
   gameOver: {
     position: "absolute",
     alignContent: "center",
     fontSize: 24,
+    fontFamily: "ComicNeue_700Bold",
     color: "black",
+  },
+  score: {
+    marginBottom: 10,
+    fontFamily: "ComicNeue_700Bold",
   },
   timerContainer: {
     marginBottom: 10,
+    color: "#6EC7BF",
   },
   title: {
     fontSize: 32,
     fontWeight: "bold",
     marginBottom: 20,
+    color: "#406789",
+    fontFamily: "ComicNeue_700Bold",
   },
   subtitle: {
     fontSize: 18,
     marginBottom: 40,
+    color: "#D48260",
+    fontFamily: "ComicNeue_700Bold",
   },
   startButton: {
     fontSize: 20,
-    color: "black",
+    color: "#326B66",
     borderRadius: 10,
     padding: 10,
-    backgroundColor: "lightblue",
+    backgroundColor: "#6EC7BF",
+    fontFamily: "ComicNeue_700Bold",
   },
   startTouch: {
     borderRadius: 10,
