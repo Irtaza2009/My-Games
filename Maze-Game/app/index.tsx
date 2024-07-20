@@ -18,7 +18,7 @@ import {
 //import { Gyroscope } from "expo-sensors";
 
 const { width, height } = Dimensions.get("window");
-const cellSize = 30; // Size of each cell
+
 const cols = 15; // Number of columns
 const rows = 15; // Number of rows
 
@@ -520,6 +520,16 @@ const MazeGame = () => {
   );
 };
 
+// Define a smaller scale factor (adjust as needed)
+const scaleFactor = Math.min(width, height) / 450; // Adjusted scale factor
+
+// Calculate sizes based on scale factor
+const cellSize = 15 * scaleFactor; // Adjust the multiplier for smaller cells
+const buttonSize = 30 * scaleFactor; // Adjusted size for gamepad buttons
+const margin = 8 * scaleFactor; // Adjusted margin
+const fontSizeBase = 14 * scaleFactor; // Adjusted base font size
+const gamepadSize = buttonSize * 2; // Gamepad size
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -552,57 +562,57 @@ const styles = StyleSheet.create({
     backgroundColor: "#406789",
   },
   instructionsContainer: {
-    marginTop: 1,
+    marginTop: margin,
   },
   instructionsText: {
-    fontSize: 25,
+    fontSize: 16 * scaleFactor, // Adjusted font size
     color: "#808080",
     fontFamily: "ComicNeue_700Bold",
   },
   level: {
-    marginTop: 10,
-    fontSize: 25,
+    marginTop: margin,
+    fontSize: 16 * scaleFactor, // Adjusted font size
     fontFamily: "ComicNeue_700Bold",
   },
   gameOver: {
     position: "absolute",
     alignContent: "center",
-    fontSize: 24,
+    fontSize: 18 * scaleFactor, // Adjusted font size
     fontFamily: "ComicNeue_700Bold",
     color: "black",
   },
   score: {
-    marginBottom: 10,
+    marginBottom: margin,
     fontFamily: "ComicNeue_700Bold",
-    fontSize: 25,
+    fontSize: 16 * scaleFactor, // Adjusted font size
   },
   timerContainer: {
-    marginBottom: 10,
+    marginBottom: margin,
     color: "#6EC7BF",
   },
   title: {
-    fontSize: 100,
+    fontSize: 30 * scaleFactor, // Adjusted font size
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 15 * scaleFactor,
     color: "#406789",
     fontFamily: "ComicNeue_700Bold",
   },
   subtitle: {
-    fontSize: 30,
-    marginBottom: 40,
+    fontSize: 18 * scaleFactor, // Adjusted font size
+    marginBottom: 25 * scaleFactor,
     color: "#D48260",
     fontFamily: "ComicNeue_700Bold",
   },
   startButton: {
-    fontSize: 40,
+    fontSize: 24 * scaleFactor, // Adjusted font size
     color: "#326B66",
-    borderRadius: 10,
-    padding: 10,
+    borderRadius: 8 * scaleFactor,
+    padding: 8 * scaleFactor,
     backgroundColor: "#6EC7BF",
     fontFamily: "ComicNeue_700Bold",
   },
   startTouch: {
-    borderRadius: 10,
+    borderRadius: 8 * scaleFactor,
   },
   topText: {
     display: "flex",
@@ -613,14 +623,15 @@ const styles = StyleSheet.create({
   },
   moves: {
     fontFamily: "ComicNeue_700Bold",
-    fontSize: 25,
-    marginRight: 10,
+    fontSize: 16 * scaleFactor, // Adjusted font size
+    marginRight: margin,
   },
   gamepad: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    width: 200, // Width of the gamepad container
-    height: 200, // Height of the gamepad container
+    position: "absolute",
+    bottom: 25 * scaleFactor, // Position from the bottom
+    right: width / 2, // Position from the right
+    width: gamepadSize,
+    height: gamepadSize,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -629,34 +640,38 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   button: {
-    width: 40,
-    height: 40,
+    width: buttonSize,
+    height: buttonSize,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#007BFF",
-    borderRadius: 25,
-    margin: 10,
+    borderRadius: buttonSize / 2,
+    margin: margin / 2, // Reduced margin
   },
   buttonText: {
     color: "white",
     fontFamily: "ComicNeue_700Bold",
-    fontSize: 16,
+    fontSize: 12 * scaleFactor, // Adjusted font size
   },
   upButton: {
     position: "absolute",
-    top: 50,
+    top: buttonSize / 3, // Adjusted position
+    left: buttonSize / 2, // Center horizontally
   },
   downButton: {
     position: "absolute",
-    bottom: 10,
+    top: buttonSize / 0.7, // Adjusted position
+    left: buttonSize / 2, // Center horizontally
   },
   leftButton: {
     position: "absolute",
-    right: 10,
+    top: buttonSize / 2, // Center vertically
+    right: 15 * scaleFactor, // Align with left edge
   },
   rightButton: {
     position: "absolute",
-    left: 10,
+    top: buttonSize / 2, // Center vertically
+    left: 20 * scaleFactor, // Align with right edge
   },
 });
 
