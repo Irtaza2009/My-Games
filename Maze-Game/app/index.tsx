@@ -299,12 +299,8 @@ const MazeGame = () => {
       <View style={styles.timerContainer}>
         {!gameOver && (
           <View>
-            <Text style={{ fontFamily: "ComicNeue_700Bold" }}>
-              Time: {timeElapsed}s
-            </Text>
-            <Text style={{ fontFamily: "ComicNeue_700Bold" }}>
-              Moves: {moves}
-            </Text>{" "}
+            <Text style={styles.moves}>Time: {timeElapsed}s</Text>
+            <Text style={styles.moves}>Moves: {moves}</Text>{" "}
           </View>
         )}
         {gameOver && (
@@ -315,7 +311,7 @@ const MazeGame = () => {
       <Text style={styles.level}>Level: {currentLevel + 1}</Text>
       {gameOver && (
         <View>
-          <Text style={styles.gameOver}>You solved all the mazes!</Text>
+          <Text style={styles.instructionsText}>You solved all the mazes!</Text>
         </View>
       )}
       {!gameOver && (
@@ -364,13 +360,13 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
   instructionsText: {
-    fontSize: 20,
+    fontSize: 25,
     color: "#808080",
     fontFamily: "ComicNeue_700Bold",
   },
   level: {
-    marginTop: 20,
-    fontSize: 20,
+    marginTop: 10,
+    fontSize: 25,
     fontFamily: "ComicNeue_700Bold",
   },
   gameOver: {
@@ -383,26 +379,27 @@ const styles = StyleSheet.create({
   score: {
     marginBottom: 10,
     fontFamily: "ComicNeue_700Bold",
+    fontSize: 25,
   },
   timerContainer: {
     marginBottom: 10,
     color: "#6EC7BF",
   },
   title: {
-    fontSize: 32,
+    fontSize: 100,
     fontWeight: "bold",
     marginBottom: 20,
     color: "#406789",
     fontFamily: "ComicNeue_700Bold",
   },
   subtitle: {
-    fontSize: 18,
+    fontSize: 30,
     marginBottom: 40,
     color: "#D48260",
     fontFamily: "ComicNeue_700Bold",
   },
   startButton: {
-    fontSize: 20,
+    fontSize: 40,
     color: "#326B66",
     borderRadius: 10,
     padding: 10,
@@ -411,6 +408,10 @@ const styles = StyleSheet.create({
   },
   startTouch: {
     borderRadius: 10,
+  },
+  moves: {
+    fontFamily: "ComicNeue_700Bold",
+    fontSize: 25,
   },
 });
 
