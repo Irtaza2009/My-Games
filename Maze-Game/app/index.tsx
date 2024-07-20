@@ -14,6 +14,8 @@ import {
   ComicNeue_700Bold,
 } from "@expo-google-fonts/comic-neue";
 
+//import { Gyroscope } from "expo-sensors";
+
 const { width, height } = Dimensions.get("window");
 const cellSize = 40; // Size of each cell
 const cols = 15; // Number of columns
@@ -132,6 +134,43 @@ const mazes: Maze[] = [
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   ],
+  // Maze Level 7
+  [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
+    [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ],
+
+  // Maze Level 8
+  [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ],
 ];
 
 function isConnected(maze: number[][]): boolean {
@@ -201,6 +240,9 @@ const initialPlayerPosition: Position = { x: 1, y: 1 };
 const goal: Goal = { x: 13, y: 13 };
 
 const MazeGame = () => {
+  // const [gyroData, setGyroData] = useState({ x: 0, y: 0, z: 0 });
+  // const [gyroEnabled, setGyroEnabled] = useState(false);
+
   let [fontsLoaded] = useFonts({
     ComicNeue_400Regular,
     ComicNeue_700Bold,
@@ -220,12 +262,25 @@ const MazeGame = () => {
 
   const maze = mazes[currentLevel];
 
+  /*
+  useEffect(() => {
+    let subscriptions;
+
+    if (gyroEnabled) {
+      subscriptions = Gyroscope.addListener((gyroscopeData) => {
+        setGyroData(gyroscopeData);
+      });
+    }
+  }, []); */
+
   useEffect(() => {
     // Start timer
     const id = setInterval(() => {
       if (!gameOver) {
         //if (showTitleScreen == false) {
         setTimeElapsed((prevTime) => prevTime + 1);
+        console.log(gameOver);
+        console.log(showTitleScreen);
         //}
       }
     }, 1000);
@@ -339,7 +394,10 @@ const MazeGame = () => {
           activeOpacity={0.8}
           underlayColor="blue"
           style={styles.startTouch}
-          onPress={() => alert("Pressed!")}
+          onPress={() => {
+            alert("Pressed!");
+            setShowTitleScreen(false);
+          }}
         >
           <Text
             style={styles.startButton}
