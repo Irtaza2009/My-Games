@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Dimensions, Text, Alert } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  Text,
+  Alert,
+  TouchableHighlight,
+} from "react-native";
 
 const { width, height } = Dimensions.get("window");
 const cellSize = 40; // Size of each cell
@@ -144,6 +151,8 @@ const MazeGame = () => {
   const [timeElapsed, setTimeElapsed] = useState<number>(0);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
+  const [showTitleScreen, setShowTitleScreen] = useState(true);
+
   const maze = mazes[currentLevel];
 
   useEffect(() => {
@@ -187,6 +196,7 @@ const MazeGame = () => {
         if (currentLevel < mazes.length - 1) {
           setCurrentLevel(currentLevel + 1);
           setPlayerPosition(initialPlayerPosition);
+          setTimeElapsed(0);
         } else {
           setGameOver(true);
           Alert.alert(
@@ -248,6 +258,30 @@ const MazeGame = () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [playerPosition, currentLevel, gameOver]);
+
+  if (showTitleScreen) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Maze Game</Text>
+        <Text style={styles.subtitle}>
+          Navigate through the maze to reach the goal!
+        </Text>
+        <TouchableHighlight
+          activeOpacity={0.8}
+          underlayColor="blue"
+          style={styles.startTouch}
+          onPress={() => alert("Pressed!")}
+        >
+          <Text
+            style={styles.startButton}
+            onPress={() => setShowTitleScreen(false)}
+          >
+            Start Game
+          </Text>
+        </TouchableHighlight>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -314,6 +348,25 @@ const styles = StyleSheet.create({
   },
   timerContainer: {
     marginBottom: 10,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  subtitle: {
+    fontSize: 18,
+    marginBottom: 40,
+  },
+  startButton: {
+    fontSize: 20,
+    color: "black",
+    borderRadius: 10,
+    padding: 10,
+    backgroundColor: "lightblue",
+  },
+  startTouch: {
+    borderRadius: 10,
   },
 });
 
