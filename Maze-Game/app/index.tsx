@@ -6,6 +6,7 @@ import {
   Text,
   Alert,
   TouchableHighlight,
+  TouchableOpacity,
 } from "react-native";
 
 import {
@@ -17,7 +18,7 @@ import {
 //import { Gyroscope } from "expo-sensors";
 
 const { width, height } = Dimensions.get("window");
-const cellSize = 40; // Size of each cell
+const cellSize = 30; // Size of each cell
 const cols = 15; // Number of columns
 const rows = 15; // Number of rows
 
@@ -477,6 +478,44 @@ const MazeGame = () => {
           </Text>
         </View>
       )}
+
+      {/* Buttons */}
+      <View style={styles.gamepad}>
+        <TouchableOpacity
+          style={[styles.button, styles.upButton]}
+          onPress={() => {
+            movePlayer("up");
+          }}
+        >
+          <Text style={styles.buttonText}>Up</Text>
+        </TouchableOpacity>
+        <View style={styles.row}>
+          <TouchableOpacity
+            style={[styles.button, styles.leftButton]}
+            onPress={() => {
+              movePlayer("left");
+            }}
+          >
+            <Text style={styles.buttonText}>Left</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, styles.rightButton]}
+            onPress={() => {
+              movePlayer("right");
+            }}
+          >
+            <Text style={styles.buttonText}>Right</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          style={[styles.button, styles.downButton]}
+          onPress={() => {
+            movePlayer("down");
+          }}
+        >
+          <Text style={styles.buttonText}>Down</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -576,6 +615,48 @@ const styles = StyleSheet.create({
     fontFamily: "ComicNeue_700Bold",
     fontSize: 25,
     marginRight: 10,
+  },
+  gamepad: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    width: 200, // Width of the gamepad container
+    height: 200, // Height of the gamepad container
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  button: {
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#007BFF",
+    borderRadius: 25,
+    margin: 10,
+  },
+  buttonText: {
+    color: "white",
+    fontFamily: "ComicNeue_700Bold",
+    fontSize: 16,
+  },
+  upButton: {
+    position: "absolute",
+    top: 50,
+  },
+  downButton: {
+    position: "absolute",
+    bottom: 10,
+  },
+  leftButton: {
+    position: "absolute",
+    right: 10,
+  },
+  rightButton: {
+    position: "absolute",
+    left: 10,
   },
 });
 
