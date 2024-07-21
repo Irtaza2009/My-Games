@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Bomb from "./Bomb";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRedo } from "@fortawesome/free-solid-svg-icons";
 import "./Game.css";
 
 const Game = () => {
@@ -8,6 +10,7 @@ const Game = () => {
   const [gameDimensions, setGameDimensions] = useState({ width: 0, height: 0 });
   const [bombDiameter, setBombDiameter] = useState(0);
   const [score, setScore] = useState(0);
+  const [dragging, setDragging] = useState(false);
 
   const bombCount = 5; // Adjust as needed
   const gameArea = useRef();
@@ -28,14 +31,7 @@ const Game = () => {
     console.log("Bomb Diameter:", bombRect.width);
   };
 
-  useEffect(() => {
-    measureElements();
-    window.addEventListener("resize", measureElements);
-    return () => window.removeEventListener("resize", measureElements);
-  }, [measureElements]);
-
-  useEffect(() => {
-    // Initialize bombs
+  const initializeBombs = useCallback(() => {
     const initialBombs = [];
     for (let i = 0; i < bombCount; i++) {
       initialBombs.push({
@@ -49,6 +45,22 @@ const Game = () => {
     setBombs(initialBombs);
   }, [gameDimensions, bombDiameter]);
 
+  const restartGame = () => {
+    setGameOver(false);
+    setScore(0);
+    initializeBombs();
+  };
+
+  useEffect(() => {
+    measureElements();
+    window.addEventListener("resize", measureElements);
+    return () => window.removeEventListener("resize", measureElements);
+  }, [measureElements]);
+
+  useEffect(() => {
+    initializeBombs();
+  }, [initializeBombs]);
+
   useEffect(() => {
     if (!gameOver) {
       const interval = setInterval(moveBombs, 20);
@@ -57,14 +69,14 @@ const Game = () => {
   }, [bombs, gameOver, gameDimensions]);
 
   useEffect(() => {
-    if (!gameOver) {
+    if (!gameOver && !dragging) {
       const scoreInterval = setInterval(
         () => setScore((prevScore) => prevScore + 1),
         100
       );
       return () => clearInterval(scoreInterval);
     }
-  }, [gameOver]);
+  }, [gameOver, dragging]);
 
   const moveBombs = () => {
     setBombs((prevBombs) => {
@@ -136,12 +148,16 @@ const Game = () => {
             onLoad={handleBombLoad}
             gameDimensions={gameDimensions}
             bombDiameter={bombDiameter}
+            setDragging={setDragging}
           />
         ))}
         {gameOver && (
           <div className="game-over">
             Game Over
             <div className="final-score">Final Score: {score}</div>
+            <button className="restart-button" onClick={restartGame}>
+              <FontAwesomeIcon icon={faRedo} /> Restart
+            </button>
           </div>
         )}
       </div>
