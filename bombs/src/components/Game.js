@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Bomb from "./Bomb";
 import "./Game.css";
 
@@ -11,30 +11,27 @@ const Game = () => {
   const bombCount = 5; // Adjust as needed
   const gameArea = useRef();
 
-  useEffect(() => {
-    // Measure the game area and bomb sizes
-    const measureElements = () => {
-      if (gameArea.current) {
-        const gameAreaRect = gameArea.current.getBoundingClientRect();
-        const bomb = document.querySelector(".bomb");
-        console.log("Bomb:", bomb);
-        const bombRect = bomb
-          ? bomb.getBoundingClientRect()
-          : { width: 0, height: 0 };
-        setGameDimensions({
-          width: gameAreaRect.width,
-          height: gameAreaRect.height,
-        });
-        setBombDiameter(bombRect.width);
-        console.log("Game Area:", gameAreaRect.width, gameAreaRect.height);
-        console.log("Bomb Diameter:", bombRect.width);
-      }
-    };
+  const measureElements = useCallback(() => {
+    if (gameArea.current) {
+      const gameAreaRect = gameArea.current.getBoundingClientRect();
+      setGameDimensions({
+        width: gameAreaRect.width,
+        height: gameAreaRect.height,
+      });
+      console.log("Game Area:", gameAreaRect.width, gameAreaRect.height);
+    }
+  }, []);
 
+  const handleBombLoad = (bombRect) => {
+    setBombDiameter(bombRect.width);
+    console.log("Bomb Diameter:", bombRect.width);
+  };
+
+  useEffect(() => {
     measureElements();
     window.addEventListener("resize", measureElements);
     return () => window.removeEventListener("resize", measureElements);
-  }, []);
+  }, [measureElements]);
 
   useEffect(() => {
     // Initialize bombs
@@ -99,14 +96,34 @@ const Game = () => {
 
   const handleDrag = (id, x, y) => {
     setBombs((prevBombs) =>
-      prevBombs.map((bomb) => (bomb.id === id ? { ...bomb, x, y } : bomb))
+      prevBombs.map((bomb) => {
+        if (bomb.id === id) {
+          const newX = Math.max(
+            0,
+            Math.min(x, gameDimensions.width - bombDiameter)
+          );
+          const newY = Math.max(
+            0,
+            Math.min(y, gameDimensions.height - bombDiameter)
+          );
+          return { ...bomb, x: newX, y: newY };
+        }
+        return bomb;
+      })
     );
   };
 
   return (
     <div className="game-area" ref={gameArea}>
       {bombs.map((bomb) => (
-        <Bomb key={bomb.id} bomb={bomb} onDrag={handleDrag} />
+        <Bomb
+          key={bomb.id}
+          bomb={bomb}
+          onDrag={handleDrag}
+          onLoad={handleBombLoad}
+          gameDimensions={gameDimensions}
+          bombDiameter={bombDiameter}
+        />
       ))}
       {gameOver && <div className="game-over">Game Over</div>}
     </div>

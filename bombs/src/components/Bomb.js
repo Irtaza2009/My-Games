@@ -1,14 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Bomb.css";
 
-const Bomb = ({ bomb, onDrag }) => {
+const Bomb = ({ bomb, onDrag, onLoad, gameDimensions, bombDiameter }) => {
   const [dragging, setDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const bombRef = useRef();
+
+  useEffect(() => {
+    if (bombRef.current) {
+      const bombRect = bombRef.current.getBoundingClientRect();
+      onLoad(bombRect);
+    }
+  }, [onLoad]);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (dragging) {
-        onDrag(bomb.id, e.clientX - offset.x, e.clientY - offset.y);
+        const newX = e.clientX - offset.x;
+        const newY = e.clientY - offset.y;
+        // Enforce boundaries
+        onDrag(
+          bomb.id,
+          Math.max(0, Math.min(newX, gameDimensions.width - bombDiameter)),
+          Math.max(0, Math.min(newY, gameDimensions.height - bombDiameter))
+        );
       }
     };
 
@@ -21,7 +36,7 @@ const Bomb = ({ bomb, onDrag }) => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [dragging, offset, bomb.id, onDrag]);
+  }, [dragging, offset, bomb.id, onDrag, gameDimensions, bombDiameter]);
 
   const handleMouseDown = (e) => {
     setDragging(true);
@@ -34,6 +49,7 @@ const Bomb = ({ bomb, onDrag }) => {
   return (
     <div
       className="bomb"
+      ref={bombRef}
       style={{ left: bomb.x, top: bomb.y }}
       onMouseDown={handleMouseDown}
     ></div>
