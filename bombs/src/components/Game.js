@@ -7,6 +7,7 @@ const Game = () => {
   const [gameOver, setGameOver] = useState(false);
   const [gameDimensions, setGameDimensions] = useState({ width: 0, height: 0 });
   const [bombDiameter, setBombDiameter] = useState(0);
+  const [score, setScore] = useState(0);
 
   const bombCount = 5; // Adjust as needed
   const gameArea = useRef();
@@ -54,6 +55,16 @@ const Game = () => {
       return () => clearInterval(interval);
     }
   }, [bombs, gameOver, gameDimensions]);
+
+  useEffect(() => {
+    if (!gameOver) {
+      const scoreInterval = setInterval(
+        () => setScore((prevScore) => prevScore + 1),
+        100
+      );
+      return () => clearInterval(scoreInterval);
+    }
+  }, [gameOver]);
 
   const moveBombs = () => {
     setBombs((prevBombs) => {
@@ -114,18 +125,26 @@ const Game = () => {
   };
 
   return (
-    <div className="game-area" ref={gameArea}>
-      {bombs.map((bomb) => (
-        <Bomb
-          key={bomb.id}
-          bomb={bomb}
-          onDrag={handleDrag}
-          onLoad={handleBombLoad}
-          gameDimensions={gameDimensions}
-          bombDiameter={bombDiameter}
-        />
-      ))}
-      {gameOver && <div className="game-over">Game Over</div>}
+    <div>
+      <div className="score">Score: {score}</div>
+      <div className="game-area" ref={gameArea}>
+        {bombs.map((bomb) => (
+          <Bomb
+            key={bomb.id}
+            bomb={bomb}
+            onDrag={handleDrag}
+            onLoad={handleBombLoad}
+            gameDimensions={gameDimensions}
+            bombDiameter={bombDiameter}
+          />
+        ))}
+        {gameOver && (
+          <div className="game-over">
+            Game Over
+            <div className="final-score">Final Score: {score}</div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,8 +1,10 @@
 .bomb {
   width: 8vmin; /* Scales with viewport size */
   height: 8vmin; /* Scales with viewport size */
-  background-color: red;
+  /*background-color: red;*/
+  background: radial-gradient(circle, #333 20%, #000 100%);
   border-radius: 50%;
   position: absolute;
   cursor: grab;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }

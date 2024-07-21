@@ -27,3 +27,14 @@ body {
   font-weight: bold;
   color: red;
 }
+
+.score {
+  font-size: 3vmin;
+  margin-bottom: 1vmin;
+}
+
+.final-score {
+  font-size: 3vmin;
+  color: #048189;
+  margin-top: 1vmin;
+}
