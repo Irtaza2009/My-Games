@@ -1,0 +1,27 @@
+.game-area {
+  width: 500px;
+  height: 500px;
+  position: relative;
+  background-color: #f0f0f0;
+  border: 2px solid #ccc;
+  overflow: hidden;
+}
+
+.game-over {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  font-weight: bold;
+  color: red;
+}
+
+.bomb {
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  cursor: grab;
+}

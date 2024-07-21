@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import './Bomb.css';
+import React, { useState, useEffect } from "react";
+import "./Bomb.css";
 
 const Bomb = ({ bomb, onDrag }) => {
   const [dragging, setDragging] = useState(false);
@@ -14,11 +14,30 @@ const Bomb = ({ bomb, onDrag }) => {
 
     const handleMouseUp = () => setDragging(false);
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
-  },
+  }, [dragging, offset, bomb.id, onDrag]);
+
+  const handleMouseDown = (e) => {
+    setDragging(true);
+    setOffset({
+      x: e.clientX - bomb.x,
+      y: e.clientY - bomb.y,
+    });
+  };
+
+  return (
+    <div
+      className="bomb"
+      style={{ left: bomb.x, top: bomb.y }}
+      onMouseDown={handleMouseDown}
+    ></div>
+  );
+};
+
+export default Bomb;
