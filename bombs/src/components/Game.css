@@ -1,10 +1,21 @@
+/* Ensure the game area is centered and scales with the screen size */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+}
+
 .game-area {
-  width: 500px;
-  height: 500px;
+  width: 80vmin; /* Scales with viewport size */
+  height: 80vmin; /* Scales with viewport size */
   position: relative;
   background-color: #f0f0f0;
   border: 2px solid #ccc;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .game-over {
@@ -12,16 +23,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 24px;
+  font-size: 4vmin;
   font-weight: bold;
   color: red;
-}
-
-.bomb {
-  width: 40px;
-  height: 40px;
-  background-color: red;
-  border-radius: 50%;
-  position: absolute;
-  cursor: grab;
 }

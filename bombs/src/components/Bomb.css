@@ -1,6 +1,6 @@
 .bomb {
-  width: 40px;
-  height: 40px;
+  width: 8vmin; /* Scales with viewport size */
+  height: 8vmin; /* Scales with viewport size */
   background-color: red;
   border-radius: 50%;
   position: absolute;
