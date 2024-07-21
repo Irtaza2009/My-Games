@@ -480,35 +480,35 @@ const MazeGame = () => {
       )}
 
       {/* Buttons */}
-      <View style={styles.gamepad}>
+      <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={[styles.button, styles.upButton]}
+          style={styles.button}
           onPress={() => {
             movePlayer("up");
           }}
         >
           <Text style={styles.buttonText}>Up</Text>
         </TouchableOpacity>
-        <View style={styles.row}>
-          <TouchableOpacity
-            style={[styles.button, styles.leftButton]}
-            onPress={() => {
-              movePlayer("left");
-            }}
-          >
-            <Text style={styles.buttonText}>Left</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.button, styles.rightButton]}
-            onPress={() => {
-              movePlayer("right");
-            }}
-          >
-            <Text style={styles.buttonText}>Right</Text>
-          </TouchableOpacity>
-        </View>
+
         <TouchableOpacity
-          style={[styles.button, styles.downButton]}
+          style={styles.button}
+          onPress={() => {
+            movePlayer("left");
+          }}
+        >
+          <Text style={styles.buttonText}>Left</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            movePlayer("right");
+          }}
+        >
+          <Text style={styles.buttonText}>Right</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
           onPress={() => {
             movePlayer("down");
           }}
@@ -626,52 +626,21 @@ const styles = StyleSheet.create({
     fontSize: 16 * scaleFactor, // Adjusted font size
     marginRight: margin,
   },
-  gamepad: {
-    position: "absolute",
-    bottom: 25 * scaleFactor, // Position from the bottom
-    right: width / 2, // Position from the right
-    width: gamepadSize,
-    height: gamepadSize,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  row: {
+  buttonContainer: {
     flexDirection: "row",
-    justifyContent: "center",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    marginTop: margin / 2,
   },
   button: {
-    width: buttonSize,
-    height: buttonSize,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#007BFF",
+    backgroundColor: "#DDDDDD",
+    padding: 10 * scaleFactor,
     borderRadius: buttonSize / 2,
-    margin: margin / 2, // Reduced margin
+    margin: margin / 2,
   },
   buttonText: {
-    color: "white",
-    fontFamily: "ComicNeue_700Bold",
-    fontSize: 12 * scaleFactor, // Adjusted font size
-  },
-  upButton: {
-    position: "absolute",
-    top: buttonSize / 3, // Adjusted position
-    left: buttonSize / 2, // Center horizontally
-  },
-  downButton: {
-    position: "absolute",
-    top: buttonSize / 0.7, // Adjusted position
-    left: buttonSize / 2, // Center horizontally
-  },
-  leftButton: {
-    position: "absolute",
-    top: buttonSize / 2, // Center vertically
-    right: 15 * scaleFactor, // Align with left edge
-  },
-  rightButton: {
-    position: "absolute",
-    top: buttonSize / 2, // Center vertically
-    left: 20 * scaleFactor, // Align with right edge
+    fontSize: 16 * scaleFactor, // Adjusted font size
+    color: "#000",
   },
 });
 
