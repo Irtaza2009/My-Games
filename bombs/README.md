@@ -1,74 +1,36 @@
-# Bombs
+### Game Description
 
-Click and drag the bombs to prevent them from colliding.
+**Bombs** is an engaging and fast-paced game where players must navigate a set of bombs floating around the screen. The objective is to avoid collisions between the bombs for as long as possible. The bombs can be moved by dragging them with the mouse, but be careful—any collision between the bombs will result in a game over. To add to the challenge, the speed of the bombs increases over time, requiring quick reflexes and strategic movement to achieve a high score.
 
-# Getting Started with Create React App
+Enjoy playing **Bombs** and challenge yourself to achieve the highest score!
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Bombs Game
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+**Bombs** is a fun and challenging game where you must navigate floating bombs to prevent them from colliding. The bombs move around the game area and can be dragged with the mouse. The longer you play, the faster the bombs move, making it increasingly difficult to avoid collisions.
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Dynamic Bomb Movement**: Bombs float around the game area with increasing speed over time.
+- **Mouse Dragging**: Move the bombs by dragging them with the mouse to avoid collisions.
+- **Score Tracking**: The game tracks your score based on how long you can prevent the bombs from colliding.
+- **Game Over and Restart**: If the bombs collide, the game is over, and you can restart to try for a higher score.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### How to Play
 
-### `npm test`
+1. The game starts with a number of bombs floating around the game area.
+2. Use your mouse to drag the bombs and prevent them from colliding.
+3. The speed of the bombs will gradually increase over time, making it more challenging to avoid collisions.
+4. Your score is based on how long you can keep the bombs from colliding.
+5. If any bombs collide, the game is over. Click the "Restart" button to try again and achieve a higher score.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Contributing
 
-### `npm run build`
+Contributions are welcome! If you have ideas for new features or improvements, feel free to open an issue or submit a pull request.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### License
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Enjoy playing **Bombs** and challenge yourself to achieve the highest score!

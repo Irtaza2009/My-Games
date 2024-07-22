@@ -11,6 +11,7 @@ const Game = () => {
   const [bombDiameter, setBombDiameter] = useState(0);
   const [score, setScore] = useState(0);
   const [dragging, setDragging] = useState(false);
+  const [speedFactor, setSpeedFactor] = useState(1);
 
   const bombCount = 5; // Adjust as needed
   const gameArea = useRef();
@@ -67,6 +68,7 @@ const Game = () => {
   const restartGame = () => {
     setGameOver(false);
     setScore(0);
+    setSpeedFactor(1); // Reset speed factor
     initializeBombs();
   };
 
@@ -97,11 +99,20 @@ const Game = () => {
     }
   }, [gameOver, dragging]);
 
+  useEffect(() => {
+    if (!gameOver) {
+      const speedInterval = setInterval(() => {
+        setSpeedFactor((prevSpeed) => prevSpeed + 0.01);
+      }, 1000); // Increase speed factor every second
+      return () => clearInterval(speedInterval);
+    }
+  }, [gameOver]);
+
   const moveBombs = () => {
     setBombs((prevBombs) => {
       const newBombs = prevBombs.map((bomb) => {
-        let newX = bomb.x + bomb.vx;
-        let newY = bomb.y + bomb.vy;
+        let newX = bomb.x + bomb.vx * speedFactor;
+        let newY = bomb.y + bomb.vy * speedFactor;
 
         // Boundary checks
         if (newX <= 0 || newX >= gameDimensions.width - bombDiameter)
