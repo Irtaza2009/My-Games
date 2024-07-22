@@ -3,6 +3,7 @@ import Bomb from "./Bomb";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRedo } from "@fortawesome/free-solid-svg-icons";
 import "./Game.css";
+import explosion from "../sounds/explosion.mp3";
 
 const Game = () => {
   const [bombs, setBombs] = useState([]);
@@ -30,6 +31,7 @@ const Game = () => {
   const handleBombLoad = (bombRect) => {
     setBombDiameter(bombRect.width);
     console.log("Bomb Diameter:", bombRect.width);
+    console.log("Bomb Speed:", speedFactor);
   };
 
   const isColliding = (bomb1, bomb2) => {
@@ -109,6 +111,11 @@ const Game = () => {
   }, [gameOver]);
 
   const moveBombs = () => {
+    const playExplosionSound = () => {
+      const audio = new Audio(explosion);
+      audio.play();
+    };
+
     setBombs((prevBombs) => {
       const newBombs = prevBombs.map((bomb) => {
         let newX = bomb.x + bomb.vx * speedFactor;
@@ -131,6 +138,7 @@ const Game = () => {
       for (let i = 0; i < newBombs.length; i++) {
         for (let j = i + 1; j < newBombs.length; j++) {
           if (isColliding(newBombs[i], newBombs[j])) {
+            playExplosionSound();
             setGameOver(true);
           }
         }
