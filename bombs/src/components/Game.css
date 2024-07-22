@@ -77,27 +77,3 @@ body {
   margin-top: 1vmin;
   font-family: "Comic Neue", cursive;
 }
-
-.instructions {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  font-size: 3vmin;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 2vmin;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-.instructions button {
-  font-size: 2.5vmin;
-  padding: 1vmin 3vmin;
-  background-color: #048189;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 2vmin;
-}

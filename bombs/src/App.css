@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
+
 .App {
   text-align: center;
 }
@@ -35,4 +37,34 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.titleMain {
+  font-size: 40vmin;
+  color: #4f525c;
+  margin-bottom: 1vmin;
+  text-align: center;
+  font-family: "Comic Neue", cursive;
+}
+
+.instructions {
+  text-align: center;
+  color: #4f525c;
+  font-size: 3vmin;
+  font-family: "Comic Neue", cursive;
+  justify-content: center;
+  margin-top: 1vmin;
+}
+
+.startButton {
+  font-size: 10vmin;
+  padding: 1vmin 3vmin;
+  background-color: #a69c7d;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 1vmin;
+  font-family: "Comic Neue", cursive;
+  margin-bottom: 50vmin;
 }

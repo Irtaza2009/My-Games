@@ -1,5 +1,3 @@
-// Game.js
-
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Bomb from "./Bomb";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,7 +11,6 @@ const Game = () => {
   const [bombDiameter, setBombDiameter] = useState(0);
   const [score, setScore] = useState(0);
   const [dragging, setDragging] = useState(false);
-  const [showInstructions, setShowInstructions] = useState(true);
 
   const bombCount = 5; // Adjust as needed
   const gameArea = useRef();
@@ -67,11 +64,6 @@ const Game = () => {
     setBombs(initialBombs);
   }, [gameDimensions, bombDiameter]);
 
-  const startGame = () => {
-    setShowInstructions(false);
-    initializeBombs();
-  };
-
   const restartGame = () => {
     setGameOver(false);
     setScore(0);
@@ -85,10 +77,8 @@ const Game = () => {
   }, [measureElements]);
 
   useEffect(() => {
-    if (!showInstructions) {
-      initializeBombs();
-    }
-  }, [initializeBombs, showInstructions]);
+    initializeBombs();
+  }, [initializeBombs]);
 
   useEffect(() => {
     if (!gameOver) {
@@ -161,39 +151,29 @@ const Game = () => {
   return (
     <div>
       <h1 className="title">Bombs</h1>
-      {showInstructions ? (
-        <div className="instructions">
-          <h1>Welcome to the Bomb Game</h1>
-          <p>Drag the bombs to avoid collisions. Good luck!</p>
-          <button onClick={startGame}>Start Game</button>
-        </div>
-      ) : (
-        <div>
-          <div className="score">Score: {score}</div>
-          <div className="game-area" ref={gameArea}>
-            {bombs.map((bomb) => (
-              <Bomb
-                key={bomb.id}
-                bomb={bomb}
-                onDrag={handleDrag}
-                onLoad={handleBombLoad}
-                gameDimensions={gameDimensions}
-                bombDiameter={bombDiameter}
-                setDragging={setDragging}
-              />
-            ))}
-            {gameOver && (
-              <div className="game-over">
-                Game Over
-                <div className="final-score">Final Score: {score}</div>
-                <button className="restart-button" onClick={restartGame}>
-                  <FontAwesomeIcon icon={faRedo} /> Restart
-                </button>
-              </div>
-            )}
+      <div className="score">Score: {score}</div>
+      <div className="game-area" ref={gameArea}>
+        {bombs.map((bomb) => (
+          <Bomb
+            key={bomb.id}
+            bomb={bomb}
+            onDrag={handleDrag}
+            onLoad={handleBombLoad}
+            gameDimensions={gameDimensions}
+            bombDiameter={bombDiameter}
+            setDragging={setDragging}
+          />
+        ))}
+        {gameOver && (
+          <div className="game-over">
+            Game Over
+            <div className="final-score">Final Score: {score}</div>
+            <button className="restart-button" onClick={restartGame}>
+              <FontAwesomeIcon icon={faRedo} /> Restart
+            </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
