@@ -2,7 +2,7 @@
   width: 8vmin; /* Scales with viewport size */
   height: 8vmin; /* Scales with viewport size */
   /*background-color: red;*/
-  background: radial-gradient(circle, #333 20%, #000 100%);
+  background: radial-gradient(circle, #333 20%, #3c3a3d 100%);
   border-radius: 50%;
   position: absolute;
   cursor: grab;
