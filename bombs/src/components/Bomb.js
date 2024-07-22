@@ -65,12 +65,18 @@ const Bomb = ({
     });
   };
 
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    setDragging(false);
+  };
+
   return (
     <div
       className="bomb"
       ref={bombRef}
       style={{ left: bomb.x, top: bomb.y }}
       onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
     ></div>
   );
 };

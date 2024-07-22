@@ -11,13 +11,29 @@ body {
   font-family: "Comic Neue", cursive;
 }
 
+@keyframes backgroundAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .game-area {
-  width: 80vmin; /* Scales with viewport size */
-  height: 80vmin; /* Scales with viewport size */
+  width: 80vmin;
+  height: 80vmin;
   position: relative;
-  background-color: #f0f0f0;
-  border: 2px solid #ccc;
-  overflow: visible;
+  background: linear-gradient(270deg, #ff0000, white, #00ffd0);
+  background-size: 400% 400%;
+  animation: backgroundAnimation 15s ease infinite;
+  border: 2px solid #048189;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .score {

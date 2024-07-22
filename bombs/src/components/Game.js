@@ -31,16 +31,35 @@ const Game = () => {
     console.log("Bomb Diameter:", bombRect.width);
   };
 
+  const isColliding = (bomb1, bomb2) => {
+    const distance = Math.sqrt(
+      (bomb1.x - bomb2.x) ** 2 + (bomb1.y - bomb2.y) ** 2
+    );
+    return distance < bombDiameter; // Using measured bomb diameter
+  };
+
   const initializeBombs = useCallback(() => {
     const initialBombs = [];
     for (let i = 0; i < bombCount; i++) {
-      initialBombs.push({
-        id: i,
-        x: Math.random() * (gameDimensions.width - bombDiameter),
-        y: Math.random() * (gameDimensions.height - bombDiameter),
-        vx: (Math.random() - 0.5) * 2,
-        vy: (Math.random() - 0.5) * 2,
-      });
+      let newBomb;
+      let colliding;
+      do {
+        colliding = false;
+        newBomb = {
+          id: i,
+          x: Math.random() * (gameDimensions.width - bombDiameter),
+          y: Math.random() * (gameDimensions.height - bombDiameter),
+          vx: (Math.random() - 0.5) * 2,
+          vy: (Math.random() - 0.5) * 2,
+        };
+        for (let j = 0; j < initialBombs.length; j++) {
+          if (isColliding(newBomb, initialBombs[j])) {
+            colliding = true;
+            break;
+          }
+        }
+      } while (colliding);
+      initialBombs.push(newBomb);
     }
     setBombs(initialBombs);
   }, [gameDimensions, bombDiameter]);
@@ -108,13 +127,6 @@ const Game = () => {
 
       return newBombs;
     });
-  };
-
-  const isColliding = (bomb1, bomb2) => {
-    const distance = Math.sqrt(
-      (bomb1.x - bomb2.x) ** 2 + (bomb1.y - bomb2.y) ** 2
-    );
-    return distance < bombDiameter; // Using measured bomb diameter
   };
 
   const handleDrag = (id, x, y) => {
