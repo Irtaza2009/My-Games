@@ -26,7 +26,7 @@ public class TileGrid : MonoBehaviour
     }
 
     private void Start() {
-        
+
         for (int y = 0; y < rows.Length; y++) {
 
             for (int x = 0; x < rows[y].cells.Length; x++) {
@@ -36,6 +36,50 @@ public class TileGrid : MonoBehaviour
             }
 
         }
+
+    }
+
+    public TileCell GetCell(int x, int y) {
+
+        if (x >= 0 && x < width && y >= 0 && y < height) {
+
+            return rows[y].cells[x];
+
+        } else {
+
+            return null;
+
+        }
+
+        
+
+    }
+
+
+    public TileCell GetRandomEmptyCell() {
+
+        int index = Random.Range(0, cells.Length);
+        int startingIndex = index;
+
+        while (cells[index].occupied) {
+
+            index++;
+
+            if (index >= cells.Length) {
+
+                index = 0;
+
+            }
+
+            if (index == startingIndex) {
+
+                return null;
+
+            }
+
+        }
+
+        return cells[index];
 
     }
 
