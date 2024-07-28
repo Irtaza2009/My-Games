@@ -60,14 +60,43 @@ public class TileBoard : MonoBehaviour
        {
            for (int y = startY; y >= 0 && y < grid.height && y >= 0; y += incrementY)
            {
-               Tile tile = GetCell(new Vector2Int(x, y));
+               TileCell cell = grid.GetCell(x, y);
 
-               if (tile != null)
-               {
-                   MoveTile(tile, direction);
+               if (cell.occupied){
+                MoveTile(cell.tile, direction);
                }
+
+               
            }
        }
+   }
+
+   private void MoveTile (Tile tile, Vector2Int direction)
+   {
+
+        TileCell newCell = null;
+        TileCell adjacent = grid.GetAdjacentCell(tile.cell, direction);
+
+        while (adjacent != null)
+        {
+            if (adjacent.occupied)
+            {
+                 //merge (will do later)
+                 break;
+            }
+      
+             newCell = adjacent;
+             adjacent = grid.GetAdjacentCell(adjacent, direction);
+       
+         }
+
+         if (newCell != null)
+         {
+             tile.MoveTo(newCell);
+         }
+
+
+
    }
   
     
