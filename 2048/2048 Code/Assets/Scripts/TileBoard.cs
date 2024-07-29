@@ -21,13 +21,24 @@ public class TileBoard : MonoBehaviour
        tiles = new List<Tile>(16);
    }
 
-   private void Start()
+   public void ClearBoard()
    {
-       CreateTile();
-       CreateTile();
+    
+        foreach (var cell in grid.cells)
+        {
+            cell.tile = null;
+        }
+
+       foreach (var tile in tiles)
+       {
+           Destroy(tile.gameObject);
+       }
+
+       tiles.Clear();
+   
    }
 
-   private void CreateTile()
+   public void CreateTile()
    {
        Tile tile = Instantiate(tilePrefab, grid.transform);
        tile.SetState(tileStates[0], 2);
@@ -97,7 +108,8 @@ public class TileBoard : MonoBehaviour
                  //merging
                 if (CanMerge(tile, adjacent.tile))
                 {
-
+                    Merge(tile, adjacent.tile);
+                    return true;
                 }
 
                  break;
@@ -121,7 +133,7 @@ public class TileBoard : MonoBehaviour
 
    private bool CanMerge (Tile a, Tile b)
    {
-       return a.number == b.number;
+       return a.number == b.number && !b.locked;
    }
 
 
@@ -129,7 +141,27 @@ public class TileBoard : MonoBehaviour
    {
         tiles.Remove(a);
         a.Merge(b.cell);
+
+        int index = Mathf.Clamp(IndexOf(b.state) + 1, 0, tileStates.Length - 1);
+        int number = b.number * 2;
+
+        b.SetState(tileStates[index], number); 
    }
+
+   private int IndexOf (TileState state)
+    {
+        
+        for (int i = 0; i < tileStates.Length; i++)
+        {
+            if (state == tileStates[i])
+            {
+                return i;
+            }
+        }
+        
+        return -1;
+
+    }
 
    private IEnumerator WaitForChanges()
    {
@@ -137,8 +169,21 @@ public class TileBoard : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         waiting = false;
 
+
+        foreach (var tile in tiles)
+        {
+            tile.locked = false;
+        }
+        
+         //create new tile
+
+        if (tiles.Count != grid.size)
+        {
+            CreateTile();
+        }
+       
+       
         //check if game over (for later)
-        //create new tile (for later)
    }
   
     

@@ -11,6 +11,8 @@ public class Tile : MonoBehaviour
 
     public int number { get; private set; }
 
+    public bool locked { get;  set; }
+
     private Image background;
 
     private TextMeshProUGUI text;
@@ -71,9 +73,13 @@ public class Tile : MonoBehaviour
         }
 
         this.cell = cell;
+        cell.tile.locked = true;
+
         StartCoroutine(Animate(cell.transform.position, true));
 
     }
+
+    
 
     private IEnumerator Animate (Vector3 to, bool merging) 
     {
