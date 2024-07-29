@@ -5,6 +5,8 @@ using UnityEngine;
 public class TileBoard : MonoBehaviour
 {
 
+    public GameManager gameManager;
+
    public Tile tilePrefab;
    public TileState[] tileStates;
 
@@ -23,7 +25,7 @@ public class TileBoard : MonoBehaviour
 
    public void ClearBoard()
    {
-    
+
         foreach (var cell in grid.cells)
         {
             cell.tile = null;
@@ -183,7 +185,50 @@ public class TileBoard : MonoBehaviour
         }
        
        
-        //check if game over (for later)
+        //check if game over 
+
+        if (CheckForGameOver())
+        {
+            gameManager.GameOver();
+        }
+
+   }
+
+   private bool CheckForGameOver()
+   {
+       if (tiles.Count != grid.size)
+       {
+           return false;
+       }
+
+       foreach (var tile in tiles)
+       {
+            TileCell up = grid.GetAdjacentCell(tile.cell, Vector2Int.up);
+            TileCell down = grid.GetAdjacentCell(tile.cell, Vector2Int.down);
+            TileCell left = grid.GetAdjacentCell(tile.cell, Vector2Int.left);
+            TileCell right = grid.GetAdjacentCell(tile.cell, Vector2Int.right);
+
+            if (up != null && CanMerge(tile, up.tile))
+            {
+                return false;
+            }
+
+            if (down != null && CanMerge(tile, down.tile))
+            {
+                return false;
+            }
+
+            if (left != null && CanMerge(tile, left.tile))
+            {
+                return false;
+            }
+
+            if (right != null && CanMerge(tile, right.tile))
+            {
+                return false;
+            }
+       }
+       return true;
    }
   
     
