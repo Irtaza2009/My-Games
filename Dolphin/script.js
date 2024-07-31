@@ -125,17 +125,87 @@ function updateBalls() {
   });
 }
 
+// Add power-ups
+let powerUps = [];
+
+function PowerUp(x, y) {
+  this.x = x;
+  this.y = y;
+  this.size = 20;
+  this.type = Math.random() > 0.5 ? "speed" : "score";
+}
+
+function drawPowerUps() {
+  powerUps.forEach((powerUp) => {
+    ctx.beginPath();
+    const gradient = ctx.createRadialGradient(
+      powerUp.x,
+      powerUp.y,
+      0,
+      powerUp.x,
+      powerUp.y,
+      powerUp.size
+    );
+    gradient.addColorStop(
+      0,
+      powerUp.type === "speed" ? "yellow" : "lightgreen"
+    );
+    gradient.addColorStop(1, powerUp.type === "speed" ? "orange" : "green");
+
+    ctx.arc(powerUp.x, powerUp.y, powerUp.size, 0, Math.PI * 2);
+    ctx.fillStyle = gradient;
+    ctx.fill();
+    ctx.closePath();
+  });
+}
+
+function updatePowerUps() {
+  powerUps.forEach((powerUp, index) => {
+    // Move power-up and check collision with dolphin
+
+    if (
+      dolphin.x < powerUp.x + powerUp.size &&
+      dolphin.x + dolphin.width > powerUp.x - powerUp.size &&
+      dolphin.y < powerUp.y + powerUp.size &&
+      dolphin.y + dolphin.height > powerUp.y - powerUp.size
+    ) {
+      // Activate power-up
+      if (powerUp.type === "speed") {
+        dolphin.speed *= 2;
+        setTimeout(() => (dolphin.speed /= 2), 5000); // Reset after 5 seconds
+      } else if (powerUp.type === "score") {
+        score += 50;
+      }
+
+      powerUps.splice(index, 1); // Remove power-up after use
+    }
+  });
+}
+
+function addPowerUp() {
+  const powerUp = new PowerUp(
+    Math.random() * canvas.width,
+    (Math.random() * canvas.height) / 2 + waterLevel
+  );
+  powerUps.push(powerUp);
+}
+
+// Call addPowerUp periodically
+setInterval(addPowerUp, 10000); // Add a power-up every 10 seconds
+
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawSky();
   drawWater();
   drawDolphin();
   balls.forEach(drawBall);
+  drawPowerUps();
 }
 
 function update() {
   moveDolphin();
   updateBalls();
+  updatePowerUps();
   draw();
   requestAnimationFrame(update);
 }
