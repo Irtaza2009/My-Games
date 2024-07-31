@@ -19,6 +19,14 @@
       <canvas id="gameCanvas"></canvas>
       <div id="score">Score: 0</div>
       <button id="restart-button" onclick="restartGame()">Restart</button>
+      <button id="leaderboard-button" onclick="showLeaderboard()">
+        Leaderboard
+      </button>
+    </div>
+    <div id="leaderboard" style="display: none">
+      <h2>Leaderboard</h2>
+      <ul id="leaderboard-list"></ul>
+      <button id="back-button" onclick="hideLeaderboard()">Back</button>
     </div>
     <script src="script.js"></script>
   </body>

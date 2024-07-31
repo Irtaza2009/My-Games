@@ -6,7 +6,7 @@ body {
   height: 100vh;
   margin: 0;
   background: linear-gradient(to bottom, #87ceeb, #ffffff);
-  font-family: Roboto Mono, monospace;
+  font-family: "Roboto Mono", monospace;
   color: #333;
 }
 
@@ -54,14 +54,13 @@ body {
 #dolphin-img {
   width: 250px;
   height: auto;
-  display: block;
+  animation: bounce 5s infinite;
 }
 
 #ball-img {
   width: 120px;
   height: 120px;
-
-  display: block;
+  animation: bounce 2s infinite;
 }
 
 #game-container {
@@ -138,10 +137,80 @@ body {
   }
 }
 
-#dolphin-img {
-  animation: bounce 5s infinite;
+#leaderboard {
+  text-align: center;
+  margin-top: 20px;
 }
 
-#ball-img {
-  animation: bounce 2s infinite;
+#leaderboard h2 {
+  font-size: 2em;
+  color: #1e90ff;
+}
+
+#leaderboard-list {
+  list-style: none;
+  padding: 0;
+}
+
+#leaderboard-list li {
+  font-size: 1.2em;
+  margin: 5px 0;
+}
+
+#leaderboard-button {
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  padding: 10px 20px;
+  background-color: #1e90ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#leaderboard-button:hover {
+  background-color: #00bfff;
+  transform: scale(1.05);
+}
+
+#leaderboard {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#leaderboard h2 {
+  font-size: 2em;
+  color: #1e90ff;
+}
+
+#leaderboard-list {
+  list-style: none;
+  padding: 0;
+}
+
+#leaderboard-list li {
+  font-size: 1.2em;
+  margin: 5px 0;
+}
+
+#back-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #1e90ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#back-button:hover {
+  background-color: #00bfff;
+  transform: scale(1.05);
 }
