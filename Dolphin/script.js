@@ -20,6 +20,8 @@ let dolphin = {
   jumpSpeed: -10,
   gravity: 0.5,
   isJumping: false,
+  isFlipped: false,
+  angle: 0,
 };
 
 const beachballImage = new Image();
@@ -33,61 +35,36 @@ function Ball(x, y) {
   this.x = x;
   this.y = y;
   this.radius = 30;
-  this.dx = Math.random() * 2 - 1;
-  this.dy = 2;
+  this.dx = Math.random() * 4 - 2; // Increased range for more dynamic movement
+  this.dy = Math.random() * 2 + 1; // Random vertical speed
 }
 
 function drawDolphin() {
   const scaledWidth = dolphin.width;
   const scaledHeight = dolphin.height;
 
-  ctx.drawImage(dolphinImage, dolphin.x, dolphin.y, scaledWidth, scaledHeight);
+  ctx.save();
+  ctx.translate(dolphin.x + scaledWidth / 2, dolphin.y + scaledHeight / 2);
 
-  // transparent box around the dolphin for debugging
+  if (dolphin.isFlipped) {
+    ctx.scale(-1, 1);
+  }
+
+  ctx.rotate(dolphin.angle);
+
+  ctx.drawImage(
+    dolphinImage,
+    -scaledWidth / 2,
+    -scaledHeight / 2,
+    scaledWidth,
+    scaledHeight
+  );
+  ctx.restore();
+
   ctx.strokeStyle = "rgba(0, 255, 0, 0.5)";
   ctx.lineWidth = 2;
   ctx.strokeRect(dolphin.x, dolphin.y, scaledWidth, scaledHeight);
 }
-
-/*
-Manual drawing of the ball
-function drawBall(ball) {
-  ctx.beginPath();
-  const gradient = ctx.createRadialGradient(
-    ball.x,
-    ball.y,
-    0,
-    ball.x,
-    ball.y,
-    ball.radius
-  );
-  gradient.addColorStop(0, "white");
-  gradient.addColorStop(1, "lightblue");
-
-  ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-  ctx.fillStyle = gradient;
-  ctx.fill();
-  ctx.closePath();
-
-  // Draw stripes
-  const stripeWidth = ball.radius / 5;
-  ctx.strokeStyle = "white";
-  ctx.lineWidth = stripeWidth;
-
-  for (let i = 0; i < 6; i++) {
-    const angle = i * (Math.PI / 3);
-    const x1 = ball.x + ball.radius * Math.cos(angle);
-    const y1 = ball.y + ball.radius * Math.sin(angle);
-    const x2 = ball.x + (ball.radius - stripeWidth) * Math.cos(angle);
-    const y2 = ball.y + (ball.radius - stripeWidth) * Math.sin(angle);
-
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.stroke();
-  }
-}
-  */
 
 function drawBall(ball) {
   ctx.drawImage(
@@ -129,8 +106,6 @@ function moveDolphin() {
     if (dolphin.y < waterLevel - dolphin.height) {
       dolphin.y = waterLevel - dolphin.height;
     }
-    console.log("dolphin y ", dolphin.y);
-    console.log("water level ", waterLevel);
   }
 
   if (dolphin.x < 0) dolphin.x = 0;
@@ -145,11 +120,58 @@ function addBall() {
   balls.push(ball);
 }
 
+function checkCollision(ball, dolphin) {
+  // Check if the ball is within the dolphin's vertical range
+  if (
+    ball.y + ball.radius > dolphin.y &&
+    ball.y - ball.radius < dolphin.y + dolphin.height
+  ) {
+    // Check horizontal overlap
+    if (
+      ball.x + ball.radius > dolphin.x &&
+      ball.x - ball.radius < dolphin.x + dolphin.width
+    ) {
+      // Collision detected, now resolve it
+      return true;
+    }
+  }
+  return false;
+}
+
+function resolveCollision(ball, dolphin) {
+  // Adjust the ball's position to avoid sticking
+  let overlapX = ball.radius * 2 - (Math.abs(ball.x - dolphin.x) + ball.radius);
+  let overlapY = ball.radius * 2 - (Math.abs(ball.y - dolphin.y) + ball.radius);
+
+  // Resolve horizontal overlap
+  if (overlapX > 0) {
+    if (ball.x < dolphin.x) {
+      ball.x = dolphin.x - ball.radius; // Move ball to the left of the dolphin
+    } else {
+      ball.x = dolphin.x + dolphin.width + ball.radius; // Move ball to the right of the dolphin
+    }
+  }
+
+  // Resolve vertical overlap
+  if (overlapY > 0) {
+    if (ball.y < dolphin.y) {
+      ball.y = dolphin.y - ball.radius; // Move ball above the dolphin
+    } else {
+      ball.y = dolphin.y + dolphin.height + ball.radius; // Move ball below the dolphin
+    }
+  }
+
+  // Reflect the ball's velocity
+  ball.dy = -ball.dy; // Reverse vertical direction
+  ball.dx = Math.random() * 4 - 2; // New random horizontal direction
+}
+
 function updateBalls() {
   balls.forEach((ball, index) => {
     ball.x += ball.dx;
     ball.y += ball.dy;
 
+    // Ball collision with the canvas boundaries
     if (ball.y + ball.radius > waterLevel) {
       balls.splice(index, 1);
       saveHighScore(score);
@@ -160,12 +182,9 @@ function updateBalls() {
     if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0)
       ball.dx = -ball.dx;
 
-    if (
-      ball.y + ball.radius > dolphin.y &&
-      ball.x > dolphin.x &&
-      ball.x < dolphin.x + dolphin.width
-    ) {
-      ball.dy = -ball.dy;
+    // Ball collision with the dolphin
+    if (checkCollision(ball, dolphin)) {
+      resolveCollision(ball, dolphin);
       score += 10;
       document.getElementById("score").innerText = `Score: ${score}`;
 
@@ -255,7 +274,6 @@ function saveHighScore(score) {
   highScores.push(score);
   highScores.sort((a, b) => b - a);
   highScores = highScores.slice(0, 10);
-  console.log(highScores);
   localStorage.setItem("highScores", JSON.stringify(highScores));
 }
 
@@ -290,8 +308,16 @@ function gameOver() {
 }
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowRight") dolphin.dx = dolphin.speed;
-  if (e.key === "ArrowLeft") dolphin.dx = -dolphin.speed;
+  if (e.key === "ArrowRight") {
+    dolphin.dx = dolphin.speed;
+    dolphin.isFlipped = true;
+    dolphin.angle = 0;
+  }
+  if (e.key === "ArrowLeft") {
+    dolphin.dx = -dolphin.speed;
+    dolphin.isFlipped = false;
+    dolphin.angle = 0;
+  }
   if (e.key === "ArrowUp") {
     if (!dolphin.isJumping && dolphin.y <= waterLevel) {
       dolphin.dy = dolphin.jumpSpeed;
@@ -299,8 +325,12 @@ document.addEventListener("keydown", (e) => {
     } else if (!dolphin.isJumping) {
       dolphin.dy = -dolphin.speed;
     }
+    dolphin.angle = Math.PI / 2;
   }
-  if (e.key === "ArrowDown" && !dolphin.isJumping) dolphin.dy = dolphin.speed;
+  if (e.key === "ArrowDown" && !dolphin.isJumping) {
+    dolphin.dy = dolphin.speed;
+    dolphin.angle = -Math.PI / 2;
+  }
 });
 
 document.addEventListener("keyup", (e) => {
