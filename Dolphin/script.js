@@ -10,15 +10,13 @@ let dolphin = {
   x: canvas.width / 2,
   y: canvas.height / 2 - 50, // Start at the edge of the water
   width: 50,
-  height: 50 * (370 / 350), // Keep the aspect ratio of the sprite
+  height: 20,
   dx: 0,
   dy: 0,
   speed: 5,
   jumpSpeed: -10,
   gravity: 0.5,
   isJumping: false,
-  direction: "right", // Track direction for horizontal movement
-  rotation: 0, // Track rotation for vertical movement
 };
 
 // Load the dolphin image
@@ -38,43 +36,11 @@ function Ball(x, y) {
 }
 
 function drawDolphin() {
-  ctx.save();
+  // Scale the image to fit the defined dolphin width and height
+  const scaledWidth = 50;
+  const scaledHeight = 50 * (dolphinImage.height / dolphinImage.width);
 
-  // Translate to the dolphin's position
-  ctx.translate(dolphin.x + dolphin.width / 2, dolphin.y + dolphin.height / 2);
-
-  // Rotate based on the dolphin's movement
-  if (dolphin.isJumping) {
-    if (dolphin.dy < 0) {
-      dolphin.rotation = -Math.PI / 2; // Pointing up
-    } else {
-      dolphin.rotation = Math.PI / 2; // Pointing down
-    }
-  } else {
-    if (dolphin.dx > 0) {
-      dolphin.rotation = 0; // Pointing right
-      dolphin.direction = "right";
-    } else if (dolphin.dx < 0) {
-      dolphin.rotation = Math.PI; // Pointing left
-      dolphin.direction = "left";
-    }
-  }
-
-  ctx.rotate(dolphin.rotation);
-
-  // Draw the dolphin image, taking direction into account
-  if (dolphin.direction === "left") {
-    ctx.scale(-1, 1); // Flip the image horizontally
-  }
-
-  ctx.drawImage(
-    dolphinImage,
-    -dolphin.width / 2,
-    -dolphin.height / 2,
-    dolphin.width,
-    dolphin.height
-  );
-  ctx.restore();
+  ctx.drawImage(dolphinImage, dolphin.x, dolphin.y, scaledWidth, scaledHeight);
 }
 
 function drawBall(ball) {
@@ -198,7 +164,9 @@ document.addEventListener("keyup", (e) => {
   if (e.key === "ArrowUp" || e.key === "ArrowDown") dolphin.dy = 0;
 });
 
-dolphinImage.onload = function () {
+function StartGame() {
+  document.getElementById("title-screen").style.display = "none";
+  document.getElementById("game-container").style.display = "block";
   addBall();
   update();
-};
+}
