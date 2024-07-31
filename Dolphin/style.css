@@ -214,3 +214,9 @@ body {
   background-color: #00bfff;
   transform: scale(1.05);
 }
+
+#subtitle {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #555;
+}

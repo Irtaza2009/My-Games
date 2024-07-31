@@ -4,13 +4,16 @@ const ctx = canvas.getContext("2d");
 canvas.width = 800;
 canvas.height = 600;
 
+const dolphinImage = new Image();
+dolphinImage.src = "dolphin.png";
+
 let score = 0;
 let balls = [];
 let dolphin = {
   x: canvas.width / 2,
-  y: canvas.height / 2 - 50,
-  width: 50,
-  height: 20,
+  y: canvas.height / 2 + 50,
+  width: 100,
+  height: 100 * (dolphinImage.height / dolphinImage.width),
   dx: 0,
   dy: 0,
   speed: 5,
@@ -18,9 +21,6 @@ let dolphin = {
   gravity: 0.5,
   isJumping: false,
 };
-
-const dolphinImage = new Image();
-dolphinImage.src = "dolphin.png";
 
 const beachballImage = new Image();
 beachballImage.src = "beachball.png";
@@ -38,10 +38,15 @@ function Ball(x, y) {
 }
 
 function drawDolphin() {
-  const scaledWidth = 100;
-  const scaledHeight = 100 * (dolphinImage.height / dolphinImage.width);
+  const scaledWidth = dolphin.width;
+  const scaledHeight = dolphin.height;
 
   ctx.drawImage(dolphinImage, dolphin.x, dolphin.y, scaledWidth, scaledHeight);
+
+  // transparent box around the dolphin for debugging
+  ctx.strokeStyle = "rgba(0, 255, 0, 0.5)";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(dolphin.x, dolphin.y, scaledWidth, scaledHeight);
 }
 
 /*
@@ -111,19 +116,21 @@ function moveDolphin() {
     dolphin.dy += dolphin.gravity;
     dolphin.y += dolphin.dy;
 
-    if (dolphin.y + dolphin.height >= waterLevel) {
-      dolphin.y = waterLevel - dolphin.height;
+    if (dolphin.y >= waterLevel) {
+      dolphin.y = waterLevel;
       dolphin.dy = 0;
       dolphin.isJumping = false;
     }
   } else {
     dolphin.y += dolphin.dy;
-    if (dolphin.y + dolphin.height > canvas.height) {
+    if (dolphin.y - dolphin.height > canvas.height) {
       dolphin.y = canvas.height - dolphin.height;
     }
     if (dolphin.y < waterLevel - dolphin.height) {
       dolphin.y = waterLevel - dolphin.height;
     }
+    console.log("dolphin y ", dolphin.y);
+    console.log("water level ", waterLevel);
   }
 
   if (dolphin.x < 0) dolphin.x = 0;
@@ -145,6 +152,7 @@ function updateBalls() {
 
     if (ball.y + ball.radius > waterLevel) {
       balls.splice(index, 1);
+      saveHighScore(score);
       gameOver();
     }
 
@@ -231,6 +239,34 @@ function addPowerUp() {
 
 setInterval(addPowerUp, 10000);
 
+function showLeaderboard() {
+  document.getElementById("game-container").style.display = "none";
+  document.getElementById("leaderboard").style.display = "block";
+  displayHighScores();
+}
+
+function hideLeaderboard() {
+  document.getElementById("leaderboard").style.display = "none";
+  document.getElementById("game-container").style.display = "block";
+}
+
+function saveHighScore(score) {
+  let highScores = JSON.parse(localStorage.getItem("highScores")) || [];
+  highScores.push(score);
+  highScores.sort((a, b) => b - a);
+  highScores = highScores.slice(0, 10);
+  console.log(highScores);
+  localStorage.setItem("highScores", JSON.stringify(highScores));
+}
+
+function displayHighScores() {
+  const highScores = JSON.parse(localStorage.getItem("highScores")) || [];
+  const leaderboardList = document.getElementById("leaderboard-list");
+  leaderboardList.innerHTML = highScores
+    .map((score) => `<li>${score}</li>`)
+    .join("");
+}
+
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawSky();
@@ -257,7 +293,7 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowRight") dolphin.dx = dolphin.speed;
   if (e.key === "ArrowLeft") dolphin.dx = -dolphin.speed;
   if (e.key === "ArrowUp") {
-    if (!dolphin.isJumping && dolphin.y === waterLevel - dolphin.height) {
+    if (!dolphin.isJumping && dolphin.y <= waterLevel) {
       dolphin.dy = dolphin.jumpSpeed;
       dolphin.isJumping = true;
     } else if (!dolphin.isJumping) {
