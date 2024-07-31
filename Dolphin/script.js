@@ -23,6 +23,10 @@ let dolphin = {
 const dolphinImage = new Image();
 dolphinImage.src = "dolphin.png";
 
+// Load the beachball image
+const beachballImage = new Image();
+beachballImage.src = "beachball.png";
+
 const waterLevel = canvas.height / 2;
 
 document.getElementById("score").innerText = `Score: ${score}`;
@@ -30,25 +34,67 @@ document.getElementById("score").innerText = `Score: ${score}`;
 function Ball(x, y) {
   this.x = x;
   this.y = y;
-  this.radius = 10;
+  this.radius = 30;
   this.dx = Math.random() * 2 - 1;
   this.dy = 2;
 }
 
 function drawDolphin() {
   // Scale the image to fit the defined dolphin width and height
-  const scaledWidth = 50;
-  const scaledHeight = 50 * (dolphinImage.height / dolphinImage.width);
+  const scaledWidth = 100;
+  const scaledHeight = 100 * (dolphinImage.height / dolphinImage.width);
 
   ctx.drawImage(dolphinImage, dolphin.x, dolphin.y, scaledWidth, scaledHeight);
 }
 
+/*
+Manual drawing of the ball
 function drawBall(ball) {
   ctx.beginPath();
+  const gradient = ctx.createRadialGradient(
+    ball.x,
+    ball.y,
+    0,
+    ball.x,
+    ball.y,
+    ball.radius
+  );
+  gradient.addColorStop(0, "white");
+  gradient.addColorStop(1, "lightblue");
+
   ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-  ctx.fillStyle = "red";
+  ctx.fillStyle = gradient;
   ctx.fill();
   ctx.closePath();
+
+  // Draw stripes
+  const stripeWidth = ball.radius / 5;
+  ctx.strokeStyle = "white";
+  ctx.lineWidth = stripeWidth;
+
+  for (let i = 0; i < 6; i++) {
+    const angle = i * (Math.PI / 3);
+    const x1 = ball.x + ball.radius * Math.cos(angle);
+    const y1 = ball.y + ball.radius * Math.sin(angle);
+    const x2 = ball.x + (ball.radius - stripeWidth) * Math.cos(angle);
+    const y2 = ball.y + (ball.radius - stripeWidth) * Math.sin(angle);
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  }
+}
+  */
+
+function drawBall(ball) {
+  ctx.drawImage(
+    beachballImage,
+    ball.x - ball.radius,
+    ball.y - ball.radius,
+    ball.radius * 2,
+    ball.radius * 2
+  );
 }
 
 function drawWater() {
@@ -91,7 +137,7 @@ function moveDolphin() {
 let ballSpawnThreshold = 1000;
 
 function addBall() {
-  const ball = new Ball(Math.random() * canvas.width, 10);
+  const ball = new Ball(Math.random() * canvas.width, 30);
   balls.push(ball);
 }
 
@@ -239,4 +285,8 @@ function StartGame() {
   document.getElementById("game-container").style.display = "block";
   addBall();
   update();
+}
+
+function restartGame() {
+  document.location.reload();
 }
