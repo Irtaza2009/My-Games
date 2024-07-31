@@ -14,6 +14,9 @@ let dolphin = {
   dx: 0,
   dy: 0,
   speed: 5,
+  isJumping: false,
+  jumpSpeed: -10,
+  gravity: 0.5,
 };
 
 document.getElementById("score").innerText = `Score: ${score}`;
@@ -24,11 +27,6 @@ function Ball(x, y) {
   this.radius = 10;
   this.dx = Math.random() * 2 - 1;
   this.dy = -2;
-}
-
-function addBall() {
-  const ball = new Ball(dolphin.x + dolphin.width / 2, dolphin.y - 20);
-  balls.push(ball);
 }
 
 function drawDolphin() {
@@ -46,14 +44,28 @@ function drawBall(ball) {
 
 function moveDolphin() {
   dolphin.x += dolphin.dx;
-  dolphin.y += dolphin.dy;
+
+  if (dolphin.isJumping) {
+    dolphin.dy += dolphin.gravity;
+    dolphin.y += dolphin.dy;
+
+    if (dolphin.y + dolphin.height >= canvas.height) {
+      dolphin.y = canvas.height - dolphin.height;
+      dolphin.dy = 0;
+      dolphin.isJumping = false;
+    }
+  }
 
   if (dolphin.x < 0) dolphin.x = 0;
   if (dolphin.x + dolphin.width > canvas.width)
     dolphin.x = canvas.width - dolphin.width;
-  if (dolphin.y < 0) dolphin.y = 0;
-  if (dolphin.y + dolphin.height > canvas.height)
-    dolphin.y = canvas.height - dolphin.height;
+}
+
+let ballSpawnThreshold = 1000;
+
+function addBall() {
+  const ball = new Ball(dolphin.x + dolphin.width / 2, dolphin.y - 20);
+  balls.push(ball);
 }
 
 function updateBalls() {
@@ -78,6 +90,44 @@ function updateBalls() {
       ball.dy = -ball.dy;
       score += 10;
       document.getElementById("score").innerText = `Score: ${score}`;
+
+      if (score % ballSpawnThreshold === 0) {
+        addBall();
+      }
     }
   });
 }
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawDolphin();
+  balls.forEach(drawBall);
+}
+
+function update() {
+  moveDolphin();
+  updateBalls();
+  draw();
+  requestAnimationFrame(update);
+}
+
+function gameOver() {
+  alert(`Game Over! Your final score is ${score}`);
+  document.location.reload();
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") dolphin.dx = dolphin.speed;
+  if (e.key === "ArrowLeft") dolphin.dx = -dolphin.speed;
+  if (e.key === "ArrowUp" && !dolphin.isJumping) {
+    dolphin.dy = dolphin.jumpSpeed;
+    dolphin.isJumping = true;
+  }
+});
+
+document.addEventListener("keyup", (e) => {
+  if (e.key === "ArrowRight" || e.key === "ArrowLeft") dolphin.dx = 0;
+});
+
+addBall();
+update();
