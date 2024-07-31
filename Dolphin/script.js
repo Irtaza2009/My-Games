@@ -8,7 +8,7 @@ let score = 0;
 let balls = [];
 let dolphin = {
   x: canvas.width / 2,
-  y: canvas.height / 2 - 50, // Start at the edge of the water
+  y: canvas.height / 2 - 50,
   width: 50,
   height: 20,
   dx: 0,
@@ -19,11 +19,9 @@ let dolphin = {
   isJumping: false,
 };
 
-// Load the dolphin image
 const dolphinImage = new Image();
 dolphinImage.src = "dolphin.png";
 
-// Load the beachball image
 const beachballImage = new Image();
 beachballImage.src = "beachball.png";
 
@@ -40,7 +38,6 @@ function Ball(x, y) {
 }
 
 function drawDolphin() {
-  // Scale the image to fit the defined dolphin width and height
   const scaledWidth = 100;
   const scaledHeight = 100 * (dolphinImage.height / dolphinImage.width);
 
@@ -171,7 +168,6 @@ function updateBalls() {
   });
 }
 
-// Add power-ups
 let powerUps = [];
 
 function PowerUp(x, y) {
@@ -207,23 +203,20 @@ function drawPowerUps() {
 
 function updatePowerUps() {
   powerUps.forEach((powerUp, index) => {
-    // Move power-up and check collision with dolphin
-
     if (
       dolphin.x < powerUp.x + powerUp.size &&
       dolphin.x + dolphin.width > powerUp.x - powerUp.size &&
       dolphin.y < powerUp.y + powerUp.size &&
       dolphin.y + dolphin.height > powerUp.y - powerUp.size
     ) {
-      // Activate power-up
       if (powerUp.type === "speed") {
         dolphin.speed *= 2;
-        setTimeout(() => (dolphin.speed /= 2), 5000); // Reset after 5 seconds
+        setTimeout(() => (dolphin.speed /= 2), 5000);
       } else if (powerUp.type === "score") {
         score += 50;
       }
 
-      powerUps.splice(index, 1); // Remove power-up after use
+      powerUps.splice(index, 1);
     }
   });
 }
@@ -236,8 +229,7 @@ function addPowerUp() {
   powerUps.push(powerUp);
 }
 
-// Call addPowerUp periodically
-setInterval(addPowerUp, 10000); // Add a power-up every 10 seconds
+setInterval(addPowerUp, 10000);
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
