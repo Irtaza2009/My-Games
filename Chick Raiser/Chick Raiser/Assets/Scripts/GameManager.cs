@@ -29,6 +29,6 @@ public class GameManager : MonoBehaviour
 
     Vector3 GetRandomPosition()
     {
-        return new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
+        return new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), -1);
     }
 }

@@ -5,21 +5,34 @@ public class ChickMovement : MonoBehaviour
     public float speed = 2f;
     private Vector2 direction;
      public GameObject coinPrefab;
-public float poopInterval = 3f;
+    public float poopInterval = 3f;
+
+        private float minX, maxX, minY, maxY;
 
     void Start()
     {
+         // Initialize boundaries
+        minX = GameObject.Find("LeftBoundary").transform.position.x + 0.5f;
+        maxX = GameObject.Find("RightBoundary").transform.position.x - 0.5f;
+        minY = GameObject.Find("BottomBoundary").transform.position.y + 0.5f;
+        maxY = GameObject.Find("TopBoundary").transform.position.y - 0.5f;
         ChangeDirection();
         InvokeRepeating("ChangeDirection", 2f, 2f);
          InvokeRepeating("PoopCoin", poopInterval, poopInterval);
     }
 
-    void Update()
+     void Update()
     {
-        transform.Translate(direction * speed * Time.deltaTime);
+        Vector3 newPosition = transform.position + (Vector3)direction * speed * Time.deltaTime;
+        
+        // Clamp the new position within the boundaries
+        newPosition.x = Mathf.Clamp(newPosition.x, minX, maxX);
+        newPosition.y = Mathf.Clamp(newPosition.y, minY, maxY);
+
+        transform.position = newPosition;
     }
 
-    void ChangeDirection()
+ void ChangeDirection()
     {
         float angle = Random.Range(0, 360);
         direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).normalized;
@@ -35,3 +48,13 @@ public float poopInterval = 3f;
     }
 
     }
+
+
+
+
+
+   
+ 
+
+   
+
