@@ -8,10 +8,16 @@ public class GameManager : MonoBehaviour
     public int coinCount = 0;
     public int eggCount = 0;
 
+    public int hatchCost = 10;
+
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI eggText;
+    public TextMeshProUGUI hatchText;
 
     public GameObject chickPrefab;
+    public GameObject eggPrefab; // Reference to the egg prefab for instantiation
+
+     private float minX, maxX, minY, maxY;
 
     void Update()
     {
@@ -60,21 +66,39 @@ public class GameManager : MonoBehaviour
     {
         if (eggCount > 0)
         {
+            if (
+                coinCount >= hatchCost)
+        {
+            coinCount -= hatchCost;
+            hatchCost += 10;
+
+            hatchText.text = "Hatch Egg" <br> "Cost: " + hatchCost  ;
+
+
+
             eggCount--;
             UpdateEggUI();
-            StartCoroutine(HatchEggCoroutine());
+            AddHatchEgg();
+        }
         }
     }
 
-    IEnumerator HatchEggCoroutine()
+    public void AddHatchEgg()
     {
-        yield return new WaitForSeconds(20f);
-        Vector3 chickPosition = GetRandomPosition();
-        Instantiate(chickPrefab, chickPosition, Quaternion.identity);
+        // Instantiate an egg on the screen
+        Vector3 eggPosition = GetRandomPosition();
+        GameObject egg = Instantiate(eggPrefab, eggPosition, Quaternion.identity);
+
+        
     }
 
     Vector3 GetRandomPosition()
     {
-        return new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), -1);
+         minX = GameObject.Find("LeftBoundary").transform.position.x + 0.5f;
+        maxX = GameObject.Find("RightBoundary").transform.position.x - 0.5f;
+        minY = GameObject.Find("BottomBoundary").transform.position.y + 0.5f;
+        maxY = GameObject.Find("TopBoundary").transform.position.y - 0.5f;
+
+         return new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), -1);
     }
 }
