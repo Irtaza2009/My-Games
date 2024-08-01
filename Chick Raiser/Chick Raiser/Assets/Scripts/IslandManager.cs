@@ -8,10 +8,13 @@ public class IslandManager : MonoBehaviour
     private int islandCount = 1;
 
     private GameManager gameManager;
+    private Camera mainCamera;
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        mainCamera = Camera.main;
+        UpdateCameraSize();
     }
 
     public void BuyIslandTile()
@@ -23,6 +26,7 @@ public class IslandManager : MonoBehaviour
             Instantiate(islandTilePrefab, newTilePosition, Quaternion.identity);
             islandCount++;
             UpdateBoundaries();
+            UpdateCameraSize();
         }
     }
 
@@ -34,5 +38,22 @@ public class IslandManager : MonoBehaviour
         {
             rightBoundary.transform.position = new Vector3(islandCount * tileWidth - 3.7f, rightBoundary.transform.position.y, rightBoundary.transform.position.z);
         }
+
+        // Find all chicks and update their boundaries
+        ChickMovement[] chicks = FindObjectsOfType<ChickMovement>();
+        foreach (ChickMovement chick in chicks)
+        {
+            chick.UpdateBoundaries();
+        }
+    }
+
+    void UpdateCameraSize()
+    {
+        // Calculate the new camera size based on the number of island tiles
+        float newCameraSize = (islandCount * tileWidth) / 2f;
+        mainCamera.orthographicSize = Mathf.Max(newCameraSize, mainCamera.orthographicSize);
+        
+        // Adjust camera position to keep the islands centered
+        mainCamera.transform.position = new Vector3((islandCount * tileWidth - tileWidth) / 2f, mainCamera.transform.position.y, mainCamera.transform.position.z);
     }
 }
