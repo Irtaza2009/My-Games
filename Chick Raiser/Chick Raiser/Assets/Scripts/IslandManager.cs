@@ -5,18 +5,24 @@ public class IslandManager : MonoBehaviour
 {
     public GameObject islandTilePrefab;
     public int tileCost = 100;
-    public float tileWidth = 5f; // Adjust based on your island tile width
     private int islandCount = 1;
 
     public TextMeshProUGUI islandText;
 
     private GameManager gameManager;
     private Camera mainCamera;
+    private float tileWidth;
+    private float tileHeight;
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
         mainCamera = Camera.main;
+        
+        // Get the size of the prefab
+        tileWidth = islandTilePrefab.GetComponent<Renderer>().bounds.size.x;
+        tileHeight = islandTilePrefab.GetComponent<Renderer>().bounds.size.y;
+
         UpdateCameraSize();
     }
 
@@ -26,8 +32,9 @@ public class IslandManager : MonoBehaviour
         {
             gameManager.coinCount -= tileCost;
             tileCost += 50;
-             islandText.text = "Hatch Egg <br> Cost: " + tileCost  ;
-            Vector3 newTilePosition = new Vector3(islandCount * tileWidth, 0, 0);
+            islandText.text = "Buy Farm <br> Cost: " + tileCost;
+
+            Vector3 newTilePosition = CalculateNewTilePosition();
             Instantiate(islandTilePrefab, newTilePosition, Quaternion.identity);
             islandCount++;
             UpdateBoundaries();
@@ -35,38 +42,52 @@ public class IslandManager : MonoBehaviour
         }
     }
 
-  void UpdateBoundaries()
-{
-    // Update the boundaries based on the number of island tiles
-    GameObject rightBoundary = GameObject.Find("RightBoundary");
-    GameObject topBoundary = GameObject.Find("TopBoundary");
-    GameObject bottomBoundary = GameObject.Find("BottomBoundary");
-    
-    if (rightBoundary != null)
+    Vector3 CalculateNewTilePosition()
     {
-        rightBoundary.transform.position = new Vector3(islandCount * tileWidth - (tileWidth / 2), rightBoundary.transform.position.y, rightBoundary.transform.position.z);
+        // Calculate row and column for the new tile
+        int row = islandCount / 2;
+        int col = islandCount % 2;
+
+        // Calculate the position based on the tile width and height
+        Vector3 newPosition = new Vector3(col * tileWidth, -row * tileHeight, 0);
+        return newPosition;
     }
 
-    if (topBoundary != null)
+    void UpdateBoundaries()
     {
-        GameObject newTopBoundary = Instantiate(topBoundary, new Vector3(islandCount * tileWidth - (tileWidth / 2), topBoundary.transform.position.y, topBoundary.transform.position.z), Quaternion.identity);
-        newTopBoundary.name = "TopBoundary_" + islandCount;
-    }
+        // Update the boundaries based on the number of island tiles
+        GameObject rightBoundary = GameObject.Find("RightBoundary");
+        GameObject topBoundary = GameObject.Find("TopBoundary");
+        GameObject bottomBoundary = GameObject.Find("BottomBoundary");
 
-    if (bottomBoundary != null)
-    {
-        GameObject newBottomBoundary = Instantiate(bottomBoundary, new Vector3(islandCount * tileWidth - (tileWidth / 2), bottomBoundary.transform.position.y, bottomBoundary.transform.position.z), Quaternion.identity);
-        newBottomBoundary.name = "BottomBoundary_" + islandCount;
-    }
+        if (rightBoundary != null)
+        {
+            rightBoundary.transform.position = new Vector3((islandCount / 2) * tileWidth + (tileWidth / 2), rightBoundary.transform.position.y, rightBoundary.transform.position.z);
+        }
 
-    // Find all chicks and update their boundaries
-    ChickMovement[] chicks = FindObjectsOfType<ChickMovement>();
-    foreach (ChickMovement chick in chicks)
-    {
-        chick.UpdateBoundaries();
-    }
-}
+        if (topBoundary != null)
+        {
+            // Instantiate a new top boundary and position it correctly
+            Vector3 newTopBoundaryPosition = new Vector3((islandCount / 2) * tileWidth + (tileWidth / 2), topBoundary.transform.position.y, topBoundary.transform.position.z);
+            GameObject newTopBoundary = Instantiate(topBoundary, newTopBoundaryPosition, Quaternion.identity);
+            newTopBoundary.name = "TopBoundary_" + islandCount;
+        }
 
+        if (bottomBoundary != null)
+        {
+            // Instantiate a new bottom boundary and position it correctly
+            Vector3 newBottomBoundaryPosition = new Vector3((islandCount / 2) * tileWidth + (tileWidth / 2), bottomBoundary.transform.position.y, bottomBoundary.transform.position.z);
+            GameObject newBottomBoundary = Instantiate(bottomBoundary, newBottomBoundaryPosition, Quaternion.identity);
+            newBottomBoundary.name = "BottomBoundary_" + islandCount;
+        }
+
+        // Find all chicks and update their boundaries
+        ChickMovement[] chicks = FindObjectsOfType<ChickMovement>();
+        foreach (ChickMovement chick in chicks)
+        {
+            chick.UpdateBoundaries();
+        }
+    }
 
     void UpdateCameraSize()
     {
