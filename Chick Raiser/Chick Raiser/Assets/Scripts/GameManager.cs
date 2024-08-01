@@ -15,10 +15,28 @@ public class GameManager : MonoBehaviour
         coinText.text = "Coins: " + coinCount;
     }
 
+
+
+   
+
     public void AddCoin()
     {
         coinCount++;
+        UpdateCoinUI();
     }
+
+    public void SpendCoins(int amount)
+    {
+        coinCount -= amount;
+        UpdateCoinUI();
+    }
+
+    void UpdateCoinUI()
+    {
+        coinText.text = "Coins: " + coinCount;
+    }
+
+
 
     public void BuyEgg()
     {
