@@ -5,14 +5,14 @@ public class WorkerChicken : MonoBehaviour
     public float speed = 2f;
     private Vector2 direction;
     private float minX, maxX, minY, maxY;
-    public GameObject eggPrefab;
+    private GameManager gameManager;
 
     void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
         UpdateBoundaries();
         ChangeDirection();
         InvokeRepeating("ChangeDirection", 2f, 2f);
-        InvokeRepeating("CollectEggs", 1f, 1f); // Periodically collect eggs
     }
 
     void Update()
@@ -29,16 +29,11 @@ public class WorkerChicken : MonoBehaviour
         direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).normalized;
     }
 
-    void CollectEggs()
+    void OnTriggerEnter2D(Collider2D other)
     {
-        Collider2D[] eggs = Physics2D.OverlapCircleAll(transform.position, 1f);
-        foreach (var egg in eggs)
+        if (other.CompareTag("Egg"))
         {
-            if (egg.CompareTag("Egg"))
-            {
-                
-                GameManager.Instance.CollectEgg(egg.gameObject); // Collect egg
-            }
+            gameManager.CollectEgg(other.gameObject); // Collect egg
         }
     }
 
