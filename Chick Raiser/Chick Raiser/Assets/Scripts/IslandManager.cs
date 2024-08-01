@@ -35,22 +35,38 @@ public class IslandManager : MonoBehaviour
         }
     }
 
-    void UpdateBoundaries()
+  void UpdateBoundaries()
+{
+    // Update the boundaries based on the number of island tiles
+    GameObject rightBoundary = GameObject.Find("RightBoundary");
+    GameObject topBoundary = GameObject.Find("TopBoundary");
+    GameObject bottomBoundary = GameObject.Find("BottomBoundary");
+    
+    if (rightBoundary != null)
     {
-        // Update the boundaries based on the number of island tiles
-        GameObject rightBoundary = GameObject.Find("RightBoundary");
-        if (rightBoundary != null)
-        {
-            rightBoundary.transform.position = new Vector3(islandCount * tileWidth - 3.7f, rightBoundary.transform.position.y, rightBoundary.transform.position.z);
-        }
-
-        // Find all chicks and update their boundaries
-        ChickMovement[] chicks = FindObjectsOfType<ChickMovement>();
-        foreach (ChickMovement chick in chicks)
-        {
-            chick.UpdateBoundaries();
-        }
+        rightBoundary.transform.position = new Vector3(islandCount * tileWidth - (tileWidth / 2), rightBoundary.transform.position.y, rightBoundary.transform.position.z);
     }
+
+    if (topBoundary != null)
+    {
+        GameObject newTopBoundary = Instantiate(topBoundary, new Vector3(islandCount * tileWidth - (tileWidth / 2), topBoundary.transform.position.y, topBoundary.transform.position.z), Quaternion.identity);
+        newTopBoundary.name = "TopBoundary_" + islandCount;
+    }
+
+    if (bottomBoundary != null)
+    {
+        GameObject newBottomBoundary = Instantiate(bottomBoundary, new Vector3(islandCount * tileWidth - (tileWidth / 2), bottomBoundary.transform.position.y, bottomBoundary.transform.position.z), Quaternion.identity);
+        newBottomBoundary.name = "BottomBoundary_" + islandCount;
+    }
+
+    // Find all chicks and update their boundaries
+    ChickMovement[] chicks = FindObjectsOfType<ChickMovement>();
+    foreach (ChickMovement chick in chicks)
+    {
+        chick.UpdateBoundaries();
+    }
+}
+
 
     void UpdateCameraSize()
     {
