@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class IslandManager : MonoBehaviour
 {
@@ -6,6 +7,8 @@ public class IslandManager : MonoBehaviour
     public int tileCost = 100;
     public float tileWidth = 5f; // Adjust based on your island tile width
     private int islandCount = 1;
+
+    public TextMeshProUGUI islandText;
 
     private GameManager gameManager;
     private Camera mainCamera;
@@ -22,6 +25,8 @@ public class IslandManager : MonoBehaviour
         if (gameManager.coinCount >= tileCost)
         {
             gameManager.coinCount -= tileCost;
+            tileCost += 50;
+             islandText.text = "Hatch Egg <br> Cost: " + tileCost  ;
             Vector3 newTilePosition = new Vector3(islandCount * tileWidth, 0, 0);
             Instantiate(islandTilePrefab, newTilePosition, Quaternion.identity);
             islandCount++;
