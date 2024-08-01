@@ -5,8 +5,10 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public int coinCount = 0;
+
     public TextMeshProUGUI coinText;
-    public GameObject chickPrefab;
+
+    public GameObject eggPrefab;
 
     void Update()
     {
@@ -23,7 +25,8 @@ public class GameManager : MonoBehaviour
         if (coinCount >= 10)
         {
             coinCount -= 10;
-            Instantiate(chickPrefab, GetRandomPosition(), Quaternion.identity);
+            Vector3 eggPosition = GetRandomPosition();
+            Instantiate(eggPrefab, eggPosition, Quaternion.identity);
         }
     }
 

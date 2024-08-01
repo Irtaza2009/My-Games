@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinCount: 0
   coinText: {fileID: 1521368675}
-  chickPrefab: {fileID: 5900895863321637817, guid: ce2b2525d76c04faab6be5cbdd932407, type: 3}
+  eggPrefab: {fileID: 7492034504996509795, guid: 7e68ac5935621480baf7db9a22f136f4, type: 3}
 --- !u!4 &9372384
 Transform:
   m_ObjectHideFlags: 0

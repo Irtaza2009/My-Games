@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5900895863321637817
+--- !u!1 &7492034504996509795
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,40 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5900895863321637823}
-  - component: {fileID: 5900895863321637822}
-  - component: {fileID: 5900895863321637698}
-  - component: {fileID: 5900895863321637821}
-  - component: {fileID: 5900895863321637820}
+  - component: {fileID: 7492034504996509805}
+  - component: {fileID: 7492034504996509804}
+  - component: {fileID: 3766985405624805738}
+  - component: {fileID: 494677215693049522}
   m_Layer: 0
-  m_Name: Chick
+  m_Name: Egg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5900895863321637823
+--- !u!4 &7492034504996509805
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5900895863321637817}
+  m_GameObject: {fileID: 7492034504996509795}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -1}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &5900895863321637822
+--- !u!212 &7492034504996509804
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5900895863321637817}
+  m_GameObject: {fileID: 7492034504996509795}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -76,39 +75,24 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -658705471, guid: 375074093fc624866aff1954a80726b8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f033769a98314431eaefdbf91af2a405, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.25, y: 0.29}
+  m_Size: {x: 1.96, y: 2.42}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5900895863321637698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5900895863321637817}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d11aaaa782b224dcbb65b6dd04a09d5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 2
-  coinPrefab: {fileID: 2536478212820718990, guid: 103fc010cfbd34495a5ef0b73f2ea7f2, type: 3}
-  poopInterval: 3
---- !u!61 &5900895863321637821
+--- !u!61 &3766985405624805738
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5900895863321637817}
+  m_GameObject: {fileID: 7492034504996509795}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -119,33 +103,26 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.25, y: 0.29}
-    newSize: {x: 0.25, y: 0.29}
+    oldSize: {x: 1.96, y: 2.42}
+    newSize: {x: 1.96, y: 2.42}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.25, y: 0.29}
+  m_Size: {x: 1.96, y: 2.42}
   m_EdgeRadius: 0
---- !u!50 &5900895863321637820
-Rigidbody2D:
-  serializedVersion: 4
+--- !u!114 &494677215693049522
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5900895863321637817}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
+  m_GameObject: {fileID: 7492034504996509795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0773da8552b9541b08983f73880061a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chickPrefab: {fileID: 5900895863321637817, guid: ce2b2525d76c04faab6be5cbdd932407, type: 3}
+  hatchTime: 10
