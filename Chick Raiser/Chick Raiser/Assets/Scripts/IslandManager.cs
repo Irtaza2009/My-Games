@@ -62,13 +62,13 @@ public class IslandManager : MonoBehaviour
 
         if (rightBoundary != null)
         {
-            rightBoundary.transform.position = new Vector3((islandCount / 2) * tileWidth + (tileWidth / 2), rightBoundary.transform.position.y, rightBoundary.transform.position.z);
+            rightBoundary.transform.position = new Vector3((islandCount / 2) * tileWidth + tileWidth / 2, rightBoundary.transform.position.y, rightBoundary.transform.position.z);
         }
 
         if (topBoundary != null)
         {
             // Instantiate a new top boundary and position it correctly
-            Vector3 newTopBoundaryPosition = new Vector3((islandCount / 2) * tileWidth + (tileWidth / 2), topBoundary.transform.position.y, topBoundary.transform.position.z);
+            Vector3 newTopBoundaryPosition = new Vector3((islandCount / 2) * tileWidth , topBoundary.transform.position.y, topBoundary.transform.position.z);
             GameObject newTopBoundary = Instantiate(topBoundary, newTopBoundaryPosition, Quaternion.identity);
             newTopBoundary.name = "TopBoundary_" + islandCount;
         }
@@ -76,7 +76,7 @@ public class IslandManager : MonoBehaviour
         if (bottomBoundary != null)
         {
             // Instantiate a new bottom boundary and position it correctly
-            Vector3 newBottomBoundaryPosition = new Vector3((islandCount / 2) * tileWidth + (tileWidth / 2), bottomBoundary.transform.position.y, bottomBoundary.transform.position.z);
+            Vector3 newBottomBoundaryPosition = new Vector3((islandCount / 2) * tileWidth , bottomBoundary.transform.position.y, bottomBoundary.transform.position.z);
             GameObject newBottomBoundary = Instantiate(bottomBoundary, newBottomBoundaryPosition, Quaternion.identity);
             newBottomBoundary.name = "BottomBoundary_" + islandCount;
         }
