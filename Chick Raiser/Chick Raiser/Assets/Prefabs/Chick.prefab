@@ -100,8 +100,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  coinPrefab: {fileID: 2536478212820718990, guid: 103fc010cfbd34495a5ef0b73f2ea7f2, type: 3}
-  poopInterval: 3
+  eggPrefab: {fileID: 7492034504996509795, guid: 7e68ac5935621480baf7db9a22f136f4, type: 3}
+  layEggInterval: 3
 --- !u!61 &5900895863321637821
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -1,23 +1,23 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
     public int coinCount = 0;
+    public int eggCount = 0;
 
     public TextMeshProUGUI coinText;
+    public TextMeshProUGUI eggText;
 
-    public GameObject eggPrefab;
+    public GameObject chickPrefab;
 
     void Update()
     {
         coinText.text = "Coins: " + coinCount;
+        eggText.text = "Eggs: " + eggCount;
     }
-
-
-
-   
 
     public void AddCoin()
     {
@@ -36,16 +36,41 @@ public class GameManager : MonoBehaviour
         coinText.text = "Coins: " + coinCount;
     }
 
-
-
-    public void BuyEgg()
+    public void CollectEgg(GameObject egg)
     {
-        if (coinCount >= 10)
+        eggCount++;
+        UpdateEggUI();
+        Destroy(egg);
+    }
+
+    void UpdateEggUI()
+    {
+        eggText.text = "Eggs: " + eggCount;
+    }
+
+    public void SellEggs()
+    {
+        coinCount += eggCount;
+        eggCount = 0;
+        UpdateCoinUI();
+        UpdateEggUI();
+    }
+
+    public void HatchEgg()
+    {
+        if (eggCount > 0)
         {
-            coinCount -= 10;
-            Vector3 eggPosition = GetRandomPosition();
-            Instantiate(eggPrefab, eggPosition, Quaternion.identity);
+            eggCount--;
+            UpdateEggUI();
+            StartCoroutine(HatchEggCoroutine());
         }
+    }
+
+    IEnumerator HatchEggCoroutine()
+    {
+        yield return new WaitForSeconds(20f);
+        Vector3 chickPosition = GetRandomPosition();
+        Instantiate(chickPrefab, chickPosition, Quaternion.identity);
     }
 
     Vector3 GetRandomPosition()

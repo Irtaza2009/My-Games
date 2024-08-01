@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7492034504996509804}
   - component: {fileID: 3766985405624805738}
   - component: {fileID: 494677215693049522}
+  - component: {fileID: -4348606689221239242}
   m_Layer: 0
   m_Name: Egg
   m_TagString: Untagged
@@ -126,3 +127,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chickPrefab: {fileID: 5900895863321637817, guid: ce2b2525d76c04faab6be5cbdd932407, type: 3}
   hatchTime: 10
+--- !u!114 &-4348606689221239242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7492034504996509795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90cebd61191194b71b01e5661f2ae297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -4,8 +4,8 @@ public class ChickMovement : MonoBehaviour
 {
     public float speed = 2f;
     private Vector2 direction;
-    public GameObject coinPrefab;
-    public float poopInterval = 3f;
+    public GameObject eggPrefab;
+    public float layEggInterval = 3f;
 
     private float minX, maxX, minY, maxY;
 
@@ -14,13 +14,13 @@ public class ChickMovement : MonoBehaviour
         UpdateBoundaries();
         ChangeDirection();
         InvokeRepeating("ChangeDirection", 2f, 2f);
-        InvokeRepeating("PoopCoin", poopInterval, poopInterval);
+        InvokeRepeating("LayEgg", layEggInterval, layEggInterval);
     }
 
     void Update()
     {
         Vector3 newPosition = transform.position + (Vector3)direction * speed * Time.deltaTime;
-        
+
         // Clamp the new position within the boundaries
         newPosition.x = Mathf.Clamp(newPosition.x, minX, maxX);
         newPosition.y = Mathf.Clamp(newPosition.y, minY, maxY);
@@ -34,9 +34,9 @@ public class ChickMovement : MonoBehaviour
         direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).normalized;
     }
 
-    void PoopCoin()
+    void LayEgg()
     {
-        Instantiate(coinPrefab, transform.position, Quaternion.identity);
+        Instantiate(eggPrefab, transform.position, Quaternion.identity);
     }
 
     public void UpdateBoundaries()
