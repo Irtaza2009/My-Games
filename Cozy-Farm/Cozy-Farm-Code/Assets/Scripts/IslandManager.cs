@@ -32,7 +32,7 @@ public class IslandManager : MonoBehaviour
         {
             gameManager.coinCount -= tileCost;
             tileCost += 50;
-            islandText.text = "Buy Farm <br> Cost: " + tileCost;
+            islandText.text = "Buy Island <br> Cost: " + tileCost;
 
             Vector3 newTilePosition = CalculateNewTilePosition();
             Instantiate(islandTilePrefab, newTilePosition, Quaternion.identity);

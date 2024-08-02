@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
                 coinCount -= hatchCost;
                 hatchCost += 10;
 
-                hatchText.text = "Buy Island <br> Cost: " + hatchCost;
+                hatchText.text = "Hatch Egg <br> Cost: " + hatchCost;
 
                 eggCount--;
                 UpdateEggUI();
