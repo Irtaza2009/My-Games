@@ -11,7 +11,7 @@ public class GameManagerCowFarm : MonoBehaviour
 
      public int milkCount = 0;
     public int workerCost = 50; // Cost to buy a worker
-    public int hatchCost = 10;
+    public int cowCost = 10;
 
     public TextMeshProUGUI coinText;
 
@@ -82,12 +82,12 @@ public class GameManagerCowFarm : MonoBehaviour
     public void BuyCow()
     {
         
-            if (coinCount >= hatchCost)
+            if (coinCount >= cowCost)
             {
-                coinCount -= hatchCost;
-                hatchCost += 10;
+                coinCount -= cowCost;
+                cowCost += 10;
 
-                buyText.text = "Hatch Egg <br> Cost: " + hatchCost;
+                buyText.text = "Buy Cow <br> Cost: " + cowCost;
 
                
                
