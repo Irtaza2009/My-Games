@@ -15,7 +15,7 @@ public class GameManagerCowFarm : MonoBehaviour
 
     public TextMeshProUGUI coinText;
 
-    public TextMeshProUGUI hatchText;
+    public TextMeshProUGUI buyText;
 
     public TextMeshProUGUI milkText;
 
@@ -87,7 +87,7 @@ public class GameManagerCowFarm : MonoBehaviour
                 coinCount -= hatchCost;
                 hatchCost += 10;
 
-                hatchText.text = "Hatch Egg <br> Cost: " + hatchCost;
+                buyText.text = "Hatch Egg <br> Cost: " + hatchCost;
 
                
                
