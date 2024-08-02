@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
             coinCount -= workerCost;
             workerCost += 10;
 
-                hatchText.text = "Buy Worker <br> Cost: " + workerCost;
+                workerText.text = "Buy Worker <br> Cost: " + workerCost;
             UpdateCoinUI();
             // Instantiate the worker chicken at a designated position
             Instantiate(workerPrefab, GetRandomPosition(), Quaternion.identity);

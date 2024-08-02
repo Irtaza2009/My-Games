@@ -18,7 +18,7 @@ public class IslandManager : MonoBehaviour
     {
         gameManager = FindObjectOfType<GameManager>();
         mainCamera = Camera.main;
-        
+
         // Get the size of the prefab
         tileWidth = islandTilePrefab.GetComponent<Renderer>().bounds.size.x;
         tileHeight = islandTilePrefab.GetComponent<Renderer>().bounds.size.y;
@@ -59,6 +59,12 @@ public class IslandManager : MonoBehaviour
         GameObject rightBoundary = GameObject.Find("RightBoundary");
         GameObject topBoundary = GameObject.Find("TopBoundary");
         GameObject bottomBoundary = GameObject.Find("BottomBoundary");
+        GameObject leftBoundary = GameObject.Find("LeftBoundary");
+
+        int row = islandCount / 2;
+        int col = islandCount % 2;
+
+        bool spawnBelowFirstIsland = (islandCount > 2) && (row == 1 && col == 0);
 
         if (rightBoundary != null)
         {
@@ -68,17 +74,34 @@ public class IslandManager : MonoBehaviour
         if (topBoundary != null)
         {
             // Instantiate a new top boundary and position it correctly
-            Vector3 newTopBoundaryPosition = new Vector3((islandCount / 2) * tileWidth , topBoundary.transform.position.y, topBoundary.transform.position.z);
+            Vector3 newTopBoundaryPosition = new Vector3((islandCount / 2) * tileWidth, topBoundary.transform.position.y, topBoundary.transform.position.z);
             GameObject newTopBoundary = Instantiate(topBoundary, newTopBoundaryPosition, Quaternion.identity);
             newTopBoundary.name = "TopBoundary_" + islandCount;
         }
 
         if (bottomBoundary != null)
         {
-            // Instantiate a new bottom boundary and position it correctly
-            Vector3 newBottomBoundaryPosition = new Vector3((islandCount / 2) * tileWidth , bottomBoundary.transform.position.y, bottomBoundary.transform.position.z);
-            GameObject newBottomBoundary = Instantiate(bottomBoundary, newBottomBoundaryPosition, Quaternion.identity);
-            newBottomBoundary.name = "BottomBoundary_" + islandCount;
+            if (spawnBelowFirstIsland)
+            {
+                // Move the old bottom boundary
+                bottomBoundary.transform.position = new Vector3(bottomBoundary.transform.position.x, -islandCount * tileHeight, bottomBoundary.transform.position.z);
+
+                // Instantiate new left and right boundaries
+                Vector3 newLeftBoundaryPosition = new Vector3(-tileWidth / 2, -row * tileHeight, 0);
+                GameObject newLeftBoundary = Instantiate(leftBoundary, newLeftBoundaryPosition, Quaternion.identity);
+                newLeftBoundary.name = "LeftBoundary_" + islandCount;
+
+                Vector3 newRightBoundaryPosition = new Vector3(tileWidth / 2, -row * tileHeight, 0);
+                GameObject newRightBoundary = Instantiate(rightBoundary, newRightBoundaryPosition, Quaternion.identity);
+                newRightBoundary.name = "RightBoundary_" + islandCount;
+            }
+            else
+            {
+                // Instantiate a new bottom boundary and position it correctly
+                Vector3 newBottomBoundaryPosition = new Vector3((islandCount / 2) * tileWidth, bottomBoundary.transform.position.y, bottomBoundary.transform.position.z);
+                GameObject newBottomBoundary = Instantiate(bottomBoundary, newBottomBoundaryPosition, Quaternion.identity);
+                newBottomBoundary.name = "BottomBoundary_" + islandCount;
+            }
         }
 
         // Find all chicks and update their boundaries
@@ -94,7 +117,7 @@ public class IslandManager : MonoBehaviour
         // Calculate the new camera size based on the number of island tiles
         float newCameraSize = (islandCount * tileWidth) / 2f;
         mainCamera.orthographicSize = Mathf.Max(newCameraSize, mainCamera.orthographicSize);
-        
+
         // Adjust camera position to keep the islands centered
         mainCamera.transform.position = new Vector3((islandCount * tileWidth - tileWidth) / 2f, mainCamera.transform.position.y, mainCamera.transform.position.z);
     }
