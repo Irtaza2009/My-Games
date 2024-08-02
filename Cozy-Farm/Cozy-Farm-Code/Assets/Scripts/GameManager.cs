@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI eggText;
     public TextMeshProUGUI hatchText;
 
+     public TextMeshProUGUI workerText;
+
     public GameObject chickPrefab;
     public GameObject eggPrefab;
     public GameObject workerPrefab; // Reference to the worker chicken prefab
@@ -96,6 +98,9 @@ public class GameManager : MonoBehaviour
         if (coinCount >= workerCost)
         {
             coinCount -= workerCost;
+            workerCost += 10;
+
+                hatchText.text = "Buy Worker <br> Cost: " + workerCost;
             UpdateCoinUI();
             // Instantiate the worker chicken at a designated position
             Instantiate(workerPrefab, GetRandomPosition(), Quaternion.identity);
