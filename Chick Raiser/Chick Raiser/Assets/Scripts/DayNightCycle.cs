@@ -49,7 +49,8 @@ public class DayNightCycle : MonoBehaviour
 
     void TransitionToNight()
     {
-        nightOverlayCanvas.enabled = true; // Enable the night overlay
+        nightOverlayCanvas.enabled = true;
+        Debug.Log("Transition to night");
         foreach (GameObject chick in chicks)
         {
             ChickBehavior chickBehavior = chick.GetComponent<ChickBehavior>();
