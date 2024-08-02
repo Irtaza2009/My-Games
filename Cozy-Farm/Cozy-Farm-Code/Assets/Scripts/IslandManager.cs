@@ -14,6 +14,12 @@ public class IslandManager : MonoBehaviour
     private float tileWidth;
     private float tileHeight;
 
+    private float minZoom = 5f;
+    private float maxZoom = 20f;
+    private float zoomSpeed = 5f;
+
+    private Vector3 dragOrigin;
+
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
@@ -24,6 +30,12 @@ public class IslandManager : MonoBehaviour
         tileHeight = islandTilePrefab.GetComponent<Renderer>().bounds.size.y;
 
         UpdateCameraSize();
+    }
+
+    void Update()
+    {
+        HandleZoom();
+        HandlePanning();
     }
 
     public void BuyIslandTile()
@@ -120,5 +132,37 @@ public class IslandManager : MonoBehaviour
 
         // Adjust camera position to keep the islands centered
         mainCamera.transform.position = new Vector3((islandCount * tileWidth - tileWidth) / 2f, mainCamera.transform.position.y, mainCamera.transform.position.z);
+    }
+
+    void HandleZoom()
+    {
+        float scrollData;
+#if UNITY_EDITOR
+        scrollData = Input.GetAxis("Mouse ScrollWheel");
+#else
+        scrollData = Input.GetTouch(0).deltaPosition.y * 0.01f;
+#endif
+        mainCamera.orthographicSize -= scrollData * zoomSpeed;
+        mainCamera.orthographicSize = Mathf.Clamp(mainCamera.orthographicSize, minZoom, maxZoom);
+    }
+
+    void HandlePanning()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            dragOrigin = Input.mousePosition;
+            return;
+        }
+
+        if (!Input.GetMouseButton(0)) return;
+
+        Vector3 difference = dragOrigin - Input.mousePosition;
+        dragOrigin = Input.mousePosition;
+
+        Vector3 newPosition = mainCamera.transform.position + difference * 0.01f;
+        newPosition.x = Mathf.Clamp(newPosition.x, -tileWidth, (islandCount / 2) * tileWidth);
+        newPosition.y = Mathf.Clamp(newPosition.y, -islandCount * tileHeight, 0);
+
+        mainCamera.transform.position = newPosition;
     }
 }
