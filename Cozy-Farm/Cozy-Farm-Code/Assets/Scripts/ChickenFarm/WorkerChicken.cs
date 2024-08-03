@@ -56,6 +56,9 @@ public class WorkerChicken : MonoBehaviour
         if (other.CompareTag("Egg"))
         {
             gameManager.CollectEgg(other.gameObject); // Collect egg
+        } else  if (other.CompareTag("Milk"))
+        {
+            gameManager.CollectMilk(other.gameObject); // Collect milk
         }
     }
 

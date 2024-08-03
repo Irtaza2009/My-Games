@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+           // DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
     public void AddHatchEgg()
     {
         Vector3 eggPosition = GetRandomPosition();
-        Instantiate(chickPrefab, eggPosition, Quaternion.identity);
+        Instantiate(eggPrefab, eggPosition, Quaternion.identity);
     }
 
     public void BuyWorker()

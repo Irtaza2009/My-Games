@@ -9,7 +9,7 @@ public class IslandManagerCowFarm : MonoBehaviour
 
     public TextMeshProUGUI islandText;
 
-    private GameManagerCowFarm gameManager;
+    private GameManager gameManager;
     private Camera mainCamera;
     private float tileWidth;
     private float tileHeight;
@@ -22,7 +22,7 @@ public class IslandManagerCowFarm : MonoBehaviour
 
     void Start()
     {
-        gameManager = FindObjectOfType<GameManagerCowFarm>();
+        gameManager = FindObjectOfType<GameManager>();
         mainCamera = Camera.main;
 
         // Get the size of the prefab

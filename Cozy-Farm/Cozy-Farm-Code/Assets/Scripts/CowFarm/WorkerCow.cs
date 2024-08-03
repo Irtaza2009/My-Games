@@ -5,12 +5,12 @@ public class WorkerCow : MonoBehaviour
     public float speed = 2f;
     private Vector2 direction;
     private float minX, maxX, minY, maxY;
-    private GameManagerCowFarm gameManager;
+    private GameManager gameManager;
     private Animator animator;
 
     void Start()
     {
-        gameManager = FindObjectOfType<GameManagerCowFarm>();
+        gameManager = FindObjectOfType<GameManager>();
         animator = GetComponent<Animator>();
         UpdateBoundaries();
         ChangeDirection();
