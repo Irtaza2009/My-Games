@@ -21,6 +21,11 @@ public class PlayerController : MonoBehaviour
     {
         ProcessInputs();
         AnimateMovement();
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            CheckStandingSpot();
+        }
     }
 
     void FixedUpdate()
@@ -96,4 +101,26 @@ public class PlayerController : MonoBehaviour
         minY = GameObject.Find("BottomBoundary").transform.position.y + 0.5f;
         maxY = GameObject.Find("TopBoundary").transform.position.y - 0.5f;
     }
+
+
+     void CheckStandingSpot()
+    {
+        // Assuming you have colliders on the spots with appropriate tags
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, 0.1f);
+
+        foreach (var hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("ChickenSpot"))
+            {
+                SceneManager.LoadScene("ChickenFarm");
+            }
+            else if (hitCollider.CompareTag("CowSpot"))
+            {
+                SceneManager.LoadScene("CowFarm");
+            }
+        }
+    }
+
+
+    
 }
