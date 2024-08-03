@@ -117,10 +117,10 @@ public class IslandManagerCowFarm : MonoBehaviour
         }
 
         // Find all chicks and update their boundaries
-        ChickMovement[] chicks = FindObjectsOfType<ChickMovement>();
-        foreach (ChickMovement chick in chicks)
+        CowMovement[] cows = FindObjectsOfType<CowMovement>();
+        foreach (CowMovement cow in cows)
         {
-            chick.UpdateBoundaries();
+            cow.UpdateBoundaries();
         }
     }
 
