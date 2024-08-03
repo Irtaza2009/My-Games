@@ -37,6 +37,11 @@ public class PlayerController : MonoBehaviour
         {
             CheckStandingSpot();
         }
+
+         if (Input.GetKeyDown(KeyCode.Return))
+        {
+            CheckPlotInteraction();
+        }
     }
 
     void FixedUpdate()
@@ -153,4 +158,28 @@ public class PlayerController : MonoBehaviour
             dialogText.text = "Press Enter to enter Cow Farm";
         }
     }
+
+    void CheckPlotInteraction()
+    {
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, 0.1f);
+
+        foreach (var hitCollider in hitColliders)
+        {
+            Plot plot = hitCollider.GetComponent<Plot>();
+            if (plot != null)
+            {
+                if (plot.Harvest())
+                {
+                    gameManager.CollectFruit(); // Collect the fruit or vegetable
+                }
+                else
+                {
+                    plot.PlantSeed(); // Plant a seed
+                }
+            }
+        }
+    }
+
+
+
 }

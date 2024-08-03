@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI eggText;
     public TextMeshProUGUI milkText;
+    public TextMeshProUGUI fruitText;
     public TextMeshProUGUI hatchText;
     public TextMeshProUGUI workerText;
     public TextMeshProUGUI buyCowText;
@@ -144,9 +145,20 @@ public class GameManager : MonoBehaviour
         Destroy(milk);
     }
 
+     public void CollectFruit()
+    {
+        fruitCount++;
+        UpdateFruitUI();
+    }
+
     void UpdateMilkUI()
     {
         if (milkText != null) milkText.text = "Milk Bottles: " + milkCount;
+    }
+
+    void UpdateFruitUI() 
+    {
+        if (fruitText != null) fruitText.text = "Fruits: " + fruitCount;
     }
 
     public void SellMilk()
