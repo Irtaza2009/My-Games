@@ -42,6 +42,8 @@ public class PlayerController : MonoBehaviour
         {
             CheckPlotInteraction();
         }
+
+        Debug.Log(currentSpotTag);
     }
 
     void FixedUpdate()
@@ -117,7 +119,7 @@ public class PlayerController : MonoBehaviour
         else if (other.CompareTag("Plot"))
         {
             isOnSpot = true;
-            currentSpotTag =  "Plot";
+            currentSpotTag =  other.CompareTag("Plot") ? "Plot" : "";
             ShowDialog(currentSpotTag);
         }
     }

@@ -159,7 +159,7 @@ public class GameManager : MonoBehaviour
 
     void UpdateFruitUI() 
     {
-        if (fruitText != null) fruitText.text = "Fruits: " + fruitCount;
+        if (fruitText != null) fruitText.text = "Wheat: " + fruitCount;
     }
 
     public void SellMilk()
