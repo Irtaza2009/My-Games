@@ -16,4 +16,14 @@ public class FarmSwitchButtonHandler : MonoBehaviour
         SceneManager.LoadScene("CowFarm");
         GameManager.Instance.LoadGameState();
     }
+
+     public void SwitchToGarden()
+    {
+        GameManager.Instance.SaveGameState();
+        SceneManager.LoadScene("Garden");
+        GameManager.Instance.LoadGameState();
+    }
+
+
+
 }
