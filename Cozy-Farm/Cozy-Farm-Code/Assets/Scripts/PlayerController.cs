@@ -1,4 +1,7 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,12 +12,20 @@ public class PlayerController : MonoBehaviour
     private float minX, maxX, minY, maxY;
     private GameManager gameManager;
 
+    public GameObject dialogBox;
+    public TextMeshProUGUI dialogText;
+
+    private bool isOnSpot = false;
+    private string currentSpotTag = "";
+
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
         animator = GetComponent<Animator>();
 
         UpdateBoundaries();
+
+        dialogBox.SetActive(false);
     }
 
     void Update()
@@ -22,7 +33,7 @@ public class PlayerController : MonoBehaviour
         ProcessInputs();
         AnimateMovement();
 
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return) && isOnSpot)
         {
             CheckStandingSpot();
         }
@@ -92,6 +103,22 @@ public class PlayerController : MonoBehaviour
         {
             gameManager.CollectMilk(other.gameObject); // Collect milk
         }
+        else if (other.CompareTag("ChickenSpot") || other.CompareTag("CowSpot"))
+        {
+            isOnSpot = true;
+            currentSpotTag = other.CompareTag("ChickenSpot") ? "ChickenSpot" : "CowSpot";
+            ShowDialog(currentSpotTag);
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("ChickenSpot") || other.CompareTag("CowSpot"))
+        {
+            isOnSpot = false;
+            currentSpotTag = "";
+            dialogBox.SetActive(false);
+        }
     }
 
     public void UpdateBoundaries()
@@ -102,25 +129,28 @@ public class PlayerController : MonoBehaviour
         maxY = GameObject.Find("TopBoundary").transform.position.y - 0.5f;
     }
 
-
-     void CheckStandingSpot()
+    void CheckStandingSpot()
     {
-        // Assuming you have colliders on the spots with appropriate tags
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, 0.1f);
-
-        foreach (var hitCollider in hitColliders)
+        if (currentSpotTag == "ChickenSpot")
         {
-            if (hitCollider.CompareTag("ChickenSpot"))
-            {
-                SceneManager.LoadScene("ChickenFarm");
-            }
-            else if (hitCollider.CompareTag("CowSpot"))
-            {
-                SceneManager.LoadScene("CowFarm");
-            }
+            SceneManager.LoadScene("ChickenFarm");
+        }
+        else if (currentSpotTag == "CowSpot")
+        {
+            SceneManager.LoadScene("CowFarm");
         }
     }
 
-
-    
+    void ShowDialog(string spotTag)
+    {
+        dialogBox.SetActive(true);
+        if (spotTag == "ChickenSpot")
+        {
+            dialogText.text = "Press Enter to enter Chicken Farm";
+        }
+        else if (spotTag == "CowSpot")
+        {
+            dialogText.text = "Press Enter to enter Cow Farm";
+        }
+    }
 }
