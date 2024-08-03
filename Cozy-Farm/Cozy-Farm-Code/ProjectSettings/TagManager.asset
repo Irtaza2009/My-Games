@@ -9,6 +9,7 @@ TagManager:
   - Milk
   - ChickenSpot
   - CowSpot
+  - Plot
   layers:
   - Default
   - TransparentFX

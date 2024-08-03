@@ -114,11 +114,17 @@ public class PlayerController : MonoBehaviour
             currentSpotTag = other.CompareTag("ChickenSpot") ? "ChickenSpot" : "CowSpot";
             ShowDialog(currentSpotTag);
         }
+        else if (other.CompareTag("Plot"))
+        {
+            isOnSpot = true;
+            currentSpotTag =  "Plot";
+            ShowDialog(currentSpotTag);
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("ChickenSpot") || other.CompareTag("CowSpot"))
+        if (other.CompareTag("ChickenSpot") || other.CompareTag("CowSpot") || other.CompareTag("Plot"))
         {
             isOnSpot = false;
             currentSpotTag = "";
@@ -156,6 +162,10 @@ public class PlayerController : MonoBehaviour
         else if (spotTag == "CowSpot")
         {
             dialogText.text = "Press Enter to enter Cow Farm";
+        }
+        else if (spotTag == "Plot")
+        {
+            dialogText.text = "Press Enter to plant or harvest";
         }
     }
 

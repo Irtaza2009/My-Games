@@ -170,6 +170,17 @@ public class GameManager : MonoBehaviour
         UpdateMilkUI();
     }
 
+      public void SellFruit()
+    {
+        coinCount += fruitCount;
+        fruitCount = 0;
+        UpdateCoinUI();
+        UpdateFruitUI();
+    }
+
+
+
+
     Vector3 GetRandomPosition()
     {
         float minX = GameObject.Find("LeftBoundary").transform.position.x + 0.5f;
