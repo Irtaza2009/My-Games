@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 
     public int coinCount = 0;
     public int eggCount = 0;
+    public int fruitCount = 0;
     public int milkCount = 0;
     public int workerCost = 50; // Cost to buy a worker
     public int hatchCost = 10;
@@ -187,6 +188,7 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetInt("WorkerCost", workerCost);
         PlayerPrefs.SetInt("HatchCost", hatchCost);
         PlayerPrefs.SetInt("CowCost", cowCost);
+        PlayerPrefs.SetInt("FruitCount", fruitCount);
         PlayerPrefs.Save();
     }
 
@@ -198,5 +200,6 @@ public class GameManager : MonoBehaviour
         workerCost = PlayerPrefs.GetInt("WorkerCost", 50);
         hatchCost = PlayerPrefs.GetInt("HatchCost", 10);
         cowCost = PlayerPrefs.GetInt("CowCost", 10);
+        fruitCount = PlayerPrefs.GetInt("FruitCount", 0);
     }
 }
