@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
         }
 
         Debug.Log(currentSpotTag);
+        UpdateBoundaries();
     }
 
     void FixedUpdate()
