@@ -123,11 +123,17 @@ public class PlayerController : MonoBehaviour
             currentSpotTag =  other.CompareTag("Plot") ? "Plot" : "";
             ShowDialog(currentSpotTag);
         }
+        else if (other.CompareTag("GardenSpot"))
+        {
+            isOnSpot = true;
+            currentSpotTag =  other.CompareTag("GardenSpot") ? "Plot" : "";
+            ShowDialog(currentSpotTag);
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("ChickenSpot") || other.CompareTag("CowSpot") || other.CompareTag("Plot"))
+        if (other.CompareTag("ChickenSpot") || other.CompareTag("CowSpot") || other.CompareTag("Plot") || other.CompareTag("GardenSpot"))
         {
             isOnSpot = false;
             currentSpotTag = "";
@@ -153,6 +159,10 @@ public class PlayerController : MonoBehaviour
         {
             SceneManager.LoadScene("CowFarm");
         }
+        else if (currentSpotTag == "GardenSpot")
+        {
+            SceneManager.LoadScene("Garden");
+        }
     }
 
     void ShowDialog(string spotTag)
@@ -165,6 +175,10 @@ public class PlayerController : MonoBehaviour
         else if (spotTag == "CowSpot")
         {
             dialogText.text = "Press Enter to enter Cow Farm";
+        }
+        else if (spotTag == "GardenSpot")
+        {
+            dialogText.text = "Press Enter to enter Garden";
         }
         else if (spotTag == "Plot")
         {

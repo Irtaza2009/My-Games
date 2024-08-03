@@ -10,6 +10,7 @@ TagManager:
   - ChickenSpot
   - CowSpot
   - Plot
+  - GardenSpot
   layers:
   - Default
   - TransparentFX
