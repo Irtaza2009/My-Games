@@ -2,13 +2,19 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5f;
+    public float moveSpeed = 1f;
     private Animator animator;
     private Vector2 movement;
 
+    private float minX, maxX, minY, maxY;
+    private GameManager gameManager;
+
     void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
         animator = GetComponent<Animator>();
+
+        UpdateBoundaries();
     }
 
     void Update()
@@ -62,20 +68,32 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        transform.Translate(movement * moveSpeed * Time.deltaTime);
+        Vector3 newPosition = transform.position + (Vector3)movement * moveSpeed * Time.deltaTime;
+
+        // Clamp the new position within the boundaries
+        newPosition.x = Mathf.Clamp(newPosition.x, minX, maxX);
+        newPosition.y = Mathf.Clamp(newPosition.y, minY, maxY);
+
+        transform.position = newPosition;
     }
 
-     void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Egg"))
         {
             gameManager.CollectEgg(other.gameObject); // Collect egg
-        } else  if (other.CompareTag("Milk"))
+        }
+        else if (other.CompareTag("Milk"))
         {
             gameManager.CollectMilk(other.gameObject); // Collect milk
         }
     }
 
-
-
+    public void UpdateBoundaries()
+    {
+        minX = GameObject.Find("LeftBoundary").transform.position.x + 0.5f;
+        maxX = GameObject.Find("RightBoundary").transform.position.x - 0.5f;
+        minY = GameObject.Find("BottomBoundary").transform.position.y + 0.5f;
+        maxY = GameObject.Find("TopBoundary").transform.position.y - 0.5f;
+    }
 }
