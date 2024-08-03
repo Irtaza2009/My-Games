@@ -10,7 +10,7 @@ public class GameManagerCowFarm : MonoBehaviour
 
 
      public int milkCount = 0;
-    public int workerCost = 50; // Cost to buy a worker
+    public int workerCost = 20; // Cost to buy a worker
     public int cowCost = 10;
 
     public TextMeshProUGUI coinText;

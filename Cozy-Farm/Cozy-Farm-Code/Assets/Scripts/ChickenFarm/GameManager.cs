@@ -1,35 +1,53 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance; // Singleton instance
+
     public int coinCount = 0;
     public int eggCount = 0;
+    public int milkCount = 0;
     public int workerCost = 50; // Cost to buy a worker
     public int hatchCost = 10;
+    public int cowCost = 10;
 
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI eggText;
+    public TextMeshProUGUI milkText;
     public TextMeshProUGUI hatchText;
-
-     public TextMeshProUGUI workerText;
+    public TextMeshProUGUI workerText;
+    public TextMeshProUGUI buyCowText;
 
     public GameObject chickPrefab;
     public GameObject eggPrefab;
     public GameObject workerPrefab; // Reference to the worker chicken prefab
+    public GameObject cowPrefab;
+    public GameObject milkPrefab;
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void Start()
+    {
+        LoadGameState();
     }
 
     void Update()
     {
         coinText.text = "Coins: " + coinCount;
-        eggText.text = "Eggs: " + eggCount;
+        if (eggText != null) eggText.text = "Eggs: " + eggCount;
+        if (milkText != null) milkText.text = "Milk Bottles: " + milkCount;
     }
 
     public void AddCoin()
@@ -58,7 +76,7 @@ public class GameManager : MonoBehaviour
 
     void UpdateEggUI()
     {
-        eggText.text = "Eggs: " + eggCount;
+        if (eggText != null) eggText.text = "Eggs: " + eggCount;
     }
 
     public void SellEggs()
@@ -71,26 +89,22 @@ public class GameManager : MonoBehaviour
 
     public void HatchEgg()
     {
-        if (eggCount > 0)
+        if (eggCount > 0 && coinCount >= hatchCost)
         {
-            if (coinCount >= hatchCost)
-            {
-                coinCount -= hatchCost;
-                hatchCost += 10;
-
-                hatchText.text = "Hatch Egg <br> Cost: " + hatchCost;
-
-                eggCount--;
-                UpdateEggUI();
-                AddHatchEgg();
-            }
+            coinCount -= hatchCost;
+            hatchCost += 10;
+            eggCount--;
+            UpdateEggUI();
+            UpdateCoinUI();
+            if (hatchText != null) hatchText.text = "Hatch Egg <br> Cost: " + hatchCost;
+            AddHatchEgg();
         }
     }
 
     public void AddHatchEgg()
     {
         Vector3 eggPosition = GetRandomPosition();
-        GameObject egg = Instantiate(eggPrefab, eggPosition, Quaternion.identity);
+        Instantiate(chickPrefab, eggPosition, Quaternion.identity);
     }
 
     public void BuyWorker()
@@ -99,12 +113,48 @@ public class GameManager : MonoBehaviour
         {
             coinCount -= workerCost;
             workerCost += 10;
-
-                workerText.text = "Buy Worker <br> Cost: " + workerCost;
             UpdateCoinUI();
-            // Instantiate the worker chicken at a designated position
+            if (workerText != null) workerText.text = "Buy Worker <br> Cost: " + workerCost;
             Instantiate(workerPrefab, GetRandomPosition(), Quaternion.identity);
         }
+    }
+
+    public void BuyCow()
+    {
+        if (coinCount >= cowCost)
+        {
+            coinCount -= cowCost;
+            cowCost += 10;
+            UpdateCoinUI();
+            if (buyCowText != null) buyCowText.text = "Buy Cow <br> Cost: " + cowCost;
+            AddCow();
+        }
+    }
+
+    public void AddCow()
+    {
+        Vector3 cowPosition = GetRandomPosition();
+        Instantiate(cowPrefab, cowPosition, Quaternion.identity);
+    }
+
+    public void CollectMilk(GameObject milk)
+    {
+        milkCount++;
+        UpdateMilkUI();
+        Destroy(milk);
+    }
+
+    void UpdateMilkUI()
+    {
+        if (milkText != null) milkText.text = "Milk Bottles: " + milkCount;
+    }
+
+    public void SellMilk()
+    {
+        coinCount += milkCount;
+        milkCount = 0;
+        UpdateCoinUI();
+        UpdateMilkUI();
     }
 
     Vector3 GetRandomPosition()
@@ -115,5 +165,26 @@ public class GameManager : MonoBehaviour
         float maxY = GameObject.Find("TopBoundary").transform.position.y - 0.5f;
 
         return new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), -1);
+    }
+
+    public void SaveGameState()
+    {
+        PlayerPrefs.SetInt("CoinCount", coinCount);
+        PlayerPrefs.SetInt("EggCount", eggCount);
+        PlayerPrefs.SetInt("MilkCount", milkCount);
+        PlayerPrefs.SetInt("WorkerCost", workerCost);
+        PlayerPrefs.SetInt("HatchCost", hatchCost);
+        PlayerPrefs.SetInt("CowCost", cowCost);
+        PlayerPrefs.Save();
+    }
+
+    public void LoadGameState()
+    {
+        coinCount = PlayerPrefs.GetInt("CoinCount", 0);
+        eggCount = PlayerPrefs.GetInt("EggCount", 0);
+        milkCount = PlayerPrefs.GetInt("MilkCount", 0);
+        workerCost = PlayerPrefs.GetInt("WorkerCost", 50);
+        hatchCost = PlayerPrefs.GetInt("HatchCost", 10);
+        cowCost = PlayerPrefs.GetInt("CowCost", 10);
     }
 }
