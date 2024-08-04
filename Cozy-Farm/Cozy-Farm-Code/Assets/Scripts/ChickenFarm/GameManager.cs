@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
     {
         coinText.text =  coinCount;
         if (eggText != null) eggText.text = eggCount;
-        if (milkText != null) milkText.text = "Milk Bottles: " + milkCount;
+        if (milkText != null) milkText.text =  milkCount;
     }
 
     public void AddCoin()
@@ -154,7 +154,7 @@ public class GameManager : MonoBehaviour
 
     void UpdateMilkUI()
     {
-        if (milkText != null) milkText.text = "Milk Bottles: " + milkCount;
+        if (milkText != null) milkText.text =   milkCount;
     }
 
     void UpdateFruitUI() 
