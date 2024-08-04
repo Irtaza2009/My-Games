@@ -47,8 +47,8 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        coinText.text = "Coins: " + coinCount;
-        if (eggText != null) eggText.text = "Eggs: " + eggCount;
+        coinText.text =  coinCount;
+        if (eggText != null) eggText.text = eggCount;
         if (milkText != null) milkText.text = "Milk Bottles: " + milkCount;
     }
 
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
 
     void UpdateCoinUI()
     {
-        coinText.text = "Coins: " + coinCount;
+        coinText.text =  coinCount;
     }
 
     public void CollectEgg(GameObject egg)
@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
 
     void UpdateEggUI()
     {
-        if (eggText != null) eggText.text = "Eggs: " + eggCount;
+        if (eggText != null) eggText.text =  eggCount;
     }
 
     public void SellEggs()
