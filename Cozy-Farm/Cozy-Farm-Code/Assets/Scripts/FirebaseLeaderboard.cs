@@ -2,35 +2,87 @@ using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections.Generic;
 using TMPro;
+using System.Collections.Generic;
 
 public class FirebaseLeaderboard : MonoBehaviour
 {
     public TextMeshProUGUI leaderboardText;
     private DatabaseReference databaseReference;
+    private string playerName;
 
     void Start()
     {
+        playerName = PlayerPrefs.GetString("PlayerName", "Unknown");
+        Debug.Log("Player Name at Start: " + playerName);
+
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
-            FirebaseApp app = FirebaseApp.DefaultInstance;
-            databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-            LoadScores();
+            if (task.IsCompleted)
+            {
+                FirebaseApp app = FirebaseApp.DefaultInstance;
+                databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+                Debug.Log("Database Reference Initialized: " + (databaseReference != null));
+                LoadScores();
+            }
+            else
+            {
+                Debug.LogError("Could not initialize Firebase dependencies.");
+            }
         });
     }
 
-    public void AddScore(string playerName, int score)
+    public void AddScore(int score)
     {
-        string key = databaseReference.Child("leaderboard").Push().Key;
-        LeaderboardEntry entry = new LeaderboardEntry(playerName, score);
-        string json = JsonUtility.ToJson(entry);
-        databaseReference.Child("leaderboard").Child(key).SetRawJsonValueAsync(json);
+        if (databaseReference == null)
+        {
+            Debug.LogError("Database reference is not initialized.");
+            return;
+        }
+
+        Debug.Log("Adding score for player: " + playerName + " Score: " + score);
+        
+        databaseReference.Child("leaderboard").Child(playerName).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if (snapshot.Exists)
+                {
+                    int currentScore = int.Parse(snapshot.Child("score").Value.ToString());
+                    if (score > currentScore)
+                    {
+                        // Update the score if the new score is higher
+                        LeaderboardEntry entry = new LeaderboardEntry(playerName, score);
+                        string json = JsonUtility.ToJson(entry);
+                        databaseReference.Child("leaderboard").Child(playerName).SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+                        {
+                            LoadScores(); // Reload scores to update the leaderboard
+                        });
+                    }
+                }
+                else
+                {
+                    // Add new entry if no previous score exists
+                    LeaderboardEntry entry = new LeaderboardEntry(playerName, score);
+                    string json = JsonUtility.ToJson(entry);
+                    databaseReference.Child("leaderboard").Child(playerName).SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+                    {
+                        LoadScores(); // Reload scores to update the leaderboard
+                    });
+                }
+            }
+        });
     }
 
     private void LoadScores()
     {
+        if (databaseReference == null)
+        {
+            Debug.LogError("Database reference is not initialized.");
+            return;
+        }
+
         databaseReference.Child("leaderboard").OrderByChild("score").LimitToLast(10).GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
@@ -54,9 +106,9 @@ public class FirebaseLeaderboard : MonoBehaviour
     private void UpdateLeaderboard(List<LeaderboardEntry> entries)
     {
         leaderboardText.text = "Leaderboard\n";
-        for (int i = 0; i < entries.Count; i++)
+        foreach (var entry in entries)
         {
-            leaderboardText.text += (i + 1) + ". " + entries[i].playerName + " - " + entries[i].score + "\n";
+            leaderboardText.text += entry.playerName + ": " + entry.score + "\n";
         }
     }
 }

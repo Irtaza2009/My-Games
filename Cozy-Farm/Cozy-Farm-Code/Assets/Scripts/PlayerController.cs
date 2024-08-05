@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
             CheckPlotInteraction();
         }
 
-        Debug.Log(currentSpotTag);
+
         UpdateBoundaries();
     }
 

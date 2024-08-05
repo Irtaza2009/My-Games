@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         LoadGameState();
-        Leaderboard = FindObjectOfType<Leaderboard>();
+        //Leaderboard = FindObjectOfType<Leaderboard>();
         firebaseLeaderboard = FindObjectOfType<FirebaseLeaderboard>();
     }
 
@@ -74,8 +74,8 @@ public class GameManager : MonoBehaviour
     void UpdateCoinUI()
     {
         coinText.text =  coinCount.ToString( );
-        Leaderboard.AddScore(coinCount);
-        firebaseLeaderboard.AddScore("PlayerName", coinCount);
+        //Leaderboard.AddScore(coinCount);
+        firebaseLeaderboard.AddScore(coinCount);
 
           
     }

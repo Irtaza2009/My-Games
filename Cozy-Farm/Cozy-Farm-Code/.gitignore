@@ -83,3 +83,13 @@ crashlytics-build.properties
 /[Aa]ssets/Parse/
 
 /[Aa]ssets/Plugins/
+
+/[Aa]ssets/Editor\ Default\ Resources.meta
+
+/[Aa]ssets/ExternalDependencyManager.meta
+
+/[Aa]ssets/Firebase.meta
+
+/[Aa]ssets/Parse.meta
+
+/[Aa]ssets/Plugins.meta
