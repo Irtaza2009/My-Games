@@ -14,6 +14,9 @@ public class PlayButtonHandler : MonoBehaviour
         // Disable the play button initially
         playButton.interactable = false;
 
+        nameInputField.text = PlayerPrefs.GetString("PlayerName", ""); // Loading the player's name from PlayerPrefs
+        ValidateName(); // Validate the player's name after getting it from PlayerPrefs
+
         // Add listener to the input field to check for text changes
         nameInputField.onValueChanged.AddListener(delegate { ValidateName(); });
 
@@ -28,6 +31,7 @@ public class PlayButtonHandler : MonoBehaviour
     {
         if (string.IsNullOrEmpty(nameInputField.text))
         {
+
             playButton.interactable = false;
             errorMessage.text = "Please enter your name.";
         }

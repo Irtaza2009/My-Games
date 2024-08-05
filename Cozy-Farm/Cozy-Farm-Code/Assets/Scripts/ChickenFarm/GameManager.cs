@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,12 +32,35 @@ public class GameManager : MonoBehaviour
     public GameObject cowPrefab;
     public GameObject milkPrefab;
 
+    private List<GameObjectData> gameObjectDataList = new List<GameObjectData>();
+
+    [System.Serializable]
+    public class GameObjectData
+    {
+        public string type;
+        public Vector3 position;
+    }
+
+    [System.Serializable]
+    public class Serialization<T>
+    {
+        public List<T> items;
+        public Serialization(List<T> items)
+        {
+            this.items = items;
+        }
+        public List<T> ToList()
+        {
+            return items;
+        }
+    }
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-           // DontDestroyOnLoad(gameObject);
+            // DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -211,7 +235,20 @@ public class GameManager : MonoBehaviour
 
     public void SaveGameState()
     {
-        // Save to PlayerPrefs for local storage
+        // Clear previous data
+        gameObjectDataList.Clear();
+
+        // Find and save all relevant objects
+        SaveGameObjectsOfType("Worker", workerPrefab);
+        SaveGameObjectsOfType("Cow", cowPrefab);
+        SaveGameObjectsOfType("Chick", chickPrefab);
+        // Add other types as needed...
+
+        // Convert to JSON and save to PlayerPrefs
+        string jsonData = JsonUtility.ToJson(new Serialization<GameObjectData>(gameObjectDataList));
+        PlayerPrefs.SetString("GameObjectData", jsonData);
+
+        // Save other game state data...
         PlayerPrefs.SetInt("CoinCount", coinCount);
         PlayerPrefs.SetInt("EggCount", eggCount);
         PlayerPrefs.SetInt("MilkCount", milkCount);
@@ -225,9 +262,22 @@ public class GameManager : MonoBehaviour
         dataSaver.SavePlayerData(eggCount, milkCount, fruitCount, coinCount, workerCost, hatchCost, cowCost);
     }
 
+    private void SaveGameObjectsOfType(string type, GameObject prefab)
+    {
+        GameObject[] objects = GameObject.FindGameObjectsWithTag(type);
+        foreach (GameObject obj in objects)
+        {
+            gameObjectDataList.Add(new GameObjectData
+            {
+                type = type,
+                position = obj.transform.position
+            });
+        }
+    }
+
     public void LoadGameState()
     {
-        // Load from PlayerPrefs for local storage
+        // Load other game state data...
         coinCount = PlayerPrefs.GetInt("CoinCount", 0);
         eggCount = PlayerPrefs.GetInt("EggCount", 0);
         milkCount = PlayerPrefs.GetInt("MilkCount", 0);
@@ -235,6 +285,21 @@ public class GameManager : MonoBehaviour
         hatchCost = PlayerPrefs.GetInt("HatchCost", 10);
         cowCost = PlayerPrefs.GetInt("CowCost", 10);
         fruitCount = PlayerPrefs.GetInt("FruitCount", 0);
+
+        // Load game objects
+        string jsonData = PlayerPrefs.GetString("GameObjectData", string.Empty);
+        if (!string.IsNullOrEmpty(jsonData))
+        {
+            gameObjectDataList = JsonUtility.FromJson<Serialization<GameObjectData>>(jsonData).ToList();
+            foreach (GameObjectData data in gameObjectDataList)
+            {
+                GameObject prefab = GetPrefabByType(data.type);
+                if (prefab != null)
+                {
+                    Instantiate(prefab, data.position, Quaternion.identity);
+                }
+            }
+        }
 
         // Load from Firebase
         dataSaver.LoadPlayerData(playerData =>
@@ -259,5 +324,21 @@ public class GameManager : MonoBehaviour
                 if (buyCowText != null) buyCowText.text = "Buy Cow <br> Cost: " + cowCost;
             }
         });
+    }
+
+    private GameObject GetPrefabByType(string type)
+    {
+        switch (type)
+        {
+            case "Worker":
+                return workerPrefab;
+            case "Cow":
+                return cowPrefab;
+            case "Chick":
+                return chickPrefab;
+            // Add other cases as needed...
+            default:
+                return null;
+        }
     }
 }
