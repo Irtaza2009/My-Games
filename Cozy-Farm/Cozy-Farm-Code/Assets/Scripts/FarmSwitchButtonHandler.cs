@@ -6,11 +6,11 @@ public class FarmSwitchButtonHandler : MonoBehaviour
 
     public void SwitchToLeaderboard()
     {
-        GameManager.Instance.SaveGameState();
+      
         PlayerPrefs.SetInt("previousScene", SceneManager.GetActiveScene().buildIndex);
         PlayerPrefs.Save();
-        SceneManager.LoadScene("leaderboard");
-        GameManager.Instance.LoadGameState();
+        SceneManager.LoadScene("Leaderboard");
+      
     }
     public void SwitchToChickenFarm()
     {

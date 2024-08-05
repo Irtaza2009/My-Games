@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        dataSaver = GetComponent<DataSaver>();
+        dataSaver = FindObjectOfType<DataSaver>();
         LoadGameState();
         //Leaderboard = FindObjectOfType<Leaderboard>();
         firebaseLeaderboard = FindObjectOfType<FirebaseLeaderboard>();
