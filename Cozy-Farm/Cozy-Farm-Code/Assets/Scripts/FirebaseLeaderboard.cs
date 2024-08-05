@@ -107,10 +107,10 @@ public class FirebaseLeaderboard : MonoBehaviour
 
     private void UpdateLeaderboard(List<LeaderboardEntry> entries)
     {
-        leaderboardText.text = "Leaderboard\n";
+        // leaderboardText.text = "Leaderboard\n";
         foreach (var entry in entries)
         {
-            leaderboardText.text += entry.playerName + ": " + entry.score + "\n";
+            if (leaderboardText != null) leaderboardText.text += entry.playerName + ": " + entry.score + " Coins\n";
         }
     }
 }

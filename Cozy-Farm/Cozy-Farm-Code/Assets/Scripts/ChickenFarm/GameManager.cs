@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     public int hatchCost = 10;
     public int cowCost = 10;
 
-    private Leaderboard Leaderboard;
+    //private Leaderboard Leaderboard;
     private FirebaseLeaderboard firebaseLeaderboard;
 
     public TextMeshProUGUI coinText;
