@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public int cowCost = 10;
 
     private Leaderboard Leaderboard;
+    private FirebaseLeaderboard firebaseLeaderboard;
 
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI eggText;
@@ -46,6 +47,7 @@ public class GameManager : MonoBehaviour
     {
         LoadGameState();
         Leaderboard = FindObjectOfType<Leaderboard>();
+        firebaseLeaderboard = FindObjectOfType<FirebaseLeaderboard>();
     }
 
     void Update()
@@ -72,7 +74,10 @@ public class GameManager : MonoBehaviour
     void UpdateCoinUI()
     {
         coinText.text =  coinCount.ToString( );
-          Leaderboard.AddScore(coinCount);
+        Leaderboard.AddScore(coinCount);
+        firebaseLeaderboard.AddScore("PlayerName", coinCount);
+
+          
     }
 
     public void CollectEgg(GameObject egg)
