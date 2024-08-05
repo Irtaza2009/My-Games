@@ -9,9 +9,11 @@ public class GameManager : MonoBehaviour
     public int eggCount = 0;
     public int fruitCount = 0;
     public int milkCount = 0;
-    public int workerCost = 50; // Cost to buy a worker
+    public int workerCost = 20; // Cost to buy a worker
     public int hatchCost = 10;
     public int cowCost = 10;
+
+    private Leaderboard Leaderboard;
 
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI eggText;
@@ -43,13 +45,15 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         LoadGameState();
+        Leaderboard = FindObjectOfType<Leaderboard>();
     }
 
     void Update()
     {
-        coinText.text =  coinCount;
-        if (eggText != null) eggText.text = eggCount;
-        if (milkText != null) milkText.text =  milkCount;
+        coinText.text =  coinCount.ToString( );
+        if (eggText != null) eggText.text = eggCount.ToString( );
+        if (milkText != null) milkText.text =  milkCount.ToString( );
+        if (fruitText != null) fruitText.text = fruitCount.ToString( );
     }
 
     public void AddCoin()
@@ -62,11 +66,13 @@ public class GameManager : MonoBehaviour
     {
         coinCount -= amount;
         UpdateCoinUI();
+      
     }
 
     void UpdateCoinUI()
     {
-        coinText.text =  coinCount;
+        coinText.text =  coinCount.ToString( );
+          Leaderboard.AddScore(coinCount);
     }
 
     public void CollectEgg(GameObject egg)
@@ -78,7 +84,7 @@ public class GameManager : MonoBehaviour
 
     void UpdateEggUI()
     {
-        if (eggText != null) eggText.text =  eggCount;
+        if (eggText != null) eggText.text =  eggCount.ToString( );
     }
 
     public void SellEggs()
@@ -154,12 +160,12 @@ public class GameManager : MonoBehaviour
 
     void UpdateMilkUI()
     {
-        if (milkText != null) milkText.text =   milkCount;
+        if (milkText != null) milkText.text =   milkCount.ToString( );
     }
 
     void UpdateFruitUI() 
     {
-        if (fruitText != null) fruitText.text = "Wheat: " + fruitCount;
+        if (fruitText != null) fruitText.text = fruitCount.ToString( );
     }
 
     public void SellMilk()
