@@ -19,6 +19,8 @@ public class PlayButtonHandler : MonoBehaviour
 
         // Add listener to the play button to handle the click event
         playButton.onClick.AddListener(LoadMainScene);
+
+
     }
 
     // Method to validate the input field for the player's name

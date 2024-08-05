@@ -3,6 +3,15 @@ using UnityEngine.SceneManagement;
 
 public class FarmSwitchButtonHandler : MonoBehaviour
 {
+
+    public void SwitchToLeaderboard()
+    {
+        GameManager.Instance.SaveGameState();
+        PlayerPrefs.SetInt("previousScene", SceneManager.GetActiveScene().buildIndex);
+        PlayerPrefs.Save();
+        SceneManager.LoadScene("leaderboard");
+        GameManager.Instance.LoadGameState();
+    }
     public void SwitchToChickenFarm()
     {
         GameManager.Instance.SaveGameState();
@@ -22,6 +31,20 @@ public class FarmSwitchButtonHandler : MonoBehaviour
         GameManager.Instance.SaveGameState();
         SceneManager.LoadScene("Garden");
         GameManager.Instance.LoadGameState();
+    }
+
+    public void SwitchToPreviousScene()
+    {
+
+        if (PlayerPrefs.GetInt("previousScene") == 0)
+        {
+            PlayerPrefs.SetInt("previousScene", 1);
+            PlayerPrefs.Save();
+        }
+        Debug.Log("Switching to previous scene: " + PlayerPrefs.GetInt("previousScene"));
+        SceneManager.LoadScene(PlayerPrefs.GetInt("previousScene"));
+
+
     }
 
 

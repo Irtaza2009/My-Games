@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Garden.unity
     guid: 988711d50500a4256ba8f8484dd27077
+  - enabled: 1
+    path: Assets/Scenes/Leaderboard.unity
+    guid: ee8e84632f6fd4c06a0ffbf2a7a9e926
   m_configObjects: {}
