@@ -16,6 +16,8 @@ public class FirebaseLeaderboard : MonoBehaviour
         playerName = PlayerPrefs.GetString("PlayerName", "Unknown");
         Debug.Log("Player Name at Start: " + playerName);
 
+        
+
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
