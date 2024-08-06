@@ -1,10 +1,10 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-
     public static GameManager Instance;
 
     public int coinCount;
@@ -27,10 +27,14 @@ public class GameManager : MonoBehaviour
 
     public GameObject chickPrefab;
     public GameObject eggPrefab;
+    public GameObject hatchEggPrefab;
     public GameObject workerPrefab;
     public GameObject cowPrefab;
     public GameObject milkPrefab;
 
+    private List<GameObject> workers = new List<GameObject>();
+    private List<GameObject> chicks = new List<GameObject>();
+    private List<GameObject> cows = new List<GameObject>();
 
     private void Awake()
     {
@@ -41,7 +45,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-           // Destroy(gameObject);
+            //Destroy(gameObject);
         }
     }
 
@@ -103,7 +107,13 @@ public class GameManager : MonoBehaviour
 
     public void AddHatchEgg()
     {
-        Instantiate(eggPrefab, GetRandomPosition(), Quaternion.identity);
+        GameObject chick = Instantiate(hatchEggPrefab, GetRandomPosition(), Quaternion.identity);
+    }
+
+    public void AddHatchedChick(GameObject chick)
+    {
+        chicks.Add(chick);
+        SaveGameState();
     }
 
     public void BuyWorker()
@@ -112,7 +122,8 @@ public class GameManager : MonoBehaviour
         {
             coinCount -= workerCost;
             workerCost += 10;
-            Instantiate(workerPrefab, GetRandomPosition(), Quaternion.identity);
+            GameObject worker = Instantiate(workerPrefab, GetRandomPosition(), Quaternion.identity);
+            workers.Add(worker);
             SaveGameState();
         }
     }
@@ -123,14 +134,10 @@ public class GameManager : MonoBehaviour
         {
             coinCount -= cowCost;
             cowCost += 10;
-            AddCow();
+            GameObject cow = Instantiate(cowPrefab, GetRandomPosition(), Quaternion.identity);
+            cows.Add(cow);
             SaveGameState();
         }
-    }
-
-    public void AddCow()
-    {
-        Instantiate(cowPrefab, GetRandomPosition(), Quaternion.identity);
     }
 
     public void CollectMilk(GameObject milk)
@@ -183,16 +190,35 @@ public class GameManager : MonoBehaviour
 
     public void SaveGameState()
     {
-        PlayerPrefs.SetInt("CoinCount", coinCount);
-        PlayerPrefs.SetInt("EggCount", eggCount);
-        PlayerPrefs.SetInt("MilkCount", milkCount);
-        PlayerPrefs.SetInt("WorkerCost", workerCost);
-        PlayerPrefs.SetInt("HatchCost", hatchCost);
-        PlayerPrefs.SetInt("CowCost", cowCost);
-        PlayerPrefs.SetInt("FruitCount", fruitCount);
-        PlayerPrefs.Save();
+        List<Vector3> workerPositions = new List<Vector3>();
+        foreach (var worker in workers)
+        {
+            if (worker != null)
+            {
+                workerPositions.Add(worker.transform.position);
+            }
+        }
 
-        dataSaver.SavePlayerData(eggCount, milkCount, fruitCount, coinCount, workerCost, cowCost, hatchCost);
+        List<Vector3> chickPositions = new List<Vector3>();
+        foreach (var chick in chicks)
+        {
+            if (chick != null)
+            {
+                chickPositions.Add(chick.transform.position);
+            }
+        }
+
+        List<Vector3> cowPositions = new List<Vector3>();
+        foreach (var cow in cows)
+        {
+            if (cow != null)
+            {
+                cowPositions.Add(cow.transform.position);
+            }
+        }
+
+        PlayerData playerData = new PlayerData(PlayerPrefs.GetString("PlayerName", "Unknown"), eggCount, milkCount, fruitCount, coinCount, workerCost, cowCost, hatchCost, workerPositions, chickPositions, cowPositions);
+        dataSaver.SavePlayerData(playerData);
     }
 
     IEnumerator LoadGameStateCoroutine()
@@ -211,8 +237,57 @@ public class GameManager : MonoBehaviour
                 cowCost = playerData.cowCost;
                 hatchCost = playerData.hatchCost;
 
+                ClearAndInstantiateWorkers(playerData.workerPositions);
+                ClearAndInstantiateChicks(playerData.chickPositions);
+                ClearAndInstantiateCows(playerData.cowPositions);
+
                 UpdateUI();
             }
         });
+    }
+
+    private void ClearAndInstantiateWorkers(List<Vector3> positions)
+    {
+        foreach (var worker in workers)
+        {
+            Destroy(worker);
+        }
+        workers.Clear();
+
+        foreach (var position in positions)
+        {
+            GameObject worker = Instantiate(workerPrefab, position, Quaternion.identity);
+            workers.Add(worker);
+        }
+    }
+
+    private void ClearAndInstantiateChicks(List<Vector3> positions)
+    {
+        foreach (var chick in chicks)
+        {
+            Destroy(chick);
+        }
+        chicks.Clear();
+
+        foreach (var position in positions)
+        {
+            GameObject chick = Instantiate(chickPrefab, position, Quaternion.identity);
+            chicks.Add(chick);
+        }
+    }
+
+    private void ClearAndInstantiateCows(List<Vector3> positions)
+    {
+        foreach (var cow in cows)
+        {
+            Destroy(cow);
+        }
+        cows.Clear();
+
+        foreach (var position in positions)
+        {
+            GameObject cow = Instantiate(cowPrefab, position, Quaternion.identity);
+            cows.Add(cow);
+        }
     }
 }
