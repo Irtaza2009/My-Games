@@ -11,6 +11,8 @@ TagManager:
   - CowSpot
   - Plot
   - GardenSpot
+  - Worker
+  - Cow
   layers:
   - Default
   - TransparentFX

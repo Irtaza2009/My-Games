@@ -11,6 +11,11 @@ public class PlayButtonHandler : MonoBehaviour
 
     void Start()
     {
+
+        // Delete all playerprefs
+        // PlayerPrefs.DeleteAll();
+        // PlayerPrefs.Save();
+
         // Disable the play button initially
         playButton.interactable = false;
 
