@@ -1,21 +1,21 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance; // Singleton instance
 
-    public int coinCount = 0;
-    public int eggCount = 0;
-    public int fruitCount = 0;
-    public int milkCount = 0;
-    public int workerCost = 20; // Cost to buy a worker
-    public int hatchCost = 10;
-    public int cowCost = 10;
+    public static GameManager Instance;
 
-    //private Leaderboard Leaderboard;
-    private FirebaseLeaderboard firebaseLeaderboard;
-    public DataSaver dataSaver;
+    public int coinCount;
+    public int eggCount;
+    public int fruitCount;
+    public int milkCount;
+    public int workerCost;
+    public int hatchCost;
+    public int cowCost;
+
+    private DataSaver dataSaver;
 
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI eggText;
@@ -27,79 +27,65 @@ public class GameManager : MonoBehaviour
 
     public GameObject chickPrefab;
     public GameObject eggPrefab;
-    public GameObject workerPrefab; // Reference to the worker chicken prefab
+    public GameObject workerPrefab;
     public GameObject cowPrefab;
     public GameObject milkPrefab;
+
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-           // DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject); // Ensure this object persists across scenes
         }
         else
         {
-            Destroy(gameObject);
+           // Destroy(gameObject);
         }
     }
 
     void Start()
     {
-        //dataSaver = FindObjectOfType<DataSaver>();
-        LoadGameState();
-        //Leaderboard = FindObjectOfType<Leaderboard>();
-        firebaseLeaderboard = FindObjectOfType<FirebaseLeaderboard>();
+        dataSaver = FindObjectOfType<DataSaver>();
+        if (dataSaver != null)
+        {
+            StartCoroutine(LoadGameStateCoroutine());
+        }
+        else
+        {
+            Debug.LogError("DataSaver instance not found in the scene.");
+        }
     }
 
     void Update()
     {
-        coinText.text = coinCount.ToString();
-        if (eggText != null) eggText.text = eggCount.ToString();
-        if (milkText != null) milkText.text = milkCount.ToString();
-        if (fruitText != null) fruitText.text = fruitCount.ToString();
+        UpdateUI();
     }
 
     public void AddCoin()
     {
         coinCount++;
-        UpdateCoinUI();
         SaveGameState();
     }
 
     public void SpendCoins(int amount)
     {
         coinCount -= amount;
-        UpdateCoinUI();
         SaveGameState();
-    }
-
-    void UpdateCoinUI()
-    {
-        coinText.text = coinCount.ToString();
-        //Leaderboard.AddScore(coinCount);
-        firebaseLeaderboard.AddScore(coinCount);
     }
 
     public void CollectEgg(GameObject egg)
     {
         eggCount++;
-        UpdateEggUI();
         Destroy(egg);
         SaveGameState();
-    }
-
-    void UpdateEggUI()
-    {
-        if (eggText != null) eggText.text = eggCount.ToString();
     }
 
     public void SellEggs()
     {
         coinCount += eggCount;
         eggCount = 0;
-        UpdateCoinUI();
-        UpdateEggUI();
         SaveGameState();
     }
 
@@ -110,9 +96,6 @@ public class GameManager : MonoBehaviour
             coinCount -= hatchCost;
             hatchCost += 10;
             eggCount--;
-            UpdateEggUI();
-            UpdateCoinUI();
-            if (hatchText != null) hatchText.text = "Hatch Egg <br> Cost: " + hatchCost;
             AddHatchEgg();
             SaveGameState();
         }
@@ -120,8 +103,7 @@ public class GameManager : MonoBehaviour
 
     public void AddHatchEgg()
     {
-        Vector3 eggPosition = GetRandomPosition();
-        Instantiate(eggPrefab, eggPosition, Quaternion.identity);
+        Instantiate(eggPrefab, GetRandomPosition(), Quaternion.identity);
     }
 
     public void BuyWorker()
@@ -130,8 +112,6 @@ public class GameManager : MonoBehaviour
         {
             coinCount -= workerCost;
             workerCost += 10;
-            UpdateCoinUI();
-            if (workerText != null) workerText.text = "Buy Worker <br> Cost: " + workerCost;
             Instantiate(workerPrefab, GetRandomPosition(), Quaternion.identity);
             SaveGameState();
         }
@@ -143,8 +123,6 @@ public class GameManager : MonoBehaviour
         {
             coinCount -= cowCost;
             cowCost += 10;
-            UpdateCoinUI();
-            if (buyCowText != null) buyCowText.text = "Buy Cow <br> Cost: " + cowCost;
             AddCow();
             SaveGameState();
         }
@@ -152,14 +130,12 @@ public class GameManager : MonoBehaviour
 
     public void AddCow()
     {
-        Vector3 cowPosition = GetRandomPosition();
-        Instantiate(cowPrefab, cowPosition, Quaternion.identity);
+        Instantiate(cowPrefab, GetRandomPosition(), Quaternion.identity);
     }
 
     public void CollectMilk(GameObject milk)
     {
         milkCount++;
-        UpdateMilkUI();
         Destroy(milk);
         SaveGameState();
     }
@@ -167,26 +143,13 @@ public class GameManager : MonoBehaviour
     public void CollectFruit()
     {
         fruitCount++;
-        UpdateFruitUI();
         SaveGameState();
-    }
-
-    void UpdateMilkUI()
-    {
-        if (milkText != null) milkText.text = milkCount.ToString();
-    }
-
-    void UpdateFruitUI()
-    {
-        if (fruitText != null) fruitText.text = fruitCount.ToString();
     }
 
     public void SellMilk()
     {
         coinCount += milkCount;
         milkCount = 0;
-        UpdateCoinUI();
-        UpdateMilkUI();
         SaveGameState();
     }
 
@@ -194,9 +157,18 @@ public class GameManager : MonoBehaviour
     {
         coinCount += fruitCount;
         fruitCount = 0;
-        UpdateCoinUI();
-        UpdateFruitUI();
         SaveGameState();
+    }
+
+    void UpdateUI()
+    {
+        if (coinText != null) coinText.text = coinCount.ToString();
+        if (eggText != null) eggText.text = eggCount.ToString();
+        if (milkText != null) milkText.text = milkCount.ToString();
+        if (fruitText != null) fruitText.text = fruitCount.ToString();
+        if (hatchText != null) hatchText.text = "Hatch Egg <br> Cost: " + hatchCost;
+        if (workerText != null) workerText.text = "Buy Worker <br> Cost: " + workerCost;
+        if (buyCowText != null) buyCowText.text = "Buy Cow <br> Cost: " + cowCost;
     }
 
     Vector3 GetRandomPosition()
@@ -211,7 +183,6 @@ public class GameManager : MonoBehaviour
 
     public void SaveGameState()
     {
-        // Save to PlayerPrefs for local storage
         PlayerPrefs.SetInt("CoinCount", coinCount);
         PlayerPrefs.SetInt("EggCount", eggCount);
         PlayerPrefs.SetInt("MilkCount", milkCount);
@@ -221,28 +192,17 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetInt("FruitCount", fruitCount);
         PlayerPrefs.Save();
 
-        // Save to Firebase
         dataSaver.SavePlayerData(eggCount, milkCount, fruitCount, coinCount, workerCost, cowCost, hatchCost);
     }
 
-    public void LoadGameState()
+    IEnumerator LoadGameStateCoroutine()
     {
-        /*
-        // Load from PlayerPrefs for local storage
-        coinCount = PlayerPrefs.GetInt("CoinCount", 0);
-        eggCount = PlayerPrefs.GetInt("EggCount", 0);
-        milkCount = PlayerPrefs.GetInt("MilkCount", 0);
-        workerCost = PlayerPrefs.GetInt("WorkerCost", 20);
-        hatchCost = PlayerPrefs.GetInt("HatchCost", 10);
-        cowCost = PlayerPrefs.GetInt("CowCost", 10);
-        fruitCount = PlayerPrefs.GetInt("FruitCount", 0);
-        */
+        yield return new WaitUntil(() => dataSaver.IsInitialized);
 
-        // Load from Firebase
         dataSaver.LoadPlayerData(playerData =>
         {
-            //if (playerData != null)
-            //{
+            if (playerData != null)
+            {
                 eggCount = playerData.eggCount;
                 milkCount = playerData.milkCount;
                 fruitCount = playerData.fruitCount;
@@ -251,12 +211,8 @@ public class GameManager : MonoBehaviour
                 cowCost = playerData.cowCost;
                 hatchCost = playerData.hatchCost;
 
-                // Update UI
-                UpdateCoinUI();
-                UpdateEggUI();
-                UpdateMilkUI();
-                UpdateFruitUI();
-            //}
+                UpdateUI();
+            }
         });
     }
 }

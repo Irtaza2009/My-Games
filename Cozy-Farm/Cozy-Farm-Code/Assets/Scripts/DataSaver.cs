@@ -6,16 +6,12 @@ using System.Collections.Generic;
 
 public class DataSaver : MonoBehaviour
 {
-
-    
-
-
-
-
     private DatabaseReference databaseReference;
     private string playerName;
 
-    void Start()
+    public bool IsInitialized { get; private set; }
+
+    void Awake()
     {
         playerName = PlayerPrefs.GetString("PlayerName", "Unknown");
 
@@ -25,6 +21,7 @@ public class DataSaver : MonoBehaviour
             {
                 FirebaseApp app = FirebaseApp.DefaultInstance;
                 databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+                IsInitialized = true;
                 Debug.Log("Database Reference Initialized: " + (databaseReference != null));
             }
             else
@@ -34,7 +31,7 @@ public class DataSaver : MonoBehaviour
         });
     }
 
-    public void SavePlayerData(int eggCount, int milkCount, int fruitCount, int coinCount, int workerCost, int cowCost, int hatchCost)
+    public void SavePlayerData(PlayerData playerData)
     {
         if (databaseReference == null)
         {
@@ -42,7 +39,6 @@ public class DataSaver : MonoBehaviour
             return;
         }
 
-        PlayerData playerData = new PlayerData(playerName, eggCount, milkCount, fruitCount, coinCount, workerCost, cowCost, hatchCost);
         string json = JsonUtility.ToJson(playerData);
 
         databaseReference.Child("playerData").Child(playerName).SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
@@ -99,12 +95,15 @@ public class PlayerData
     public int milkCount;
     public int fruitCount;
     public int coinCount;
-
     public int workerCost;
     public int cowCost;
     public int hatchCost;
 
-    public PlayerData(string playerName, int eggCount, int milkCount, int fruitCount, int coinCount, int workerCost, int hatchCost, int cowCost)
+    public List<Vector3> workerPositions;
+    public List<Vector3> chickPositions;
+    public List<Vector3> cowPositions;
+
+    public PlayerData(string playerName, int eggCount, int milkCount, int fruitCount, int coinCount, int workerCost, int cowCost, int hatchCost, List<Vector3> workerPositions, List<Vector3> chickPositions, List<Vector3> cowPositions)
     {
         this.playerName = playerName;
         this.eggCount = eggCount;
@@ -112,8 +111,10 @@ public class PlayerData
         this.fruitCount = fruitCount;
         this.coinCount = coinCount;
         this.workerCost = workerCost;
-        this.hatchCost = hatchCost;
         this.cowCost = cowCost;
+        this.hatchCost = hatchCost;
+        this.workerPositions = workerPositions;
+        this.chickPositions = chickPositions;
+        this.cowPositions = cowPositions;
     }
-    
 }
