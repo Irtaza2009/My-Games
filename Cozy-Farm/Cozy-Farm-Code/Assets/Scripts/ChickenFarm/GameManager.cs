@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -36,6 +37,8 @@ public class GameManager : MonoBehaviour
     private List<GameObject> chicks = new List<GameObject>();
     private List<GameObject> cows = new List<GameObject>();
 
+    private bool isDataLoaded = false;
+
     private void Awake()
     {
         if (Instance == null)
@@ -64,38 +67,53 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        UpdateUI();
+        if (isDataLoaded)
+        {
+            UpdateUI();
+        }
     }
 
     public void AddCoin()
     {
-        coinCount++;
-        SaveGameState();
+        if (isDataLoaded)
+        {
+            coinCount++;
+            SaveGameState();
+        }
     }
 
     public void SpendCoins(int amount)
     {
-        coinCount -= amount;
-        SaveGameState();
+        if (isDataLoaded)
+        {
+            coinCount -= amount;
+            SaveGameState();
+        }
     }
 
     public void CollectEgg(GameObject egg)
     {
-        eggCount++;
-        Destroy(egg);
-        SaveGameState();
+        if (isDataLoaded)
+        {
+            eggCount++;
+            Destroy(egg);
+            SaveGameState();
+        }
     }
 
     public void SellEggs()
     {
-        coinCount += eggCount;
-        eggCount = 0;
-        SaveGameState();
+        if (isDataLoaded)
+        {
+            coinCount += eggCount;
+            eggCount = 0;
+            SaveGameState();
+        }
     }
 
     public void HatchEgg()
     {
-        if (eggCount > 0 && coinCount >= hatchCost)
+        if (isDataLoaded && eggCount > 0 && coinCount >= hatchCost)
         {
             coinCount -= hatchCost;
             hatchCost += 10;
@@ -107,18 +125,24 @@ public class GameManager : MonoBehaviour
 
     public void AddHatchEgg()
     {
-        GameObject chick = Instantiate(hatchEggPrefab, GetRandomPosition(), Quaternion.identity);
+        if (isDataLoaded)
+        {
+            GameObject chick = Instantiate(hatchEggPrefab, GetRandomPosition(), Quaternion.identity);
+        }
     }
 
     public void AddHatchedChick(GameObject chick)
     {
-        chicks.Add(chick);
-        SaveGameState();
+        if (isDataLoaded)
+        {
+            chicks.Add(chick);
+            SaveGameState();
+        }
     }
 
     public void BuyWorker()
     {
-        if (coinCount >= workerCost)
+        if (isDataLoaded && coinCount >= workerCost)
         {
             coinCount -= workerCost;
             workerCost += 10;
@@ -130,7 +154,7 @@ public class GameManager : MonoBehaviour
 
     public void BuyCow()
     {
-        if (coinCount >= cowCost)
+        if (isDataLoaded && coinCount >= cowCost)
         {
             coinCount -= cowCost;
             cowCost += 10;
@@ -142,29 +166,41 @@ public class GameManager : MonoBehaviour
 
     public void CollectMilk(GameObject milk)
     {
-        milkCount++;
-        Destroy(milk);
-        SaveGameState();
+        if (isDataLoaded)
+        {
+            milkCount++;
+            Destroy(milk);
+            SaveGameState();
+        }
     }
 
     public void CollectFruit()
     {
-        fruitCount++;
-        SaveGameState();
+        if (isDataLoaded)
+        {
+            fruitCount++;
+            SaveGameState();
+        }
     }
 
     public void SellMilk()
     {
-        coinCount += milkCount;
-        milkCount = 0;
-        SaveGameState();
+        if (isDataLoaded)
+        {
+            coinCount += milkCount;
+            milkCount = 0;
+            SaveGameState();
+        }
     }
 
     public void SellFruit()
     {
-        coinCount += fruitCount;
-        fruitCount = 0;
-        SaveGameState();
+        if (isDataLoaded)
+        {
+            coinCount += fruitCount;
+            fruitCount = 0;
+            SaveGameState();
+        }
     }
 
     void UpdateUI()
@@ -190,30 +226,39 @@ public class GameManager : MonoBehaviour
 
     public void SaveGameState()
     {
+        if (!isDataLoaded) return;
+
+        string currentScene = SceneManager.GetActiveScene().name;
         List<Vector3> workerPositions = new List<Vector3>();
-        foreach (var worker in workers)
-        {
-            if (worker != null)
-            {
-                workerPositions.Add(worker.transform.position);
-            }
-        }
-
         List<Vector3> chickPositions = new List<Vector3>();
-        foreach (var chick in chicks)
+        List<Vector3> cowPositions = new List<Vector3>();
+
+        if (currentScene == "ChickenFarm")
         {
-            if (chick != null)
+            foreach (var worker in workers)
             {
-                chickPositions.Add(chick.transform.position);
+                if (worker != null)
+                {
+                    workerPositions.Add(worker.transform.position);
+                }
+            }
+
+            foreach (var chick in chicks)
+            {
+                if (chick != null)
+                {
+                    chickPositions.Add(chick.transform.position);
+                }
             }
         }
-
-        List<Vector3> cowPositions = new List<Vector3>();
-        foreach (var cow in cows)
+        else if (currentScene == "CowFarm")
         {
-            if (cow != null)
+            foreach (var cow in cows)
             {
-                cowPositions.Add(cow.transform.position);
+                if (cow != null)
+                {
+                    cowPositions.Add(cow.transform.position);
+                }
             }
         }
 
@@ -237,11 +282,20 @@ public class GameManager : MonoBehaviour
                 cowCost = playerData.cowCost;
                 hatchCost = playerData.hatchCost;
 
-                ClearAndInstantiateWorkers(playerData.workerPositions);
-                ClearAndInstantiateChicks(playerData.chickPositions);
-                ClearAndInstantiateCows(playerData.cowPositions);
+                string currentScene = SceneManager.GetActiveScene().name;
+
+                if (currentScene == "ChickenFarm")
+                {
+                    ClearAndInstantiateWorkers(playerData.workerPositions);
+                    ClearAndInstantiateChicks(playerData.chickPositions);
+                }
+                else if (currentScene == "CowFarm")
+                {
+                    ClearAndInstantiateCows(playerData.cowPositions);
+                }
 
                 UpdateUI();
+                isDataLoaded = true; // Data has been successfully loaded
             }
         });
     }
