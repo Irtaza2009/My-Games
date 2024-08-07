@@ -2,7 +2,6 @@ using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
 using UnityEngine;
-using System.Collections.Generic;
 
 public class DataSaver : MonoBehaviour
 {
@@ -31,7 +30,7 @@ public class DataSaver : MonoBehaviour
         });
     }
 
-    public void SavePlayerData(PlayerData playerData)
+    public void SavePlayerData(int eggCount, int milkCount, int fruitCount, int coinCount, int workerCost, int cowCost, int hatchCost)
     {
         if (databaseReference == null)
         {
@@ -39,6 +38,7 @@ public class DataSaver : MonoBehaviour
             return;
         }
 
+        PlayerData playerData = new PlayerData(playerName, eggCount, milkCount, fruitCount, coinCount, workerCost, cowCost, hatchCost);
         string json = JsonUtility.ToJson(playerData);
 
         databaseReference.Child("playerData").Child(playerName).SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
@@ -87,6 +87,7 @@ public class DataSaver : MonoBehaviour
     }
 }
 
+
 [System.Serializable]
 public class PlayerData
 {
@@ -95,15 +96,12 @@ public class PlayerData
     public int milkCount;
     public int fruitCount;
     public int coinCount;
+
     public int workerCost;
     public int cowCost;
     public int hatchCost;
 
-    public List<Vector3> workerPositions;
-    public List<Vector3> chickPositions;
-    public List<Vector3> cowPositions;
-
-    public PlayerData(string playerName, int eggCount, int milkCount, int fruitCount, int coinCount, int workerCost, int cowCost, int hatchCost, List<Vector3> workerPositions, List<Vector3> chickPositions, List<Vector3> cowPositions)
+    public PlayerData(string playerName, int eggCount, int milkCount, int fruitCount, int coinCount, int workerCost, int hatchCost, int cowCost)
     {
         this.playerName = playerName;
         this.eggCount = eggCount;
@@ -111,10 +109,8 @@ public class PlayerData
         this.fruitCount = fruitCount;
         this.coinCount = coinCount;
         this.workerCost = workerCost;
-        this.cowCost = cowCost;
         this.hatchCost = hatchCost;
-        this.workerPositions = workerPositions;
-        this.chickPositions = chickPositions;
-        this.cowPositions = cowPositions;
+        this.cowCost = cowCost;
     }
+    
 }
