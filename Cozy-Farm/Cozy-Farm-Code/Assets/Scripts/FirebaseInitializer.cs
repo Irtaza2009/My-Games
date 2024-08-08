@@ -1,11 +1,15 @@
+using UnityEngine;
+
+#if !UNITY_WEBGL
 using Firebase;
 using Firebase.Extensions;
-using UnityEngine;
+#endif
 
 public class FirebaseInitializer : MonoBehaviour
 {
     void Start()
     {
+        #if !UNITY_WEBGL
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
             if (task.Result == DependencyStatus.Available)
@@ -18,5 +22,6 @@ public class FirebaseInitializer : MonoBehaviour
                 Debug.LogError("Could not resolve all Firebase dependencies: " + task.Result);
             }
         });
+        #endif
     }
 }

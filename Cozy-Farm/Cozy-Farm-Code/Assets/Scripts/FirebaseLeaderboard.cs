@@ -1,14 +1,21 @@
-using Firebase;
-using Firebase.Database;
-using Firebase.Extensions;
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 
+#if !UNITY_WEBGL
+using Firebase;
+using Firebase.Database;
+using Firebase.Extensions;
+#endif
+
 public class FirebaseLeaderboard : MonoBehaviour
 {
     public TextMeshProUGUI leaderboardText;
+
+    #if !UNITY_WEBGL
     private DatabaseReference databaseReference;
+    #endif
+
     private string playerName;
 
     void Start()
@@ -16,8 +23,7 @@ public class FirebaseLeaderboard : MonoBehaviour
         playerName = PlayerPrefs.GetString("PlayerName", "Unknown");
         Debug.Log("Player Name at Start: " + playerName);
 
-        
-
+        #if !UNITY_WEBGL
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
@@ -32,10 +38,12 @@ public class FirebaseLeaderboard : MonoBehaviour
                 Debug.LogError("Could not initialize Firebase dependencies.");
             }
         });
+        #endif
     }
 
     public void AddScore(int score)
     {
+        #if !UNITY_WEBGL
         if (databaseReference == null)
         {
             Debug.LogError("Database reference is not initialized.");
@@ -75,10 +83,12 @@ public class FirebaseLeaderboard : MonoBehaviour
                 }
             }
         });
+        #endif
     }
 
     private void LoadScores()
     {
+        #if !UNITY_WEBGL
         if (databaseReference == null)
         {
             Debug.LogError("Database reference is not initialized.");
@@ -103,11 +113,11 @@ public class FirebaseLeaderboard : MonoBehaviour
                 UpdateLeaderboard(leaderboardEntries);
             }
         });
+        #endif
     }
 
     private void UpdateLeaderboard(List<LeaderboardEntry> entries)
     {
-        // leaderboardText.text = "Leaderboard\n";
         foreach (var entry in entries)
         {
             if (leaderboardText != null) leaderboardText.text += entry.playerName + ": " + entry.score + " Coins\n";

@@ -247,8 +247,9 @@ public class GameManager : MonoBehaviour
         });
         #else
         LoadGameStateFromPlayerPrefs();
+        yield return null;
         #endif
-
+        
         LoadWorkerPositions();
         LoadChickPositions();
         LoadCowPositions();

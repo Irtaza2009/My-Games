@@ -1,11 +1,17 @@
+using UnityEngine;
+
+#if !UNITY_WEBGL
 using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
-using UnityEngine;
+#endif
 
 public class DataSaver : MonoBehaviour
 {
+    #if !UNITY_WEBGL
     private DatabaseReference databaseReference;
+    #endif
+
     private string playerName;
 
     public bool IsInitialized { get; private set; }
@@ -14,6 +20,7 @@ public class DataSaver : MonoBehaviour
     {
         playerName = PlayerPrefs.GetString("PlayerName", "Unknown");
 
+        #if !UNITY_WEBGL
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
@@ -28,10 +35,14 @@ public class DataSaver : MonoBehaviour
                 Debug.LogError("Could not initialize Firebase dependencies.");
             }
         });
+        #else
+        IsInitialized = true; // Set IsInitialized to true for WebGL builds
+        #endif
     }
 
     public void SavePlayerData(int eggCount, int milkCount, int fruitCount, int coinCount, int workerCost, int cowCost, int hatchCost)
     {
+        #if !UNITY_WEBGL
         if (databaseReference == null)
         {
             Debug.LogError("Database reference is not initialized.");
@@ -52,10 +63,12 @@ public class DataSaver : MonoBehaviour
                 Debug.LogError("Failed to save player data.");
             }
         });
+        #endif
     }
 
     public void LoadPlayerData(System.Action<PlayerData> onDataLoaded)
     {
+        #if !UNITY_WEBGL
         if (databaseReference == null)
         {
             Debug.LogError("Database reference is not initialized.");
@@ -84,9 +97,9 @@ public class DataSaver : MonoBehaviour
                 Debug.LogError("Failed to load player data.");
             }
         });
+        #endif
     }
 }
-
 
 [System.Serializable]
 public class PlayerData
@@ -112,5 +125,4 @@ public class PlayerData
         this.hatchCost = hatchCost;
         this.cowCost = cowCost;
     }
-    
 }
