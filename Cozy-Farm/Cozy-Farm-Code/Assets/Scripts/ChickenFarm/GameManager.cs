@@ -35,6 +35,11 @@ public class GameManager : MonoBehaviour
     private List<GameObject> chicks = new List<GameObject>();
     private List<GameObject> cows = new List<GameObject>();
 
+    public string fruitType = "Wheat";
+
+    public Button wheatButton;
+    public Button fruitButton;
+
     private void Awake()
     {
         if (Instance == null)
@@ -312,4 +317,21 @@ public class GameManager : MonoBehaviour
             cows.Add(cow);
         }
     }
+
+    public void FruitSwitch()
+    {
+        if (fruitType == "Wheat")
+        {
+            fruitType = "Fruit";
+            wheatButton.interactable = true;
+            fruitButton.interactable = false;
+        }
+        else
+        {
+            fruitType = "Wheat";
+            wheatButton.interactable = false;  // Disable the button to indicate it's selected
+            fruitButton.interactable = true;   // Enable the other button
+        }
+    }
+
 }

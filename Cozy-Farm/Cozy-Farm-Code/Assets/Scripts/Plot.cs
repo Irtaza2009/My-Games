@@ -7,11 +7,14 @@ public class Plot : MonoBehaviour
     private bool isPlanted = false;
     private bool isHarvestable = false;
 
-    private string fruitType = "Wheat";
+    private GameManager gameManager;
+
+    
 
     void Start()
     {
         animator = GetComponent<Animator>();
+        gameManager = GameManager.Instance;
     }
 
     public void PlantSeed()
@@ -26,7 +29,7 @@ public class Plot : MonoBehaviour
     {
         isPlanted = true;
 
-        if (fruitType == "Wheat")
+        if (gameManager.fruitType == "Wheat")
         {
             animator.Play("WheatGrowth");
         }
@@ -51,15 +54,5 @@ public class Plot : MonoBehaviour
         return false;
     }
 
-    public void FruitSwitch()
-    {
-        if fruitType == "Wheat"
-        {
-            fruitType = "Fruit";
-        }
-        else
-        {
-            fruitType = "Wheat";
-        }
-    }
+    
 }
