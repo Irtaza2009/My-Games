@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Agbalumo&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap");
 
 * {
   margin: 0;
@@ -12,7 +12,7 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: #e3f2fd;
+  background: linear-gradient(135deg, #e3f2fd, #b8c6dc, #293447);
 }
 
 .wrapper {
