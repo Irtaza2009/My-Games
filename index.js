@@ -30,9 +30,11 @@ function displayGames(games) {
 
     card.innerHTML = `
             <a href="${game.link}">
-                <img src="${game.thumbnail}" alt="${game.title}">
-                <div class="card-content">
-                    <h3>${game.title}</h3>
+                <div class="image-container">
+                    <img class="image" src="${game.thumbnail}" alt="${game.title}">
+                    <div class="overlay">${game.title}</div>
+                </div>
+                <div class="card-footer">
                     <p>${game.description}</p>
                 </div>
             </a>
