@@ -1,4 +1,3 @@
-/* Reset some basic elements */
 * {
   margin: 0;
   padding: 0;
@@ -7,13 +6,13 @@
 
 body {
   font-family: "Arial", sans-serif;
-  background-color: #121212;
-  color: #fff;
+  background-color: #2e2e2e;
+  color: #f0f0f0;
   line-height: 1.6;
 }
 
 header {
-  background: #1e1e1e;
+  background: #3a3a3a;
   padding: 20px;
   text-align: center;
   position: sticky;
@@ -25,6 +24,7 @@ header {
 header h1 {
   font-size: 2.5rem;
   margin-bottom: 10px;
+  color: #f0f0f0;
 }
 
 header input[type="text"] {
@@ -33,11 +33,14 @@ header input[type="text"] {
   border-radius: 5px;
   width: 80%;
   max-width: 400px;
+  background-color: #4a4a4a;
+  color: #fff;
+  outline: none;
 }
 
 #game-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   padding: 20px;
 }
@@ -45,16 +48,18 @@ header input[type="text"] {
 .card {
   position: relative;
   overflow: hidden;
-  border-radius: 15px;
+  border-radius: 10px;
   background-color: #1e1e1e;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  max-width: 250px;
+  margin: auto;
 }
 
 .card img {
   width: 100%;
   height: auto;
-  border-radius: 15px;
+  border-radius: 10px;
   transition: transform 0.3s ease-in-out;
 }
 
@@ -64,7 +69,7 @@ header input[type="text"] {
   width: 100%;
   background: rgba(0, 0, 0, 0.7);
   color: white;
-  padding: 20px;
+  padding: 10px;
   box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
   transform: translateY(100%);
   transition: transform 0.3s ease-in-out;
@@ -86,7 +91,7 @@ header input[type="text"] {
 footer {
   text-align: center;
   padding: 20px;
-  background: #1e1e1e;
+  background: #3a3a3a;
   margin-top: 40px;
   font-size: 0.9rem;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
