@@ -29,16 +29,14 @@ function displayGames(games) {
     card.classList.add("card");
 
     card.innerHTML = `
-            <a href="${game.link}">
-                <div class="image-container">
-                    <img class="image" src="${game.thumbnail}" alt="${game.title}">
-                    <div class="overlay">${game.title}</div>
-                </div>
-                <div class="card-footer">
-                    <p>${game.description}</p>
-                </div>
-            </a>
-        `;
+          <a href="${game.link}">
+              <img src="${game.thumbnail}" alt="${game.title}">
+              <div class="card-content">
+                  <h3>${game.title}</h3>
+                  <p>${game.description}</p>
+              </div>
+          </a>
+      `;
 
     container.appendChild(card);
   });
