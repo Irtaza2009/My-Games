@@ -6,9 +6,9 @@
 }
 
 body {
-  font-family: "Arial", sans-serif;
+  font-family: "Roboto Mono", monospace;
   background-color: #84dcc6;
-  color: #edf2fb;
+  color: #ffffff;
   line-height: 1.6;
 }
 
@@ -23,7 +23,7 @@ body {
 .header h1 {
   font-size: 2.5rem;
   margin-bottom: 10px;
-  color: #ff686b;
+  color: #ffffff;
 }
 
 .header input[type="text"] {
@@ -33,7 +33,7 @@ body {
   width: 80%;
   max-width: 400px;
   background-color: #a5ffd6;
-  color: #fff;
+  color: #ff686b;
   outline: none;
 }
 
@@ -95,7 +95,7 @@ body {
   padding: 20px;
   margin-top: 18.5%;
   font-size: 0.9rem;
-  color: #ffffff;
+  color: #ff686b;
   background-color: #a5ffd6;
   height: fit-content;
   width: 100%;
