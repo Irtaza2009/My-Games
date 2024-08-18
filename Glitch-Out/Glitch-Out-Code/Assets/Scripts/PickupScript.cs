@@ -20,7 +20,7 @@ public class PickupScript : MonoBehaviour
 
     void Start()
     {
-        LayerNumber = LayerMask.NameToLayer("holdLayer"); // Ensure the layer is correctly named
+        LayerNumber = LayerMask.NameToLayer("Grabbable"); // Ensure the layer is correctly named
 
         // mouseLookScript = player.GetComponent<MouseLookScript>();
     }
@@ -75,7 +75,7 @@ public class PickupScript : MonoBehaviour
             heldObjRb = pickUpObj.GetComponent<Rigidbody>(); // Get the Rigidbody
             heldObjRb.isKinematic = true; // Disable physics while holding
             heldObjRb.transform.parent = holdPos; // Parent object to hold position
-            heldObj.layer = LayerNumber; // Change the object layer
+            // heldObj.layer = LayerNumber; // Change the object layer
             // Ignore collision with player
             Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), true);
         }
@@ -85,7 +85,7 @@ public class PickupScript : MonoBehaviour
     {
         // Re-enable collision with player
         Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
-        heldObj.layer = 0; // Reset the object layer
+        heldObj.layer = 7; // Reset the object layer
         heldObjRb.isKinematic = false; // Re-enable physics
         heldObj.transform.parent = null; // Unparent the object
         heldObj = null; // Clear the held object
