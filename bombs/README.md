@@ -2,6 +2,9 @@
 
 **Bombs** is an engaging and fast-paced game where players must navigate a set of bombs floating around the screen. The objective is to avoid collisions between the bombs for as long as possible. The bombs can be moved by dragging them with the mouse, but be careful—any collision between the bombs will result in a game over. To add to the challenge, the speed of the bombs increases over time, requiring quick reflexes and strategic movement to achieve a high score.
 
+![Title](https://www.irtaza.xyz/My-Games/bombs/Images/Title.png)
+![Bombs](https://www.irtaza.xyz/My-Games/bombs/Images/Bombs.png)
+
 ## Play
 
 Play at: https://www.irtaza.xyz/My-Games/bombs/build/

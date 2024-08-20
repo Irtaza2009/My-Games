@@ -4,6 +4,10 @@
 
 Dolphin Bounce is a fun, arcade-style game where you control a dolphin to bounce beach balls out of the water. Navigate the dolphin using arrow keys to score points by hitting the balls. Avoid letting the balls fall into the water, and collect power-ups to enhance your gameplay.
 
+## Play
+
+Play at: https://www.irtaza.xyz/My-Games/Dolphin/
+
 ## How to Play
 
 1. **Controls**:
