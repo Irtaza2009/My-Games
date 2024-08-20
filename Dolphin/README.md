@@ -1,4 +1,4 @@
-# Dolphin Bounce Game
+# Flipper Frenzy
 
 ## Description
 
