@@ -10,7 +10,7 @@ public class EndTrigger : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         // Check if the player (or any specific object) entered the trigger
-        if (other.CompareTag("Player")) // Make sure your player has the tag "Player"
+        if (other.CompareTag("P")) // Make sure your player has the tag "Player"
         {
             // Load the specified scene
             SceneManager.LoadScene(sceneToLoad);
