@@ -287,7 +287,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -326,8 +326,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 490589568}
   - {fileID: 1293268453}
+  - {fileID: 490589568}
   - {fileID: 1443587056}
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -368,12 +368,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 170830348}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 50, y: 63.900005}
-  m_SizeDelta: {x: -500, y: -272.2}
+  m_AnchoredPosition: {x: 52.100006, y: 63.900005}
+  m_SizeDelta: {x: -504.2, y: -272.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &490589569
 MonoBehaviour:
@@ -428,7 +428,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -718,18 +718,18 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1293268452}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 941723789}
   m_Father: {fileID: 170830348}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -124.8}
-  m_SizeDelta: {x: 92.099976, y: 40.50003}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -185.20001}
+  m_SizeDelta: {x: -707.9, y: -530.60004}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1293268454
 MonoBehaviour:
@@ -752,7 +752,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 0.41037738, b: 0.41037738, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.8301887, g: 0.34069067, b: 0.34069067, a: 1}
     m_PressedColor: {r: 0.8490566, g: 0.15619439, b: 0.15619439, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -800,7 +800,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.3066038, b: 0.3066038, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -860,8 +860,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -75}
-  m_SizeDelta: {x: -100, y: -150}
+  m_AnchoredPosition: {x: 0, y: 124.999985}
+  m_SizeDelta: {x: -100, y: -550}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1443587057
 MonoBehaviour:
@@ -889,7 +889,8 @@ MonoBehaviour:
     bypass hidden traps, and break the simulation's code to descend into the secret
     underground area. But beware\u2014the deeper you go, the more unstable the world
     becomes. Can you outsmart the system and find your way out before the simulation
-    collapses entirely?"
+    collapses entirely?\n\n- Use WASD for movement \n- Press Spacebar to jump\n-
+    Hold E to grab boxes"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 76a0362dce76847feb04268fd7137769, type: 2}
   m_sharedMaterial: {fileID: 6655476708743071340, guid: 76a0362dce76847feb04268fd7137769, type: 2}
@@ -916,8 +917,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 19
+  m_fontSizeBase: 19
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

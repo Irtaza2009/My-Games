@@ -19,6 +19,7 @@ public class ScenesManager : MonoBehaviour
 
     public void LoadLevelScene()
     {
-        SceneManager.LoadScene(1);
+        Debug.Log("Loading Level Scene");
+        SceneManager.LoadScene("Levels");
     }
 }
