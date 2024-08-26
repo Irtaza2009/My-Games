@@ -126,7 +126,7 @@ public class PlayerController : MonoBehaviour
         else if (other.CompareTag("GardenSpot"))
         {
             isOnSpot = true;
-            currentSpotTag =  other.CompareTag("GardenSpot") ? "Plot" : "";
+            currentSpotTag =  other.CompareTag("GardenSpot") ? "GardenSpot" : "";
             ShowDialog(currentSpotTag);
         }
     }
