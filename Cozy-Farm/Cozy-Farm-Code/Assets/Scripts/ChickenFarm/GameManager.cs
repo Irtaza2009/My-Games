@@ -306,7 +306,7 @@ public class GameManager : MonoBehaviour
             float x = PlayerPrefs.GetFloat("Chick" + i + "X");
             float y = PlayerPrefs.GetFloat("Chick" + i + "Y");
             Vector3 position = new Vector3(x, y, -1);
-            GameObject chick = Instantiate(eggPrefab, position, Quaternion.identity);
+            GameObject chick = Instantiate(chickPrefab, position, Quaternion.identity);
             chicks.Add(chick);
         }
     }
