@@ -108,9 +108,15 @@ public class GameManager : MonoBehaviour
     public void AddHatchEgg()
     {
         Vector3 position = GetRandomPosition();
-        GameObject chick = Instantiate(eggPrefab, position, Quaternion.identity);
+        Instantiate(eggPrefab, position, Quaternion.identity);
+
+    }
+
+    public void AddChickToList(GameObject chick)
+    {
         chicks.Add(chick);
     }
+
 
     public void BuyWorker()
     {

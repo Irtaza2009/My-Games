@@ -16,12 +16,15 @@ public class EggHatching : MonoBehaviour
     }
 
     void Hatch()
-    {
-        // Instantiate a chick at the egg's position
-        Instantiate(chickPrefab, transform.position, Quaternion.identity);
-        // Notify the game manager that an egg has hatched
-        
-        // Destroy the egg
-        Destroy(gameObject);
-    }
+{
+    // Instantiate a chick at the egg's position
+    GameObject chick = Instantiate(chickPrefab, transform.position, Quaternion.identity);
+
+    // Notify the game manager to add the new chick to the list
+    gameManager.AddChickToList(chick);
+
+    // Destroy the egg
+    Destroy(gameObject);
+}
+
 }
